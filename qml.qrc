@@ -1,0 +1,10 @@
+<RCC>
+    <qresource prefix="/">
+        <file>images/fuel-icon.png</file>
+        <file>images/temperature-icon.png</file>
+        <file>QML/DefaultGaugeStyle.qml</file>
+        <file>QML/IconGaugeStyle.qml</file>
+        <file>QML/TachGaugeStyle.qml</file>
+        <file>QML/MainForm.qml</file>
+    </qresource>
+</RCC>
