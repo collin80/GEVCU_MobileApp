@@ -13,6 +13,11 @@ Window {
     height: 1080
     color: "#000000"
 
+    Image
+    {
+        source: "qrc:/images/evtvbackground.png"
+    }
+
     SwipeView {
         id: swipedView
 
@@ -583,7 +588,7 @@ Window {
             id: throttleConfigPage
             Label {
                 id: label10
-                color: "#1fcaff"
+                color: "#AAAAFF"
                 text: qsTr("Throttle:")
                 font.pointSize: 25
                 anchors.top: throttleConfigPage.top
@@ -600,7 +605,7 @@ Window {
 
                 Label {
                     id: label11
-                    color: "#1fcaff"
+                    color: "white"
                     text: qsTr("Num of throttle pots:")
                     font.pointSize: 15
                 }
@@ -610,7 +615,7 @@ Window {
                 }
                 Label {
                     id: label12
-                    color: "#1fcaff"
+                    color: "white"
                     text: qsTr("Throttle type:")
                     font.pointSize: 15
                 }
@@ -622,7 +627,7 @@ Window {
 
                 Label {
                     id: label13
-                    color: "#1fcaff"
+                    color: "white"
                     text: qsTr("Min Level Sig 1")
                     font.pointSize: 15
                 }
@@ -635,7 +640,7 @@ Window {
                 }
                Label {
                     id: label14
-                    color: "#1fcaff"
+                    color: "white"
                     text: qsTr("Regen Max Pedal Position")
                     font.pointSize: 15
                 }
@@ -650,7 +655,7 @@ Window {
 
                Label {
                     id: label15
-                    color: "#1fcaff"
+                    color: "white"
                     text: qsTr("Max Level Sig 1")
                     font.pointSize: 15
                 }
@@ -663,7 +668,7 @@ Window {
                 }
                Label {
                     id: label16
-                    color: "#1fcaff"
+                    color: "white"
                     text: qsTr("Regen Min Pedal Position")
                     font.pointSize: 15
                 }
@@ -677,7 +682,7 @@ Window {
 
                Label {
                     id: label17
-                    color: "#1fcaff"
+                    color: "white"
                     text: qsTr("Min Level Sig 2")
                     font.pointSize: 15
                 }
@@ -691,7 +696,7 @@ Window {
                 }
                Label {
                     id: label18
-                    color: "#1fcaff"
+                    color: "white"
                     text: qsTr("Motion Start Pedal Position")
                     font.pointSize: 15
                 }
@@ -705,7 +710,7 @@ Window {
 
                Label {
                     id: label19
-                    color: "#1fcaff"
+                    color: "white"
                     text: qsTr("Max Level Sig 2")
                     font.pointSize: 15
                 }
@@ -718,7 +723,7 @@ Window {
                 }
                Label {
                     id: label20
-                    color: "#1fcaff"
+                    color: "white"
                     text: qsTr("50% Throttle Pedal Position")
                     font.pointSize: 15
                 }
@@ -732,7 +737,7 @@ Window {
 
                Label {
                     id: label21
-                    color: "#1fcaff"
+                    color: "white"
                     text: qsTr("Creep Level")
                     font.pointSize: 15
                 }
@@ -745,7 +750,7 @@ Window {
                 }
                Label {
                     id: label22
-                    color: "#1fcaff"
+                    color: "white"
                     text: qsTr("Min. Throttle Regen")
                     font.pointSize: 15
                 }
@@ -760,7 +765,7 @@ Window {
 
             Label {
                 id: label100
-                color: "#1fcaff"
+                color: "#AAAAFF"
                 text: qsTr("Brake:")
                 font.pointSize: 25
                 anchors.top: throttleConfigGrid.bottom
@@ -777,7 +782,7 @@ Window {
 
                 Label {
                     id: label101
-                    color: "#1fcaff"
+                    color: "white"
                     text: qsTr("Min Signal Level")
                     font.pointSize: 15
                 }
@@ -790,7 +795,7 @@ Window {
                 }
                Label {
                     id: label102
-                    color: "#1fcaff"
+                    color: "white"
                     text: qsTr("Min Brake Regen")
                     font.pointSize: 15
                 }
@@ -804,7 +809,7 @@ Window {
 
                Label {
                     id: label103
-                    color: "#1fcaff"
+                    color: "white"
                     text: qsTr("Max Signal Level")
                     font.pointSize: 15
                 }
@@ -817,7 +822,7 @@ Window {
                 }
                Label {
                     id: label104
-                    color: "#1fcaff"
+                    color: "white"
                     text: qsTr("Max Brake Regen")
                     font.pointSize: 15
                 }
@@ -833,7 +838,7 @@ Window {
 
             Label {
                 id: label150
-                color: "#1fcaff"
+                color: "#AAAAFF"
                 text: qsTr("Motor Control:")
                 font.pointSize: 25
                 anchors.top: throttleConfigGrid2.bottom
@@ -850,7 +855,7 @@ Window {
 
                 Label {
                     id: maxSpeedLabel
-                    color: "#1fcaff"
+                    color: "white"
                     font.pointSize: 15
                     text: "Max Speed (RPM):"
                 }
@@ -861,7 +866,7 @@ Window {
 
                 Label {
                     id: maxTorqueLabel
-                    color: "#1fcaff"
+                    color: "white"
                     font.pointSize: 15
                     text: "Max Torque (Nm):"
                 }
@@ -872,7 +877,7 @@ Window {
 
                 Label {
                     id: motorModeLabel
-                    color: "#1fcaff"
+                    color: "white"
                     font.pointSize: 15
                     text: "Motor Mode:"
                 }
@@ -886,7 +891,7 @@ Window {
 
             Label {
                 id: label200
-                color: "#1fcaff"
+                color: "#AAAAFF"
                 text: qsTr("System:")
                 font.pointSize: 25
                 anchors.top: configRow9.bottom
@@ -903,7 +908,7 @@ Window {
 
                 Label {
                     id: loggingLabel
-                    color: "#1fcaff"
+                    color: "white"
                     font.pointSize: 15
                     text: "Log Level:"
                 }
@@ -915,7 +920,7 @@ Window {
 
                 Label {
                     id: nomVoltsLabel
-                    color: "#1fcaff"
+                    color: "white"
                     font.pointSize: 15
                     text: "Nominal Battery Voltage:"
                 }
@@ -932,7 +937,7 @@ Window {
             Label
             {
                 id:outputLabel1
-                color: "#1fcaff"
+                color: "#AAAAFF"
                 font.pointSize: 25
                 text: "Digital Outputs - DOUT0 - DOUT7"
             }
@@ -948,7 +953,7 @@ Window {
                 Label
                 {
                     id: outputLabel2
-                    color: "#1fcaff"
+                    color: "white"
                     font.pointSize: 15
                     text: "Fan Output"
                 }
@@ -960,7 +965,7 @@ Window {
                 Label
                 {
                     id: outputLabel3
-                    color: "#1fcaff"
+                    color: "white"
                     font.pointSize: 15
                     text: "Fan On Temp (Deg C)"
                 }
@@ -971,7 +976,7 @@ Window {
                 Label
                 {
                     id: outputLabel4
-                    color: "#1fcaff"
+                    color: "white"
                     font.pointSize: 15
                     text: "Fan Off Temp (Deg C)"
                 }
@@ -983,7 +988,7 @@ Window {
                 Label
                 {
                     id: outputLabel5
-                    color: "#1fcaff"
+                    color: "white"
                     font.pointSize: 15
                     text: "Precharge Output"
                 }
@@ -995,7 +1000,7 @@ Window {
                 Label
                 {
                     id: outputLabel6
-                    color: "#1fcaff"
+                    color: "white"
                     font.pointSize: 15
                     text: "Precharge Delay (ms)"
                 }
@@ -1007,7 +1012,7 @@ Window {
                 Label
                 {
                     id: outputLabel7
-                    color: "#1fcaff"
+                    color: "white"
                     font.pointSize: 15
                     text: "Main Contactor Output"
                     Layout.row: 2
@@ -1022,7 +1027,7 @@ Window {
                 Label
                 {
                     id: outputLabel8
-                    color: "#1fcaff"
+                    color: "white"
                     font.pointSize: 15
                     text: "Brake Light Output"
                     Layout.row: 3
@@ -1037,7 +1042,7 @@ Window {
                 Label
                 {
                     id: outputLabel9
-                    color: "#1fcaff"
+                    color: "white"
                     font.pointSize: 15
                     text: "Reverse Light Output"
                     Layout.row: 4
@@ -1056,7 +1061,7 @@ Window {
             Label
             {
                 id:inputLabel1
-                color: "#1fcaff"
+                color: "#AAAAFF"
                 font.pointSize: 25
                 text: "Digital Inputs - DIN0 - DIN3"
             }
@@ -1073,7 +1078,7 @@ Window {
                 Label
                 {
                     id: inputLabel2
-                    color: "#1fcaff"
+                    color: "white"
                     font.pointSize: 15
                     text: "Enable Input"
                 }
@@ -1086,7 +1091,7 @@ Window {
                 Label
                 {
                     id: inputLabel3
-                    color: "#1fcaff"
+                    color: "white"
                     font.pointSize: 15
                     text: "Reverse Input"
                 }
@@ -1103,7 +1108,7 @@ Window {
             Label
             {
                 id:deviceLabel1
-                color: "#1fcaff"
+                color: "#AAAAFF"
                 font.pointSize: 25
                 text: "Device Selection / Activation"
             }
@@ -1119,14 +1124,14 @@ Window {
                 Label
                 {
                     id:deviceLabel2
-                    color: "#1fcaff"
+                    color: "#6666BB"
                     font.pointSize: 20
                     text: "Motor Controllers"
                 }
                 Label
                 {
                     id:deviceLabel3
-                    color: "#1fcaff"
+                    color: "#6666BB"
                     font.pointSize: 20
                     text: "Throttle and Brake"
                     Layout.row: 0
@@ -1136,7 +1141,7 @@ Window {
                 Label
                 {
                     id:deviceLabel4
-                    color: "#1fcaff"
+                    color: "white"
                     font.pointSize: 15
                     text: "Azure Dynamics DMOC645"
                     Layout.row: 1
@@ -1150,7 +1155,7 @@ Window {
                 Label
                 {
                     id:deviceLabel5
-                    color: "#1fcaff"
+                    color: "white"
                     font.pointSize: 15
                     text: "Potentiometer/Hall Effect Throttle"
                 }
@@ -1163,7 +1168,7 @@ Window {
                 Label
                 {
                     id:deviceLabel6
-                    color: "#1fcaff"
+                    color: "white"
                     font.pointSize: 15
                     text: "UQM Powerphase 100"
                 }
@@ -1175,7 +1180,7 @@ Window {
                 Label
                 {
                     id:deviceLabel7
-                    color: "#1fcaff"
+                    color: "white"
                     font.pointSize: 15
                     text: "Potentiometer/Hall Effect Brake"
                 }
@@ -1188,7 +1193,7 @@ Window {
                 Label
                 {
                     id:deviceLabel8
-                    color: "#1fcaff"
+                    color: "white"
                     font.pointSize: 15
                     text: "Brusa DMC5"
                 }
@@ -1200,7 +1205,7 @@ Window {
                 Label
                 {
                     id:deviceLabel9
-                    color: "#1fcaff"
+                    color: "white"
                     font.pointSize: 15
                     text: "CANBus Throttle"
                 }
@@ -1213,7 +1218,7 @@ Window {
                 Label
                 {
                     id:deviceLabel10
-                    color: "#1fcaff"
+                    color: "white"
                     font.pointSize: 15
                     text: "CANBus Brake"
                 }
@@ -1226,7 +1231,7 @@ Window {
                 Label
                 {
                     id:deviceLabel20
-                    color: "#1fcaff"
+                    color: "#6666BB"
                     font.pointSize: 20
                     text: "Communication Interfaces"
                     Layout.row: 5
@@ -1236,7 +1241,7 @@ Window {
                 Label
                 {
                     id:deviceLabel21
-                    color: "#1fcaff"
+                    color: "#6666BB"
                     font.pointSize: 20
                     text: "Battery Chargers and Management"
                     Layout.row: 5
@@ -1246,7 +1251,7 @@ Window {
                 Label
                 {
                     id:deviceLabel22
-                    color: "#1fcaff"
+                    color: "white"
                     font.pointSize: 15
                     text: "ConnectOne WiReach Wifi"
                     Layout.row: 6
@@ -1260,7 +1265,7 @@ Window {
                 Label
                 {
                     id:deviceLabel23
-                    color: "#1fcaff"
+                    color: "white"
                     font.pointSize: 15
                     text: "Brusa NLG5 Charger"
                 }
@@ -1273,7 +1278,7 @@ Window {
                 Label
                 {
                     id:deviceLabel24
-                    color: "#1fcaff"
+                    color: "white"
                     font.pointSize: 15
                     text: "ELM327 OBDII Wireless"
                 }
@@ -1285,7 +1290,7 @@ Window {
                 Label
                 {
                     id:deviceLabel25
-                    color: "#1fcaff"
+                    color: "white"
                     font.pointSize: 15
                     text: "TCCH/Elcon Charger"
                 }
@@ -1298,7 +1303,7 @@ Window {
                 Label
                 {
                     id:deviceLabel26
-                    color: "#1fcaff"
+                    color: "white"
                     font.pointSize: 15
                     text: "OBDII PID Listener (CANBus)"
                 }
@@ -1310,7 +1315,7 @@ Window {
                 Label
                 {
                     id:deviceLabel27
-                    color: "#1fcaff"
+                    color: "white"
                     font.pointSize: 15
                     text: "Lear Charger"
                 }
@@ -1323,7 +1328,7 @@ Window {
                 Label
                 {
                     id:deviceLabel28
-                    color: "#1fcaff"
+                    color: "white"
                     font.pointSize: 15
                     text: "Think BMS"
                 }
