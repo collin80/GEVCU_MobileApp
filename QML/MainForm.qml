@@ -2,6 +2,7 @@ import QtQuick 2.5
 import QtQuick.Controls 1.5
 import QtQuick.Extras 1.4
 import QtQuick.Window 2.0
+import QtQuick.Layouts 1.1
 import QtQuick.Controls.Styles 1.4
 import Qt.labs.controls 1.0
 
@@ -26,7 +27,7 @@ Window {
                 text: "Motor Control"
                 font.pointSize: 25
                 color: "#AAAAFF"
-                width: root.width * 0.66
+                width: root.width * 0.55
             }
             Label
             {
@@ -36,12 +37,14 @@ Window {
                 font.pointSize: 25
                 color: "#AAAAFF"
             }
-            Row
+
+            GridLayout
             {
-                id: statusRow1
-                spacing: 0
+                id: statusGrid
+                columns: 6
                 anchors.top: mcLabel.bottom
                 anchors.topMargin: 20
+
 
                 Label
                 {
@@ -94,14 +97,6 @@ Window {
                     color: "white"
                     width: root.width / 6
                 }
-            }
-
-            Row
-            {
-                id: statusRow2
-                spacing: 0
-                anchors.top: statusRow1.bottom
-                anchors.topMargin: 20
 
                 Label
                 {
@@ -154,13 +149,7 @@ Window {
                     color: "white"
                     width: root.width / 6
                 }
-            }
-            Row
-            {
-                id: statusRow3
-                spacing: 0
-                anchors.top: statusRow2.bottom
-                anchors.topMargin: 20
+
 
                 Label
                 {
@@ -180,16 +169,10 @@ Window {
                     width: root.width / 6
                 }
 
-            }
-            Row
-            {
-                id: statusRow4
-                spacing: 0
-                anchors.top: statusRow3.bottom
-                anchors.topMargin: 20
-
                 Label
                 {
+                    Layout.row: 4
+                    Layout.column: 0
                     id: motorTempLabel
                     text: "Motor Temperature:"
                     font.pointSize: 15
@@ -223,17 +206,10 @@ Window {
                     width: root.width / 6
                 }
 
-            }
-
-            Row
-            {
-                id: statusRow5
-                spacing: 0
-                anchors.top: statusRow4.bottom
-                anchors.topMargin: 20
-
                 Label
                 {
+                    Layout.row: 5
+                    Layout.column: 0
                     id: rTorqueLabel
                     text: "Requested Torque:"
                     font.pointSize: 15
@@ -267,18 +243,11 @@ Window {
                     width: root.width / 6
                 }
 
-            }
-
-
-            Row
-            {
-                id: statusRow6
-                spacing: 0
-                anchors.top: statusRow5.bottom
-                anchors.topMargin: 20
 
                 Label
                 {
+                    Layout.row: 6
+                    Layout.column: 0
                     id: voltLabel
                     text: "Battery Voltage:"
                     font.pointSize: 15
@@ -328,6 +297,7 @@ Window {
                     color: "white"
                     width: root.width / 6
                 }
+
             }
 
         }
@@ -619,13 +589,15 @@ Window {
                 anchors.top: throttleConfigPage.top
                 anchors.left: throttleConfigPage.left
             }
-            Row {
-                id: configRow1
-                spacing: root.width / 20
-                anchors.left: throttleConfigPage.left
+
+            GridLayout
+            {
+                id: throttleConfigGrid
+                columns: 4
                 anchors.top: label10.bottom
                 anchors.topMargin: 20
-                anchors.leftMargin: 50
+                columnSpacing: throttleConfigPage.width / 20
+
                 Label {
                     id: label11
                     color: "#1fcaff"
@@ -648,15 +620,6 @@ Window {
                     implicitWidth: 200
                 }
 
-            }
-
-            Row {
-                id: configRow2
-                spacing: root.width / 20
-                anchors.left: throttleConfigPage.left
-                anchors.top: configRow1.bottom
-                anchors.topMargin: 20
-                anchors.leftMargin: 50
                 Label {
                     id: label13
                     color: "#1fcaff"
@@ -685,16 +648,7 @@ Window {
 
                }
 
-            }
-
-            Row {
-                id: configRow3
-                spacing: root.width / 20
-                anchors.left: throttleConfigPage.left
-                anchors.top: configRow2.bottom
-                anchors.topMargin: 20
-                anchors.leftMargin: 50
-                Label {
+               Label {
                     id: label15
                     color: "#1fcaff"
                     text: qsTr("Max Level Sig 1")
@@ -721,15 +675,7 @@ Window {
                    implicitWidth: root.width / 4
                }
 
-            }
-            Row {
-                id: configRow4
-                spacing: root.width / 20
-                anchors.left: throttleConfigPage.left
-                anchors.top: configRow3.bottom
-                anchors.topMargin: 20
-                anchors.leftMargin: 50
-                Label {
+               Label {
                     id: label17
                     color: "#1fcaff"
                     text: qsTr("Min Level Sig 2")
@@ -757,15 +703,7 @@ Window {
                    implicitWidth: root.width / 4
                }
 
-            }
-            Row {
-                id: configRow5
-                spacing: root.width / 20
-                anchors.left: throttleConfigPage.left
-                anchors.top: configRow4.bottom
-                anchors.topMargin: 20
-                anchors.leftMargin: 50
-                Label {
+               Label {
                     id: label19
                     color: "#1fcaff"
                     text: qsTr("Max Level Sig 2")
@@ -792,15 +730,7 @@ Window {
                    implicitWidth: root.width / 4
                }
 
-            }
-            Row {
-                id: configRow6
-                spacing: root.width / 20
-                anchors.left: throttleConfigPage.left
-                anchors.top: configRow5.bottom
-                anchors.topMargin: 20
-                anchors.leftMargin: 50
-                Label {
+               Label {
                     id: label21
                     color: "#1fcaff"
                     text: qsTr("Creep Level")
@@ -833,17 +763,18 @@ Window {
                 color: "#1fcaff"
                 text: qsTr("Brake:")
                 font.pointSize: 25
-                anchors.top: configRow6.bottom
+                anchors.top: throttleConfigGrid.bottom
                 anchors.left: throttleConfigPage.left
             }
 
-            Row {
-                id: configRow7
-                spacing: root.width / 20
-                anchors.left: throttleConfigPage.left
+            GridLayout
+            {
+                id: throttleConfigGrid2
+                columns: 4
                 anchors.top: label100.bottom
                 anchors.topMargin: 20
-                anchors.leftMargin: 50
+                columnSpacing: throttleConfigPage.width / 20
+
                 Label {
                     id: label101
                     color: "#1fcaff"
@@ -871,16 +802,7 @@ Window {
                    implicitWidth: root.width / 4
                }
 
-            }
-
-            Row {
-                id: configRow8
-                spacing: root.width / 20
-                anchors.left: throttleConfigPage.left
-                anchors.top: configRow7.bottom
-                anchors.topMargin: 20
-                anchors.leftMargin: 50
-                Label {
+               Label {
                     id: label103
                     color: "#1fcaff"
                     text: qsTr("Max Signal Level")
@@ -914,7 +836,7 @@ Window {
                 color: "#1fcaff"
                 text: qsTr("Motor Control:")
                 font.pointSize: 25
-                anchors.top: configRow8.bottom
+                anchors.top: throttleConfigGrid2.bottom
                 anchors.left: throttleConfigPage.left
             }
 
@@ -961,7 +883,6 @@ Window {
                 }
 
             }
-
 
             Label {
                 id: label200
@@ -1015,12 +936,14 @@ Window {
                 font.pointSize: 25
                 text: "Digital Outputs - DOUT0 - DOUT7"
             }
-            Row
+
+            GridLayout
             {
-                id:outputRow1
+                id: outputConfigGrid1
+                columns: 6
                 anchors.top: outputLabel1.bottom
                 anchors.topMargin: 20
-                spacing: root.width / 20
+                columnSpacing: throttleConfigPage.width / 20
 
                 Label
                 {
@@ -1056,13 +979,6 @@ Window {
                 {
                     id: fanOffTempText
                 }
-            }
-            Row
-            {
-                id: outputRow2
-                anchors.top: outputRow1.bottom
-                anchors.topMargin: 20
-                spacing: root.width / 20
 
                 Label
                 {
@@ -1087,14 +1003,6 @@ Window {
                 {
                     id:prechargeDelayText
                 }
-            }
-
-            Row
-            {
-                id: outputRow3
-                anchors.top: outputRow2.bottom
-                anchors.topMargin: 20
-                spacing: root.width / 20
 
                 Label
                 {
@@ -1102,20 +1010,14 @@ Window {
                     color: "#1fcaff"
                     font.pointSize: 15
                     text: "Main Contactor Output"
+                    Layout.row: 2
+                    Layout.column: 0
                 }
                 ComboBox {
                     id: cbMainContOutput
                     model: [ "None", "0", "1", "2", "3", "4", "5", "6", "7" ]
                     implicitWidth: 200
                 }
-            }
-
-            Row
-            {
-                id: outputRow4
-                anchors.top: outputRow3.bottom
-                anchors.topMargin: 20
-                spacing: root.width / 20
 
                 Label
                 {
@@ -1123,19 +1025,14 @@ Window {
                     color: "#1fcaff"
                     font.pointSize: 15
                     text: "Brake Light Output"
+                    Layout.row: 3
+                    Layout.column: 0
                 }
                 ComboBox {
                     id: cbBrakeLightOutput
                     model: [ "None", "0", "1", "2", "3", "4", "5", "6", "7" ]
                     implicitWidth: 200
                 }
-            }
-            Row
-            {
-                id: outputRow5
-                anchors.top: outputRow4.bottom
-                anchors.topMargin: 20
-                spacing: root.width / 20
 
                 Label
                 {
@@ -1143,6 +1040,8 @@ Window {
                     color: "#1fcaff"
                     font.pointSize: 15
                     text: "Reverse Light Output"
+                    Layout.row: 4
+                    Layout.column: 0
                 }
                 ComboBox {
                     id: cbReverseLightOutput
@@ -1150,7 +1049,6 @@ Window {
                     implicitWidth: 200
                 }
             }
-
         }
         Item {
             id: inputsConfigPage
@@ -1162,12 +1060,15 @@ Window {
                 font.pointSize: 25
                 text: "Digital Inputs - DIN0 - DIN3"
             }
-            Row
+
+            GridLayout
             {
-                id:inputRow1
+                id: inputConfigGrid1
+                columns: 2
                 anchors.top: inputLabel1.bottom
                 anchors.topMargin: 20
-                spacing: root.width / 20
+                columnSpacing: throttleConfigPage.width / 20
+
 
                 Label
                 {
@@ -1181,13 +1082,6 @@ Window {
                     model: [ "None", "0", "1", "2", "3" ]
                     implicitWidth: 200
                 }
-            }
-            Row
-            {
-                id: inputRow2
-                anchors.top: inputRow1.bottom
-                anchors.topMargin: 20
-                spacing: root.width / 20
 
                 Label
                 {
@@ -1202,7 +1096,6 @@ Window {
                     implicitWidth: 200
                 }
             }
-
         }
         Item {
             id: devicesConfigPage
@@ -1214,12 +1107,14 @@ Window {
                 font.pointSize: 25
                 text: "Device Selection / Activation"
             }
-            Row
+
+            GridLayout
             {
-                id: deviceRow1
+                id: deviceConfigGrid1
+                columns: 4
                 anchors.top: deviceLabel1.bottom
                 anchors.topMargin: 20
-                spacing: root.width / 20
+                columnSpacing: throttleConfigPage.width / 20
 
                 Label
                 {
@@ -1234,15 +1129,9 @@ Window {
                     color: "#1fcaff"
                     font.pointSize: 20
                     text: "Throttle and Brake"
+                    Layout.row: 0
+                    Layout.column: 2
                 }
-            }
-
-            Row
-            {
-                id: deviceRow2
-                anchors.top: deviceRow1.bottom
-                anchors.topMargin: 20
-                spacing: root.width / 20
 
                 Label
                 {
@@ -1250,6 +1139,8 @@ Window {
                     color: "#1fcaff"
                     font.pointSize: 15
                     text: "Azure Dynamics DMOC645"
+                    Layout.row: 1
+                    Layout.column: 0
                 }
                 ComboBox {
                     id: cbDMOC645
@@ -1268,13 +1159,7 @@ Window {
                     model: [ "Disabled", "Enabled" ]
                     implicitWidth: 200
                 }
-            }
-            Row
-            {
-                id: deviceRow3
-                anchors.top: deviceRow2.bottom
-                anchors.topMargin: 20
-                spacing: root.width / 20
+
                 Label
                 {
                     id:deviceLabel6
@@ -1299,13 +1184,7 @@ Window {
                     model: [ "Disabled", "Enabled" ]
                     implicitWidth: 200
                 }
-            }
-            Row
-            {
-                id: deviceRow4
-                anchors.top: deviceRow3.bottom
-                anchors.topMargin: 20
-                spacing: root.width / 20
+
                 Label
                 {
                     id:deviceLabel8
@@ -1330,13 +1209,7 @@ Window {
                     model: [ "Disabled", "Enabled" ]
                     implicitWidth: 200
                 }
-            }
-            Row
-            {
-                id: deviceRow5
-                anchors.top: deviceRow4.bottom
-                anchors.topMargin: 20
-                spacing: root.width / 20
+
                 Label
                 {
                     id:deviceLabel10
@@ -1350,21 +1223,14 @@ Window {
                     implicitWidth: 200
                 }
 
-            }
-
-            Row
-            {
-                id: deviceRow6
-                anchors.top: deviceRow5.bottom
-                anchors.topMargin: 20
-                spacing: root.width / 20
-
                 Label
                 {
                     id:deviceLabel20
                     color: "#1fcaff"
                     font.pointSize: 20
                     text: "Communication Interfaces"
+                    Layout.row: 5
+                    Layout.column:0
                 }
 
                 Label
@@ -1373,21 +1239,18 @@ Window {
                     color: "#1fcaff"
                     font.pointSize: 20
                     text: "Battery Chargers and Management"
+                    Layout.row: 5
+                    Layout.column: 2
                 }
-            }
 
-            Row
-            {
-                id: deviceRow7
-                anchors.top: deviceRow6.bottom
-                anchors.topMargin: 20
-                spacing: root.width / 20
                 Label
                 {
                     id:deviceLabel22
                     color: "#1fcaff"
                     font.pointSize: 15
                     text: "ConnectOne WiReach Wifi"
+                    Layout.row: 6
+                    Layout.column: 0
                 }
                 ComboBox {
                     id: cbCOWifi
@@ -1406,14 +1269,7 @@ Window {
                     model: [ "Disabled", "Enabled" ]
                     implicitWidth: 200
                 }
-            }
 
-            Row
-            {
-                id: deviceRow8
-                anchors.top: deviceRow7.bottom
-                anchors.topMargin: 20
-                spacing: root.width / 20
                 Label
                 {
                     id:deviceLabel24
@@ -1438,14 +1294,7 @@ Window {
                     model: [ "Disabled", "Enabled" ]
                     implicitWidth: 200
                 }
-            }
 
-            Row
-            {
-                id: deviceRow9
-                anchors.top: deviceRow8.bottom
-                anchors.topMargin: 20
-                spacing: root.width / 20
                 Label
                 {
                     id:deviceLabel26
@@ -1470,14 +1319,7 @@ Window {
                     model: [ "Disabled", "Enabled" ]
                     implicitWidth: 200
                 }
-            }
 
-            Row
-            {
-                id: deviceRow10
-                anchors.top: deviceRow9.bottom
-                anchors.topMargin: 20
-                spacing: root.width / 20
                 Label
                 {
                     id:deviceLabel28
@@ -1491,8 +1333,6 @@ Window {
                     implicitWidth: 200
                 }
             }
-
-
         }
         Item {
             id: aboutPage
@@ -1501,28 +1341,32 @@ Window {
                 font.pointSize: 20
                 color: "white"
                 text:
-                    "About GEVCU Mobile App and GEVCU Hardware/Software:\n" +
+                    "About GEVCU Mobile App and GEVCU Hardware/Software:\n\n" +
                     "The Generalized Electric Vehicle Control Unit - GEVCU is an open source software and hardware \n"+
                     "project to develop a Vehicle Control Unit (VCU) specifically for electric vehicles.\n"+
                     "The purpose of GEVCU is to handle throttle control, regenerative braking, forward, reverse, \n"+
                     "and such peculiarities as precharge, cooling system control, instrumentation etc.\n"+
-                    " - essentially the driver interface of the car. GEVCU then manages torque and speed \n"+
+                    "It is essentially the driver interface of the car. GEVCU then manages torque and speed \n"+
                     "commands to the power electronics via CAN bus to actually operate the vehicle in response\n"+
-                    " to driver input. But it also provides outputs to instrumentation, brake lights, reverse lights,\n"+
-                    " cooling systems, and other controls specific to that vehicle. GEVCU is both open-source and \n" +
+                    "to driver input. But it also provides outputs to instrumentation, brake lights, reverse lights,\n"+
+                    "cooling systems, and other controls specific to that vehicle. GEVCU is both open-source and \n" +
                     "object-oriented allowing easy addition of additional C++ object modules to incorporate multiple \n"+
                     "standard power components. It is easily modified using the Arduino IDE to incorporate additional \n"+
                     "features peculiar to any specific electric car conversion or build. For most operations, it is \n"+
                     "easily configurable by non-programmers through simple web and serial port interfaces to adapt to\n"+
-                    " a wide variety of power components and vehicle applications. GEVCU was originally conceived of and \n"+
-                    "proposed by Jack Rickard of Electric Vehicle Television (http://EVtv.me) who wrote the original\n"+
-                    " design specification. The main source of the program was developed and is maintained by Collin Kidder\n"+
-                    " and the latest version is always available at http:/github.com/collin80/GEVCU. A list of major \n"+
-                    "contributors to the project is maintained there. Hardware was designed and developed by Ed Clausen\n"+
-                    " and Paulo Jorge Pires de Almeida based on the Arduino Due. GEVCU is open source hardware and \n"+
-                    "software and is presented as EXPERIMENTAL - USE AT YOUR OWN RISK. It is offered strictly for \n"+
-                    "experimental and educational purposes and is NOT intended for actual use in any commercial \n"+
-                    "product or for any specific useful purpose."
+                    "a wide variety of power components and vehicle applications.\n\n" +
+                    "GEVCU was originally conceived of and proposed by Jack Rickard of Electric Vehicle Television\n"+
+                    "(http://EVtv.me) who wrote the original design specification. The main source of the program was\n"+
+                    "developed and is maintained by Collin Kidder and the latest version is always available at \n"+
+                    "http:/github.com/collin80/GEVCU. A list of major contributors to the project is maintained there.\n"+
+                    "Hardware was designed and developed by Ed Clausen, Collin Kidder, and Paulo Jorge Pires de Almeida\n"+
+                    "based on the Arduino Due. GEVCU is open source hardware and software and is presented as \n"+
+                    "EXPERIMENTAL - USE AT YOUR OWN RISK. It is offered strictly for experimental and educational purposes\n"+
+                    "and is NOT intended for actual use in any commercial product or for any specific useful purpose.\n\n" +
+                    "This mobile app was written by Collin Kidder and is meant as a companion to GEVCU. It allows for easy\n" +
+                    "configuration and monitoring of GEVCU without having to gain physical access to the unit itself.\n\n" +
+                    "And, for God's sake, don't use this mobile application while you're driving down the road.\n"+
+                    "Have some common sense man!"
             }
         }
     }
