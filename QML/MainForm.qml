@@ -9,13 +9,26 @@ import Qt.labs.controls 1.0
 Window {
     id: root
     visible: true
-    width: 1920
-    height: 1080
+    width: 800
+    height: 600
     color: "#000000"
+
+
+    ValueStorage {
+        id: valueStorage
+    }
+
+    property real stretchFactor: (width / 1920)
+    property real smallTextSize: 15 * stretchFactor
+    property real medTextSize: 20 * stretchFactor
+    property real largeTextSize: 25 * stretchFactor
 
     Image
     {
         source: "qrc:/images/evtvbackground.png"
+        width: root.width
+        height: root.height
+        fillMode: Image.Stretch
     }
 
     SwipeView {
@@ -26,133 +39,128 @@ Window {
 
         Item {
             id: statusPage
-            Label
-            {
-                id: mcLabel
-                text: "Motor Control"
-                font.pointSize: 25
-                color: "#AAAAFF"
-                width: root.width * 0.55
-            }
-            Label
-            {
-                id: thLabel
-                text: "Throttle/Brake"
-                anchors.left: mcLabel.right
-                font.pointSize: 25
-                color: "#AAAAFF"
-            }
 
             GridLayout
             {
                 id: statusGrid
                 columns: 6
-                anchors.top: mcLabel.bottom
-                anchors.topMargin: 20
+                anchors.top: undefined
+                anchors.topMargin: medTextSize
+                width: root.width
 
+                Label
+                {
+                    id: mcLabel
+                    text: "Motor Control"
+                    font.pointSize: largeTextSize
+                    color: "#AAAAFF"
+                    Layout.row: 0
+                    Layout.column: 0
+                    Layout.columnSpan: 2
+                }
+                Label
+                {
+                    id: thLabel
+                    text: "Throttle/Brake"
+                    font.pointSize: largeTextSize
+                    color: "#AAAAFF"
+                    Layout.row: 0
+                    Layout.column: 4
+                    Layout.columnSpan: 2
+                }
 
                 Label
                 {
                     id: runningLabel
                     text: "Running:"
-                    font.pointSize: 15
+                    font.pointSize: smallTextSize
                     color: "white"
-                    width: root.width / 6
+                    Layout.row: 1
+                    Layout.column: 0
                 }
 
                 Label
                 {
                     id: runningValueLabel
-                    text: ""
-                    font.pointSize: 15
+                    text: valueStorage.isRunning.toString()
+                    font.pointSize: smallTextSize
                     color: "white"
-                    width: root.width / 6
                 }
                 Label
                 {
                     id: optimeLabel
                     text: "Operating Time:"
-                    font.pointSize: 15
+                    font.pointSize: smallTextSize
                     color: "white"
-                    width: root.width / 6
                 }
 
                 Label
                 {
                     id: optimeValueLabel
-                    text: ""
-                    font.pointSize: 15
+                    text: valueStorage.operatingTime.toString()
+                    font.pointSize: smallTextSize
                     color: "white"
-                    width: root.width / 6
                 }
                 Label
                 {
                     id: tlevLabel
                     text: "Throttle Level:"
-                    font.pointSize: 15
+                    font.pointSize: smallTextSize
                     color: "white"
-                    width: root.width / 6
                 }
 
                 Label
                 {
                     id: tlevValueLabel
-                    text: ""
-                    font.pointSize: 15
+                    text: valueStorage.throttleLevel.toString()
+                    font.pointSize: smallTextSize
                     color: "white"
-                    width: root.width / 6
                 }
 
                 Label
                 {
                     id: faultLabel
                     text: "Fault:"
-                    font.pointSize: 15
+                    font.pointSize: smallTextSize
                     color: "white"
-                    width: root.width / 6
                 }
 
                 Label
                 {
                     id: faultValueLabel
-                    text: ""
-                    font.pointSize: 15
+                    text: valueStorage.faultMsg
+                    font.pointSize: smallTextSize
                     color: "white"
-                    width: root.width / 6
                 }
                 Label
                 {
                     id: warningLabel
                     text: "Warning:"
-                    font.pointSize: 15
+                    font.pointSize: smallTextSize
                     color: "white"
-                    width: root.width / 6
                 }
 
                 Label
                 {
                     id: warningValueLabel
-                    text: ""
-                    font.pointSize: 15
+                    text: valueStorage.warningMsg
+                    font.pointSize: smallTextSize
                     color: "white"
-                    width: root.width / 6
                 }
                 Label
                 {
                     id: blevLabel
                     text: "Brake Level:"
-                    font.pointSize: 15
+                    font.pointSize: smallTextSize
                     color: "white"
-                    width: root.width / 6
                 }
 
                 Label
                 {
                     id: blevValueLabel
-                    text: ""
-                    font.pointSize: 15
+                    text: valueStorage.brakeLevel.toString()
+                    font.pointSize: smallTextSize
                     color: "white"
-                    width: root.width / 6
                 }
 
 
@@ -160,18 +168,16 @@ Window {
                 {
                     id: gearLabel
                     text: "Gear Switch:"
-                    font.pointSize: 15
+                    font.pointSize: smallTextSize
                     color: "white"
-                    width: root.width / 6
                 }
 
                 Label
                 {
                     id: gearValueLabel
-                    text: ""
-                    font.pointSize: 15
+                    text: valueStorage.gear
+                    font.pointSize: smallTextSize
                     color: "white"
-                    width: root.width / 6
                 }
 
                 Label
@@ -180,35 +186,31 @@ Window {
                     Layout.column: 0
                     id: motorTempLabel
                     text: "Motor Temperature:"
-                    font.pointSize: 15
+                    font.pointSize: smallTextSize
                     color: "white"
-                    width: root.width / 6
                 }
 
                 Label
                 {
                     id: motorTempValueLabel
-                    text: ""
-                    font.pointSize: 15
+                    text: valueStorage.motorTemp.toString()
+                    font.pointSize: smallTextSize
                     color: "white"
-                    width: root.width / 6
                 }
                 Label
                 {
                     id: inverterTempLabel
                     text: "Inverter Temperature:"
-                    font.pointSize: 15
+                    font.pointSize: smallTextSize
                     color: "white"
-                    width: root.width / 6
                 }
 
                 Label
                 {
                     id: inverterTempValueLabel
-                    text: ""
-                    font.pointSize: 15
+                    text: valueStorage.inverterTemp.toString()
+                    font.pointSize: smallTextSize
                     color: "white"
-                    width: root.width / 6
                 }
 
                 Label
@@ -217,35 +219,31 @@ Window {
                     Layout.column: 0
                     id: rTorqueLabel
                     text: "Requested Torque:"
-                    font.pointSize: 15
+                    font.pointSize: smallTextSize
                     color: "white"
-                    width: root.width / 6
                 }
 
                 Label
                 {
                     id: rTorqueValueLabel
-                    text: ""
-                    font.pointSize: 15
+                    text: valueStorage.reqTorque.toString()
+                    font.pointSize: smallTextSize
                     color: "white"
-                    width: root.width / 6
                 }
                 Label
                 {
                     id: aTorqueLabel
                     text: "Actual Torque:"
-                    font.pointSize: 15
+                    font.pointSize: smallTextSize
                     color: "white"
-                    width: root.width / 6
                 }
 
                 Label
                 {
                     id: aTorqueValueLabel
-                    text: ""
-                    font.pointSize: 15
+                    text: valueStorage.actTorque.toString()
+                    font.pointSize: smallTextSize
                     color: "white"
-                    width: root.width / 6
                 }
 
 
@@ -255,52 +253,46 @@ Window {
                     Layout.column: 0
                     id: voltLabel
                     text: "Battery Voltage:"
-                    font.pointSize: 15
+                    font.pointSize: smallTextSize
                     color: "white"
-                    width: root.width / 6
                 }
 
                 Label
                 {
                     id: voltValueLabel
-                    text: ""
-                    font.pointSize: 15
+                    text: valueStorage.battVoltage.toString()
+                    font.pointSize: smallTextSize
                     color: "white"
-                    width: root.width / 6
                 }
                 Label
                 {
                     id: currentLabel
                     text: "Battery Current:"
-                    font.pointSize: 15
+                    font.pointSize: smallTextSize
                     color: "white"
-                    width: root.width / 6
                 }
 
                 Label
                 {
                     id: currentValueLabel
-                    text: ""
-                    font.pointSize: 15
+                    text: valueStorage.battCurrent.toString()
+                    font.pointSize: smallTextSize
                     color: "white"
-                    width: root.width / 6
                 }
                 Label
                 {
                     id: powerLabel
                     text: "Power:"
-                    font.pointSize: 15
+                    font.pointSize: smallTextSize
                     color: "white"
-                    width: root.width / 6
                 }
 
                 Label
                 {
                     id: powerValueLabel
-                    text: ""
-                    font.pointSize: 15
+                    text: valueStorage.power.toString()
+                    font.pointSize: smallTextSize
                     color: "white"
-                    width: root.width / 6
                 }
 
             }
@@ -331,6 +323,7 @@ Window {
                         upperDangerValue: 90
                         coloredZones: true
                     }
+                    value: valueStorage.throttleLevel
                 }
 
                 CircularGauge {
@@ -345,6 +338,7 @@ Window {
                         upperDangerValue: 500
                         coloredZones: true
                     }
+                    value: valueStorage.actTorque
                 }
 
                 CircularGauge {
@@ -360,6 +354,7 @@ Window {
                         upperDangerValue: 280
                         coloredZones: true
                     }
+                    value: valueStorage.battCurrent
                 }
 
                 CircularGauge {
@@ -369,6 +364,7 @@ Window {
                     maximumValue: 8
                     style: TachGaugeStyle {
                     }
+                    value: valueStorage.rpm / 1000.0
                 }
             }
 
@@ -392,6 +388,7 @@ Window {
                         upperDangerValue: 400
                         coloredZones: true
                     }
+                    value: valueStorage.battVoltage
                 }
                 CircularGauge {
                     id: powerGauge
@@ -405,6 +402,7 @@ Window {
                         upperDangerValue: 150
                         coloredZones: true
                     }
+                    value: valueStorage.power
                 }
             }
 
@@ -421,6 +419,7 @@ Window {
                     width: root.height / 8
                     height: width
                     maximumValue: 1
+                    value: valueStorage.motorTemp / 140.0
                     style: IconGaugeStyle {
                         id: motorGaugeStyle
                         description: "Motor Temp"
@@ -443,6 +442,7 @@ Window {
                     width: root.height / 8
                     height: width
                     maximumValue: 1
+                    value: valueStorage.inverterTemp / 140.0
                     style: IconGaugeStyle {
                         id: controllerGaugeStyle
                         description: "Controller Temp"
@@ -465,6 +465,7 @@ Window {
                     width: root.height / 8
                     height: width
                     maximumValue: 1
+                    value: valueStorage.battSOC / 100.0
                     style: IconGaugeStyle {
                         id: energyGaugeStyle
                         description: "Battery Capacity"
@@ -488,98 +489,111 @@ Window {
                 spacing: root.width * 0.025
                 anchors.left: gaugesRow2.right
                 anchors.top: gaugesRow3.bottom
-                anchors.topMargin: 20
-                anchors.leftMargin: 50
+                anchors.topMargin: 20 * stretchFactor
+                anchors.leftMargin: 50 * stretchFactor
 
                 Label {
                     id: label1
                     color: "#1fcaff"
                     text: qsTr("Inputs:")
-                    font.pointSize: 15
+                    font.pointSize: smallTextSize
                 }
 
                 StatusIndicator {
                     id: statusInput1
+                    active: valueStorage.input1
                 }
 
                 StatusIndicator {
                     id: statusInput2
+                    active: valueStorage.input2
                 }
 
                 StatusIndicator {
                     id: statusInput3
+                    active: valueStorage.input3
                 }
 
                 StatusIndicator {
                     id: statusInput4
+                    active: valueStorage.input4
                 }
             }
 
             Row {
                 id: dashboardRow2
-                spacing: root.width * 0.025
+                spacing: 20 * stretchFactor
                 anchors.left: gaugesRow2.right
                 anchors.top: dashboardRow1.bottom
-                anchors.topMargin: 20
-                anchors.leftMargin: 50
+                anchors.topMargin: 20 * stretchFactor
+                anchors.leftMargin: 50 * stretchFactor
 
                 Label {
                     id: label2
                     color: "#1fcaff"
                     text: qsTr("Outputs:")
-                    font.pointSize: 15
+                    font.pointSize: smallTextSize
                 }
 
                 StatusIndicator {
                     id: statusOutput1
+                    active: valueStorage.output1
                 }
 
                 StatusIndicator {
                     id: statusOutput2
+                    active: valueStorage.output2
                 }
 
                 StatusIndicator {
                     id: statusOutput3
+                    active: valueStorage.output3
                 }
 
                 StatusIndicator {
                     id: statusOutput4
+                    active: valueStorage.output4
                 }
 
                 StatusIndicator {
                     id: statusOutput5
+                    active: valueStorage.output5
                 }
 
                 StatusIndicator {
                     id: statusOutput6
+                    active: valueStorage.output6
                 }
 
                 StatusIndicator {
                     id: statusOutput7
+                    active: valueStorage.output7
                 }
 
                 StatusIndicator {
                     id: statusOutput8
+                    active: valueStorage.output8
                 }
             }
 
             Row {
                 id: dashboardRow3
-                spacing: root.width * 0.025
+                spacing: 20 * stretchFactor
                 anchors.left: gaugesRow2.right
                 anchors.top: dashboardRow2.bottom
-                anchors.topMargin: 20
-                anchors.leftMargin: 50
+                anchors.topMargin: 20 * stretchFactor
+                anchors.leftMargin: 50 * stretchFactor
 
                 Label {
                     id: label3
                     color: "#1fcaff"
                     text: qsTr("System Status:")
-                    font.pointSize: 15
+                    font.pointSize: smallTextSize
                 }
 
                 StatusIndicator {
                     id: statusSystem
+                    active: valueStorage.sysStatus
                 }
             }
         }
