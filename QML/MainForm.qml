@@ -572,7 +572,6 @@ Window {
                         id: statusOutput6
                         active: valueStorage.output6
                     }
-
                     StatusIndicator {
                         id: statusOutput7
                         active: valueStorage.output7
@@ -1122,7 +1121,6 @@ Window {
                 anchors.topMargin: 20 * stretchFactor
                 columnSpacing: 80 * stretchFactor
 
-
                 Label
                 {
                     id: inputLabel2
@@ -1147,8 +1145,8 @@ Window {
                 ComboBox {
                     id: cbReverseInput
                     model: [ "None", "0", "1", "2", "3" ]
-                    implicitWidth: stdElementSize
                     font.pointSize: smallTextSize
+                    implicitWidth: 200 * stretchFactor
                 }
             }
         }
