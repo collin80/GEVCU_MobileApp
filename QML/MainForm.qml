@@ -197,7 +197,7 @@ Window {
                 Label
                 {
                     id: motorTempValueLabel
-                    text: valueStorage.motorTemp.toString()
+                    text: valueStorage.motorTemp.toFixed(1)
                     font.pointSize: smallTextSize
                     color: "white"
                 }
@@ -212,7 +212,7 @@ Window {
                 Label
                 {
                     id: inverterTempValueLabel
-                    text: valueStorage.inverterTemp.toString()
+                    text: valueStorage.inverterTemp.toFixed(1)
                     font.pointSize: smallTextSize
                     color: "white"
                 }
@@ -230,7 +230,7 @@ Window {
                 Label
                 {
                     id: rTorqueValueLabel
-                    text: valueStorage.reqTorque.toString()
+                    text: valueStorage.reqTorque.toFixed(1)
                     font.pointSize: smallTextSize
                     color: "white"
                 }
@@ -245,7 +245,7 @@ Window {
                 Label
                 {
                     id: aTorqueValueLabel
-                    text: valueStorage.actTorque.toString()
+                    text: valueStorage.actTorque.toFixed(1)
                     font.pointSize: smallTextSize
                     color: "white"
                 }
@@ -264,7 +264,7 @@ Window {
                 Label
                 {
                     id: voltValueLabel
-                    text: valueStorage.battVoltage.toString()
+                    text: valueStorage.battVoltage.toFixed(1)
                     font.pointSize: smallTextSize
                     color: "white"
                 }
@@ -279,7 +279,7 @@ Window {
                 Label
                 {
                     id: currentValueLabel
-                    text: valueStorage.battCurrent.toString()
+                    text: valueStorage.battCurrent.toFixed(1)
                     font.pointSize: smallTextSize
                     color: "white"
                 }
@@ -294,7 +294,7 @@ Window {
                 Label
                 {
                     id: powerValueLabel
-                    text: valueStorage.power.toString()
+                    text: valueStorage.power.toFixed(1)
                     font.pointSize: smallTextSize
                     color: "white"
                 }
