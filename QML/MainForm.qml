@@ -22,10 +22,13 @@ Window {
     property real smallTextSize: 15 * stretchFactor
     property real medTextSize: 20 * stretchFactor
     property real largeTextSize: 25 * stretchFactor
-    property real stdElementSize: 250 * stretchFactor
+    property real textboxSize: 175 * stretchFactor
+    property real comboboxSize: 320 * stretchFactor
     property real bigGaugeWidth: 440 * stretchFactor
     property real smallGaugeWidth: 180 * stretchFactor
     property real sliderWidth: 450 * stretchFactor
+    property real sliderBuffer: 100 * stretchFactor
+    property int adcMaxValue: 4096
 
     Image
     {
@@ -638,7 +641,8 @@ Window {
                 ComboBox {
                     id: cbNumPots
                     model: [ "1","2" ]
-                    implicitWidth: stdElementSize
+                    currentIndex: valueStorage.numThrottles
+                    implicitWidth: comboboxSize
                     font.pointSize: smallTextSize
                 }
                 Label {
@@ -650,7 +654,8 @@ Window {
                 ComboBox {
                     id: cbThrottleType
                     model: [ "Std Pot", "Inv Pot", "Hall Effect" ]
-                    implicitWidth: stdElementSize
+                    currentIndex: valueStorage.throttleType
+                    implicitWidth: comboboxSize
                     font.pointSize: smallTextSize
                 }
 
@@ -663,9 +668,11 @@ Window {
                 SliderWithText {
                     id: sliderMinSig1
                     minimumValue: 0
-                    maximumValue: 65536
+                    maximumValue: adcMaxValue
+                    value: valueStorage.sig1Min
                     stepSize: 10
                     implicitWidth: sliderWidth
+                    anchors.rightMargin: sliderBuffer
                 }
                Label {
                     id: label14
@@ -677,8 +684,10 @@ Window {
                    id: sliderRegenMaxPedal
                    minimumValue: 0
                    maximumValue: 100
+                   value: valueStorage.regenMaxPedal
                    stepSize: 1
                    implicitWidth: sliderWidth
+                   anchors.rightMargin: sliderBuffer
 
                }
 
@@ -690,10 +699,12 @@ Window {
                 }
                 SliderWithText {
                     minimumValue: 0
-                    maximumValue: 65536
+                    maximumValue: adcMaxValue
+                    value: valueStorage.sig1Max
                     stepSize: 10
                     id: sliderMaxSig1
                     implicitWidth: sliderWidth
+                    anchors.rightMargin: sliderBuffer
                 }
                Label {
                     id: label16
@@ -704,9 +715,11 @@ Window {
                SliderWithText {
                    id: sliderRegenMinPedal
                    minimumValue: 0
-                   maximumValue: 65536
+                   maximumValue: adcMaxValue
+                   value: valueStorage.regenMinPedal
                    stepSize: 10
                    implicitWidth: sliderWidth
+                   anchors.rightMargin: sliderBuffer
                }
 
                Label {
@@ -718,11 +731,12 @@ Window {
                 SliderWithText {
                     id: sliderMinSig2
                     minimumValue: 0
-                    maximumValue: 65536
+                    maximumValue: adcMaxValue
+                    value: valueStorage.sig2Min
                     stepSize: 10
                     implicitWidth: sliderWidth
-
-                }
+                    anchors.rightMargin: sliderBuffer
+               }
                Label {
                     id: label18
                     color: "white"
@@ -733,8 +747,10 @@ Window {
                    id: sliderMotionStart
                    minimumValue: 0
                    maximumValue: 100
+                   value: valueStorage.motionStartPedal
                    stepSize: 1
                    implicitWidth: sliderWidth
+                   anchors.rightMargin: sliderBuffer
                }
 
                Label {
@@ -746,9 +762,11 @@ Window {
                 SliderWithText {
                     id: sliderMaxSig2
                     minimumValue: 0
-                    maximumValue: 65536
+                    maximumValue: adcMaxValue
+                    value: valueStorage.sig2Max
                     stepSize: 10
                     implicitWidth: sliderWidth
+                    anchors.rightMargin: sliderBuffer
                 }
                Label {
                     id: label20
@@ -760,8 +778,10 @@ Window {
                    id: sliderHalfThrottle
                    minimumValue: 0
                    maximumValue: 100
+                   value: valueStorage.halfMotionPedal
                    stepSize: 1
                    implicitWidth: sliderWidth
+                   anchors.rightMargin: sliderBuffer
                }
 
                Label {
@@ -774,8 +794,10 @@ Window {
                     id: sliderCreepLevel
                     minimumValue: 0
                     maximumValue: 100
+                    value: valueStorage.creepLevel
                     stepSize: 1
                     implicitWidth: sliderWidth
+                    anchors.rightMargin: sliderBuffer
                 }
                Label {
                     id: label22
@@ -787,8 +809,10 @@ Window {
                    id: sliderMinThrottleRegen
                    minimumValue: 0
                    maximumValue: 100
+                   value: valueStorage.minRegenThrottle
                    stepSize: 1
                    implicitWidth: sliderWidth
+                   anchors.rightMargin: sliderBuffer
                }
             }
 
@@ -818,9 +842,11 @@ Window {
                 SliderWithText {
                     id: sliderMinSigBrake
                     minimumValue: 0
-                    maximumValue: 65536
+                    maximumValue: adcMaxValue
+                    value: valueStorage.brakeSigMin
                     stepSize: 10
                     implicitWidth: sliderWidth
+                    anchors.rightMargin: sliderBuffer
                 }
                Label {
                     id: label102
@@ -832,8 +858,10 @@ Window {
                    id: sliderMinBrakeRegen
                    minimumValue: 0
                    maximumValue: 100
+                   value: valueStorage.brakeRegenMin
                    stepSize: 1
                    implicitWidth: sliderWidth
+                   anchors.rightMargin: sliderBuffer
                }
 
                Label {
@@ -845,9 +873,11 @@ Window {
                 SliderWithText {
                     id: sliderMaxSigBrake
                     minimumValue: 0
-                    maximumValue: 65536
+                    maximumValue: adcMaxValue
+                    value: valueStorage.brakeSigMax
                     stepSize: 10
                     implicitWidth: sliderWidth
+                    anchors.rightMargin: sliderBuffer
                 }
                Label {
                     id: label104
@@ -859,8 +889,10 @@ Window {
                    id: sliderMaxBrakeRegen
                    minimumValue: 0
                    maximumValue: 100
+                   value: valueStorage.brakeRegenMax
                    stepSize: 1
                    implicitWidth: sliderWidth
+                   anchors.rightMargin: sliderBuffer
                }
             }
 
@@ -890,8 +922,10 @@ Window {
                 TextField
                 {
                     id: maxSpeedText
-                    font.pointSize: smallTextSize
-                    implicitWidth: stdElementSize
+                    text: valueStorage.maxSpeed.toString()
+                    font.pointSize: medTextSize
+                    color: "white"
+                    implicitWidth: textboxSize
                 }
 
                 Label {
@@ -903,8 +937,10 @@ Window {
                 TextField
                 {
                     id: maxTorqueText
-                    font.pointSize: smallTextSize
-                    implicitWidth: stdElementSize
+                    text: valueStorage.maxTorque.toString()
+                    font.pointSize: medTextSize
+                    color: "white"
+                    implicitWidth: textboxSize
                 }
 
                 Label {
@@ -916,7 +952,8 @@ Window {
                 ComboBox {
                     id: cbMotorMode
                     model: [ "Torque Control", "Speed Control" ]
-                    implicitWidth: stdElementSize
+                    currentIndex: valueStorage.motorMode
+                    implicitWidth: comboboxSize
                     font.pointSize: smallTextSize
                 }
 
@@ -948,7 +985,8 @@ Window {
                 ComboBox {
                     id: cbLogMode
                     model: [ "Debug", "Info", "Warning", "Error", "Off" ]
-                    implicitWidth: stdElementSize
+                    currentIndex: valueStorage.logLevel
+                    implicitWidth: comboboxSize
                     font.pointSize: smallTextSize
                 }
 
@@ -961,8 +999,10 @@ Window {
                 TextField
                 {
                     id: nomVoltsText
-                    implicitWidth: stdElementSize
-                    font.pointSize: smallTextSize
+                    text: valueStorage.nomBattVolts.toString()
+                    implicitWidth: textboxSize
+                    font.pointSize: medTextSize
+                    color: "white"
                 }
             }
 
@@ -996,7 +1036,8 @@ Window {
                 ComboBox {
                     id: cbFanOutput
                     model: [ "None", "0", "1", "2", "3", "4", "5", "6", "7" ]
-                    implicitWidth: stdElementSize
+                    currentIndex: valueStorage.fanPin
+                    implicitWidth: comboboxSize
                     font.pointSize: smallTextSize
                 }
                 Label
@@ -1009,8 +1050,10 @@ Window {
                 TextField
                 {
                     id:fanOnTempText
-                    font.pointSize: smallTextSize
-                    implicitWidth: stdElementSize
+                    text: valueStorage.fanOnTemp.toString()
+                    font.pointSize: medTextSize
+                    color: "white"
+                    implicitWidth: textboxSize
                 }
                 Label
                 {
@@ -1022,8 +1065,10 @@ Window {
                 TextField
                 {
                     id: fanOffTempText
-                    font.pointSize: smallTextSize
-                    implicitWidth: stdElementSize
+                    text: valueStorage.fanOffTemp.toString()
+                    font.pointSize: medTextSize
+                    color: "white"
+                    implicitWidth: textboxSize
                 }
 
                 Label
@@ -1036,7 +1081,8 @@ Window {
                 ComboBox {
                     id: cbPrechargeOutput
                     model: [ "None", "0", "1", "2", "3", "4", "5", "6", "7" ]
-                    implicitWidth: stdElementSize
+                    currentIndex: valueStorage.prechargePin
+                    implicitWidth: comboboxSize
                     font.pointSize: smallTextSize
                 }
                 Label
@@ -1049,8 +1095,10 @@ Window {
                 TextField
                 {
                     id:prechargeDelayText
-                    font.pointSize: smallTextSize
-                    implicitWidth: stdElementSize
+                    text: valueStorage.prechargeDelay.toString()
+                    font.pointSize: medTextSize
+                    color: "white"
+                    implicitWidth: textboxSize
                 }
 
                 Label
@@ -1065,7 +1113,8 @@ Window {
                 ComboBox {
                     id: cbMainContOutput
                     model: [ "None", "0", "1", "2", "3", "4", "5", "6", "7" ]
-                    implicitWidth: stdElementSize
+                    currentIndex: valueStorage.mainContPin
+                    implicitWidth: comboboxSize
                     font.pointSize: smallTextSize
                 }
 
@@ -1081,7 +1130,8 @@ Window {
                 ComboBox {
                     id: cbBrakeLightOutput
                     model: [ "None", "0", "1", "2", "3", "4", "5", "6", "7" ]
-                    implicitWidth: stdElementSize
+                    currentIndex: valueStorage.brakeLightPin
+                    implicitWidth: comboboxSize
                     font.pointSize: smallTextSize
                 }
 
@@ -1097,7 +1147,8 @@ Window {
                 ComboBox {
                     id: cbReverseLightOutput
                     model: [ "None", "0", "1", "2", "3", "4", "5", "6", "7" ]
-                    implicitWidth: stdElementSize
+                    currentIndex: valueStorage.reverseLightPin
+                    implicitWidth: comboboxSize
                     font.pointSize: smallTextSize
                 }
             }
@@ -1131,7 +1182,8 @@ Window {
                 ComboBox {
                     id: cbEnableInput
                     model: [ "None", "0", "1", "2", "3" ]
-                    implicitWidth: stdElementSize
+                    currentIndex: valueStorage.enablePin
+                    implicitWidth: comboboxSize
                     font.pointSize: smallTextSize
                 }
 
@@ -1145,8 +1197,9 @@ Window {
                 ComboBox {
                     id: cbReverseInput
                     model: [ "None", "0", "1", "2", "3" ]
+                    currentIndex: valueStorage.reversePin
                     font.pointSize: smallTextSize
-                    implicitWidth: 200 * stretchFactor
+                    implicitWidth: comboboxSize
                 }
             }
         }
@@ -1198,7 +1251,8 @@ Window {
                 ComboBox {
                     id: cbDMOC645
                     model: [ "Disabled", "Enabled" ]
-                    implicitWidth: stdElementSize
+                    currentIndex: valueStorage.dmocEnabled
+                    implicitWidth: comboboxSize
                     font.pointSize: smallTextSize
                 }
                 Label
@@ -1211,7 +1265,8 @@ Window {
                 ComboBox {
                     id: cbPotThrottle
                     model: [ "Disabled", "Enabled" ]
-                    implicitWidth: stdElementSize
+                    currentIndex: valueStorage.potThrottleEnabled
+                    implicitWidth: comboboxSize
                     font.pointSize: smallTextSize
                 }
 
@@ -1225,7 +1280,8 @@ Window {
                 ComboBox {
                     id: cbUQMPowerPhase
                     model: [ "Disabled", "Enabled" ]
-                    implicitWidth: stdElementSize
+                    currentIndex: valueStorage.uqmPowerphaseEnabled
+                    implicitWidth: comboboxSize
                     font.pointSize: smallTextSize
                 }
                 Label
@@ -1238,7 +1294,8 @@ Window {
                 ComboBox {
                     id: cbPotBrake
                     model: [ "Disabled", "Enabled" ]
-                    implicitWidth: stdElementSize
+                    currentIndex: valueStorage.potBrakeEnabled
+                    implicitWidth: comboboxSize
                     font.pointSize: smallTextSize
                 }
 
@@ -1252,7 +1309,8 @@ Window {
                 ComboBox {
                     id: cbBrusaDMC5
                     model: [ "Disabled", "Enabled" ]
-                    implicitWidth: stdElementSize
+                    currentIndex: valueStorage.brusaDMCEnabled
+                    implicitWidth: comboboxSize
                     font.pointSize: smallTextSize
                 }
                 Label
@@ -1265,7 +1323,8 @@ Window {
                 ComboBox {
                     id: cbCANThrottle
                     model: [ "Disabled", "Enabled" ]
-                    implicitWidth: stdElementSize
+                    currentIndex: valueStorage.canThrottleEnabled
+                    implicitWidth: comboboxSize
                     font.pointSize: smallTextSize
                 }
 
@@ -1279,7 +1338,8 @@ Window {
                 ComboBox {
                     id: cbCANBrake
                     model: [ "Disabled", "Enabled" ]
-                    implicitWidth: stdElementSize
+                    currentIndex: valueStorage.canBrakeEnabled
+                    implicitWidth: comboboxSize
                     font.pointSize: smallTextSize
                 }
 
@@ -1315,7 +1375,8 @@ Window {
                 ComboBox {
                     id: cbCOWifi
                     model: [ "Disabled", "Enabled" ]
-                    implicitWidth: stdElementSize
+                    currentIndex: valueStorage.wiReachEnabled
+                    implicitWidth: comboboxSize
                     font.pointSize: smallTextSize
                 }
                 Label
@@ -1328,7 +1389,8 @@ Window {
                 ComboBox {
                     id: cbBrusaNLG5
                     model: [ "Disabled", "Enabled" ]
-                    implicitWidth: stdElementSize
+                    currentIndex: valueStorage.brusaNLGEnabled
+                    implicitWidth: comboboxSize
                     font.pointSize: smallTextSize
                 }
 
@@ -1342,7 +1404,8 @@ Window {
                 ComboBox {
                     id: cbELM327
                     model: [ "Disabled", "Enabled" ]
-                    implicitWidth: stdElementSize
+                    currentIndex: valueStorage.elm327Enabled
+                    implicitWidth: comboboxSize
                     font.pointSize: smallTextSize
                 }
                 Label
@@ -1355,7 +1418,8 @@ Window {
                 ComboBox {
                     id: cbTCCH
                     model: [ "Disabled", "Enabled" ]
-                    implicitWidth: stdElementSize
+                    currentIndex: valueStorage.tcchEnabled
+                    implicitWidth: comboboxSize
                     font.pointSize: smallTextSize
                 }
 
@@ -1369,7 +1433,8 @@ Window {
                 ComboBox {
                     id: cbOBD2PID
                     model: [ "Disabled", "Enabled" ]
-                    implicitWidth: stdElementSize
+                    currentIndex: valueStorage.pidListenerEnabled
+                    implicitWidth: comboboxSize
                     font.pointSize: smallTextSize
                 }
                 Label
@@ -1382,7 +1447,8 @@ Window {
                 ComboBox {
                     id: cbLearCharger
                     model: [ "Disabled", "Enabled" ]
-                    implicitWidth: stdElementSize
+                    currentIndex: valueStorage.learChargerEnabled
+                    implicitWidth: comboboxSize
                     font.pointSize: smallTextSize
                 }
 
@@ -1396,7 +1462,8 @@ Window {
                 ComboBox {
                     id: cbThinkBMS
                     model: [ "Disabled", "Enabled" ]
-                    implicitWidth: stdElementSize
+                    currentIndex: valueStorage.thinkBMSEnabled
+                    implicitWidth: comboboxSize
                     font.pointSize: smallTextSize
                 }
             }
