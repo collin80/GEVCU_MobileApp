@@ -9,8 +9,8 @@ import Qt.labs.controls 1.0
 Window {
     id: root
     visible: true
-    width: 800
-    height: 600
+    width: 1440
+    height: 900
     color: "#000000"
 
 
@@ -18,7 +18,7 @@ Window {
         id: valueStorage
     }
 
-    property real stretchFactor: (width / 1920)
+    property real stretchFactor: (root.width / 1920)
     property real smallTextSize: 15 * stretchFactor
     property real medTextSize: 20 * stretchFactor
     property real largeTextSize: 25 * stretchFactor
@@ -374,6 +374,7 @@ Window {
                     style: TachGaugeStyle {
                     }
                     value: valueStorage.rpm / 1000.0
+
                 }
                  //second row of gauges
                 CircularGauge {
@@ -409,10 +410,10 @@ Window {
                 Row {
                     id: gaugesRow3
                     spacing: 60 * stretchFactor
-                    anchors.left: powerGauge.right
-                    anchors.top: rpmGauge.bottom
-                    anchors.topMargin: 120 * stretchFactor
-                    anchors.leftMargin: 40 * stretchFactor
+                    //anchors.left: powerGauge.right
+                    //anchors.top: rpmGauge.bottom
+                    //anchors.topMargin: 120 * stretchFactor
+                    //anchors.leftMargin: 40 * stretchFactor
                     Layout.row: 1
                     Layout.column: 2
                     Layout.columnSpan: 2
@@ -630,7 +631,7 @@ Window {
                 columns: 4
                 anchors.top: label10.bottom
                 anchors.topMargin: 20 * stretchFactor
-                columnSpacing: 80 * stretchFactor
+                columnSpacing: 120 * stretchFactor
 
                 Label {
                     id: label11
@@ -671,8 +672,7 @@ Window {
                     maximumValue: adcMaxValue
                     value: valueStorage.sig1Min
                     stepSize: 10
-                    implicitWidth: sliderWidth
-                    anchors.rightMargin: sliderBuffer
+                    implicitWidth: sliderWidth                    
                 }
                Label {
                     id: label14
@@ -687,8 +687,6 @@ Window {
                    value: valueStorage.regenMaxPedal
                    stepSize: 1
                    implicitWidth: sliderWidth
-                   anchors.rightMargin: sliderBuffer
-
                }
 
                Label {
@@ -704,7 +702,6 @@ Window {
                     stepSize: 10
                     id: sliderMaxSig1
                     implicitWidth: sliderWidth
-                    anchors.rightMargin: sliderBuffer
                 }
                Label {
                     id: label16
@@ -719,7 +716,6 @@ Window {
                    value: valueStorage.regenMinPedal
                    stepSize: 10
                    implicitWidth: sliderWidth
-                   anchors.rightMargin: sliderBuffer
                }
 
                Label {
@@ -735,7 +731,6 @@ Window {
                     value: valueStorage.sig2Min
                     stepSize: 10
                     implicitWidth: sliderWidth
-                    anchors.rightMargin: sliderBuffer
                }
                Label {
                     id: label18
@@ -750,7 +745,6 @@ Window {
                    value: valueStorage.motionStartPedal
                    stepSize: 1
                    implicitWidth: sliderWidth
-                   anchors.rightMargin: sliderBuffer
                }
 
                Label {
@@ -766,7 +760,6 @@ Window {
                     value: valueStorage.sig2Max
                     stepSize: 10
                     implicitWidth: sliderWidth
-                    anchors.rightMargin: sliderBuffer
                 }
                Label {
                     id: label20
@@ -781,7 +774,6 @@ Window {
                    value: valueStorage.halfMotionPedal
                    stepSize: 1
                    implicitWidth: sliderWidth
-                   anchors.rightMargin: sliderBuffer
                }
 
                Label {
@@ -797,7 +789,6 @@ Window {
                     value: valueStorage.creepLevel
                     stepSize: 1
                     implicitWidth: sliderWidth
-                    anchors.rightMargin: sliderBuffer
                 }
                Label {
                     id: label22
@@ -812,7 +803,6 @@ Window {
                    value: valueStorage.minRegenThrottle
                    stepSize: 1
                    implicitWidth: sliderWidth
-                   anchors.rightMargin: sliderBuffer
                }
             }
 
@@ -831,7 +821,7 @@ Window {
                 columns: 4
                 anchors.top: label100.bottom
                 anchors.topMargin: 20
-                columnSpacing: 80 * stretchFactor
+                columnSpacing: 120 * stretchFactor
 
                 Label {
                     id: label101
@@ -846,7 +836,6 @@ Window {
                     value: valueStorage.brakeSigMin
                     stepSize: 10
                     implicitWidth: sliderWidth
-                    anchors.rightMargin: sliderBuffer
                 }
                Label {
                     id: label102
@@ -861,7 +850,6 @@ Window {
                    value: valueStorage.brakeRegenMin
                    stepSize: 1
                    implicitWidth: sliderWidth
-                   anchors.rightMargin: sliderBuffer
                }
 
                Label {
@@ -877,7 +865,6 @@ Window {
                     value: valueStorage.brakeSigMax
                     stepSize: 10
                     implicitWidth: sliderWidth
-                    anchors.rightMargin: sliderBuffer
                 }
                Label {
                     id: label104
@@ -892,7 +879,6 @@ Window {
                    value: valueStorage.brakeRegenMax
                    stepSize: 1
                    implicitWidth: sliderWidth
-                   anchors.rightMargin: sliderBuffer
                }
             }
 

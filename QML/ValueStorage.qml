@@ -93,7 +93,7 @@ Item {
                 easing.type: Easing.InOutSine
                 from: 250
                 to: 400
-                duration: 3000
+                duration: 30000
             }
             NumberAnimation {
                 target: valueStorage
@@ -101,7 +101,7 @@ Item {
                 easing.type: Easing.InOutSine
                 from: -150
                 to: 400
-                duration: 3000
+                duration: 30000
             }
             NumberAnimation {
                 target: valueStorage
@@ -109,7 +109,7 @@ Item {
                 easing.type: Easing.InOutSine
                 from: 0
                 to: 100
-                duration: 3000
+                duration: 30000
             }
             NumberAnimation {
                 target: valueStorage
@@ -117,7 +117,7 @@ Item {
                 easing.type: Easing.InOutSine
                 from: 0
                 to: 100
-                duration: 3000
+                duration: 30000
             }
             NumberAnimation {
                 target: valueStorage
@@ -125,7 +125,7 @@ Item {
                 easing.type: Easing.InOutSine
                 from: 0
                 to: 100
-                duration: 3000
+                duration: 30000
             }
             NumberAnimation {
                 target: valueStorage
@@ -133,7 +133,7 @@ Item {
                 easing.type: Easing.InOutSine
                 from: 0
                 to: 200
-                duration: 3000
+                duration: 30000
             }
             NumberAnimation {
                 target: valueStorage
@@ -141,7 +141,7 @@ Item {
                 easing.type: Easing.InOutSine
                 from: 0
                 to: 200
-                duration: 3000
+                duration: 30000
             }
             NumberAnimation {
                 target: valueStorage
@@ -149,7 +149,7 @@ Item {
                 easing.type: Easing.InOutSine
                 from: 0
                 to: 300
-                duration: 3000
+                duration: 30000
             }
             NumberAnimation {
                 target: valueStorage
@@ -157,7 +157,7 @@ Item {
                 easing.type: Easing.InOutSine
                 from: 0
                 to: 100
-                duration: 3000
+                duration: 30000
             }
             NumberAnimation {
                 target: valueStorage
@@ -165,7 +165,7 @@ Item {
                 easing.type: Easing.InOutSine
                 from: 0
                 to: 200
-                duration: 3000
+                duration: 30000
             }
             NumberAnimation {
                 target: valueStorage
@@ -173,7 +173,7 @@ Item {
                 easing.type: Easing.InOutSine
                 from: 0
                 to: 6000
-                duration: 3000
+                duration: 30000
             }
         }
         PropertyAnimation

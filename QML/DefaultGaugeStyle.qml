@@ -185,6 +185,8 @@ CircularGaugeStyle {
     }
 
     background: Canvas {
+        anchors.fill: parent
+
         onPaint: {
             var ctx = getContext("2d");
             ctx.reset();
@@ -202,7 +204,7 @@ CircularGaugeStyle {
         Rectangle {
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.top: parent.verticalCenter
-            anchors.topMargin: -toPixels(0.1)
+            anchors.topMargin: -toPixels(0.07)
             rotation: 90
             gradient: Gradient {
                 GradientStop { position: 0.0; color: "#797979" }

@@ -95,7 +95,7 @@ DefaultGaugeStyle {
             anchors.top: parent.verticalCenter
             anchors.topMargin: 20
 
-            readonly property int rpmInt: 0
+            readonly property int rpmInt: valueStorage.rpm
         }
         Text {
             text: "x1000"
