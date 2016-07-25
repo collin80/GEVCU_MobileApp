@@ -10,6 +10,9 @@ BLEHandler::BLEHandler()
             this, SLOT(deviceScanError(QBluetoothDeviceDiscoveryAgent::Error)));
     connect(discoveryAgent, SIGNAL(finished()), this, SLOT(scanFinished()));
 
+    bleController = 0;
+    bleService = 0;
+
     discoveryAgent->start();
 }
 
@@ -126,20 +129,28 @@ void BLEHandler::deviceDisconnected()
 
 void BLEHandler::serviceDiscovered(const QBluetoothUuid &gatt)
 {
-    if (gatt == QBluetoothUuid(QBluetoothUuid::HeartRate)) {
+    qWarning() << "Found service " << gatt.toUInt16();
+    if (gatt.toUInt16() == 0x3100) {
         //setMessage("GEVCU service discovered. Waiting for service scan to be done...");
+        qWarning() << "Found GEVCU service!";
         foundGEVCUService = true;
     }
 }
 
 void BLEHandler::serviceScanDone()
 {
-    delete bleService;
-    bleService = 0;
+    qWarning() << "Done scanning services";
+
+    if (bleService)
+    {
+        delete bleService;
+        bleService = 0;
+    }
 
     if (foundGEVCUService) {
         //setMessage("Connecting to service...");
-        bleService = bleController->createServiceObject(QBluetoothUuid(QBluetoothUuid::HeartRate), this);
+        qWarning() << "Connecting to GEVCU service";
+        bleService = bleController->createServiceObject(QBluetoothUuid((quint16)0x3100), this);
     }
 
     if (!bleService) {
