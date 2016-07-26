@@ -40,8 +40,8 @@ private slots:
 
     //QLowEnergyService
     void serviceStateChanged(QLowEnergyService::ServiceState s);
-    //void updateHeartRateValue(const QLowEnergyCharacteristic &c,
-               //               const QByteArray &value);
+    void updateBLECharacteristic(const QLowEnergyCharacteristic &c,
+                              const QByteArray &value);
     void confirmedDescriptorWrite(const QLowEnergyDescriptor &d,
                               const QByteArray &value);
     void serviceError(QLowEnergyService::ServiceError e);

@@ -161,7 +161,7 @@ void BLEHandler::serviceScanDone()
     connect(bleService, SIGNAL(stateChanged(QLowEnergyService::ServiceState)),
             this, SLOT(serviceStateChanged(QLowEnergyService::ServiceState)));
     connect(bleService, SIGNAL(characteristicChanged(QLowEnergyCharacteristic,QByteArray)),
-            this, SLOT(updateHeartRateValue(QLowEnergyCharacteristic,QByteArray)));
+            this, SLOT(updateBLECharacteristic(QLowEnergyCharacteristic,QByteArray)));
     connect(bleService, SIGNAL(descriptorWritten(QLowEnergyDescriptor,QByteArray)),
             this, SLOT(confirmedDescriptorWrite(QLowEnergyDescriptor,QByteArray)));
 
@@ -194,28 +194,99 @@ void BLEHandler::controllerError(QLowEnergyController::Error error)
     qWarning() << "Controller Error:" << error;
 }
 
+/*
+ * Called whenever a notification subscribed characteristic changes
+ */
+void BLEHandler::updateBLECharacteristic(const QLowEnergyCharacteristic &c, const QByteArray &value)
+{
+    qWarning() << "Got characteristic update for id " << c.uuid().toUInt16();
+    switch (c.uuid().toUInt16())
+    {
+    case 0x3101:
+        break;
+    case 0x3102:
+        break;
+    case 0x3103:
+        break;
+    case 0x3104:
+        break;
+    case 0x3105:
+        break;
+    case 0x3106:
+        break;
+    case 0x3107:
+        break;
+    case 0x3108:
+        break;
+    case 0x3109:
+        break;
+    case 0x310A:
+        break;
+    case 0x310B:
+        break;
+    case 0x310C:
+        break;
+    case 0x310D:
+        break;
+    case 0x31D0:
+        break;
+    }
 
+
+    /*
+    const quint8 *data = reinterpret_cast<const quint8 *>(value.constData());
+    quint8 flags = data[0];
+
+    //Heart Rate
+    if (flags & 0x1) { // HR 16 bit? otherwise 8 bit
+        const quint16 heartRate = qFromLittleEndian<quint16>(data[1]);
+        //qDebug() << "16 bit HR value:" << heartRate;
+        m_measurements.append(heartRate);
+    } else {
+        const quint8 *heartRate = &data[1];
+        m_measurements.append(*heartRate);
+        //qDebug() << "8 bit HR value:" << *heartRate;
+    }
+
+    //Energy Expended
+    if (flags & 0x8) {
+        int index = (flags & 0x1) ? 5 : 3;
+        const quint16 energy = qFromLittleEndian<quint16>(data[index]);
+        qDebug() << "Used Energy:" << energy;
+    }
+    //! [Reading value 1]
+
+    Q_EMIT hrChanged();
+    */
+}
+
+/*
+ *Called when discoverDetails() has gotten all of the characteristics and
+ * their details. At this point it is possible to subscribe to characteristic
+ * notifications.
+*/
 void BLEHandler::serviceStateChanged(QLowEnergyService::ServiceState s)
 {
+    QLowEnergyCharacteristic bleChar;
+    QLowEnergyDescriptor bleNotificationDesc;
+
     switch (s) {
     case QLowEnergyService::ServiceDiscovered:
     {
-        /*
-        const QLowEnergyCharacteristic hrChar = m_service->characteristic(
-                    QBluetoothUuid(QBluetoothUuid::HeartRateMeasurement));
-        if (!hrChar.isValid()) {
-            setMessage("HR Data not found.");
-            break;
-        }
+        for (int i = 0x3101; i < 0x310E; i++)
+        {
+            bleChar = bleService->characteristic(QBluetoothUuid((quint16)i));
+            if (!bleChar.isValid()) {
+                qWarning() << "Could not get characteristic " << i;
+                break;
+            }
 
-        const QLowEnergyDescriptor m_notificationDesc = hrChar.descriptor(
-                    QBluetoothUuid::ClientCharacteristicConfiguration);
-        if (m_notificationDesc.isValid()) {
-            m_service->writeDescriptor(m_notificationDesc, QByteArray::fromHex("0100"));
-            setMessage("Measuring");
-            m_start = QDateTime::currentDateTime();
+            bleNotificationDesc = bleChar.descriptor(QBluetoothUuid::ClientCharacteristicConfiguration);
+            if (bleNotificationDesc.isValid()) {
+                //this line enables notifications for this characteristic.
+                bleService->writeDescriptor(bleNotificationDesc, QByteArray::fromHex("0100"));
+            }
         }
-*/
         break;
     }
     default:
