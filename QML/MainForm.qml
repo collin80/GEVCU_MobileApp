@@ -89,7 +89,7 @@ Window {
                 Label
                 {
                     id: runningValueLabel
-                    text: valueStorage.isRunning.toString()
+                    text: bleHandler.isRunning.toString()
                     font.pointSize: smallTextSize
                     color: "white"
                 }
@@ -104,7 +104,7 @@ Window {
                 Label
                 {
                     id: optimeValueLabel
-                    text: valueStorage.operatingTime.toString()
+                    text: bleHandler.timeRunning.toString()
                     font.pointSize: smallTextSize
                     color: "white"
                 }
@@ -119,7 +119,7 @@ Window {
                 Label
                 {
                     id: tlevValueLabel
-                    text: valueStorage.throttleLevel.toString()
+                    text: bleHandler.rawThrottle.toString()
                     font.pointSize: smallTextSize
                     color: "white"
                 }
@@ -135,7 +135,7 @@ Window {
                 Label
                 {
                     id: faultValueLabel
-                    text: valueStorage.faultMsg
+                    text: bleHandler.isFaulted.toString()
                     font.pointSize: smallTextSize
                     color: "white"
                 }
@@ -150,7 +150,7 @@ Window {
                 Label
                 {
                     id: warningValueLabel
-                    text: valueStorage.warningMsg
+                    text: bleHandler.isWarning.toString()
                     font.pointSize: smallTextSize
                     color: "white"
                 }
@@ -165,7 +165,7 @@ Window {
                 Label
                 {
                     id: blevValueLabel
-                    text: valueStorage.brakeLevel.toString()
+                    text: bleHandler.rawBrake.toString()
                     font.pointSize: smallTextSize
                     color: "white"
                 }
@@ -182,7 +182,7 @@ Window {
                 Label
                 {
                     id: gearValueLabel
-                    text: valueStorage.gear
+                    text: bleHandler.gear.toString()
                     font.pointSize: smallTextSize
                     color: "white"
                 }
@@ -200,7 +200,7 @@ Window {
                 Label
                 {
                     id: motorTempValueLabel
-                    text: valueStorage.motorTemp.toFixed(1)
+                    text: bleHandler.motorTemperature.toFixed(1)
                     font.pointSize: smallTextSize
                     color: "white"
                 }
@@ -215,7 +215,7 @@ Window {
                 Label
                 {
                     id: inverterTempValueLabel
-                    text: valueStorage.inverterTemp.toFixed(1)
+                    text: bleHandler.inverterTemperature.toFixed(1)
                     font.pointSize: smallTextSize
                     color: "white"
                 }
@@ -233,7 +233,7 @@ Window {
                 Label
                 {
                     id: rTorqueValueLabel
-                    text: valueStorage.reqTorque.toFixed(1)
+                    text: bleHandler.reqTorque.toFixed(1)
                     font.pointSize: smallTextSize
                     color: "white"
                 }
@@ -248,7 +248,7 @@ Window {
                 Label
                 {
                     id: aTorqueValueLabel
-                    text: valueStorage.actTorque.toFixed(1)
+                    text: bleHandler.actTorque.toFixed(1)
                     font.pointSize: smallTextSize
                     color: "white"
                 }
@@ -267,7 +267,7 @@ Window {
                 Label
                 {
                     id: voltValueLabel
-                    text: valueStorage.battVoltage.toFixed(1)
+                    text: bleHandler.busVoltage.toFixed(1)
                     font.pointSize: smallTextSize
                     color: "white"
                 }
@@ -282,7 +282,7 @@ Window {
                 Label
                 {
                     id: currentValueLabel
-                    text: valueStorage.battCurrent.toFixed(1)
+                    text: bleHandler.busCurrent.toFixed(1)
                     font.pointSize: smallTextSize
                     color: "white"
                 }
@@ -297,7 +297,7 @@ Window {
                 Label
                 {
                     id: powerValueLabel
-                    text: valueStorage.power.toFixed(1)
+                    text: bleHandler.mechPower.toFixed(1)
                     font.pointSize: smallTextSize
                     color: "white"
                 }
@@ -332,7 +332,7 @@ Window {
                         upperDangerValue: 90
                         coloredZones: true
                     }
-                    value: valueStorage.throttleLevel
+                    value: bleHandler.rawThrottle
                 }
 
                 CircularGauge {
@@ -347,7 +347,7 @@ Window {
                         upperDangerValue: 500
                         coloredZones: true
                     }
-                    value: valueStorage.actTorque
+                    value: bleHandler.actTorque
                 }
 
                 CircularGauge {
@@ -363,7 +363,7 @@ Window {
                         upperDangerValue: 280
                         coloredZones: true
                     }
-                    value: valueStorage.battCurrent
+                    value: bleHandler.busCurrent
                 }
 
                 CircularGauge {
@@ -373,8 +373,7 @@ Window {
                     maximumValue: 8
                     style: TachGaugeStyle {
                     }
-                    value: valueStorage.rpm / 1000.0
-
+                    value: bleHandler.actRPM / 1000.0
                 }
                  //second row of gauges
                 CircularGauge {
@@ -390,7 +389,7 @@ Window {
                         upperDangerValue: 400
                         coloredZones: true
                     }
-                    value: valueStorage.battVoltage
+                    value: bleHandler.busVoltage
                 }
                 CircularGauge {
                     id: powerGauge
@@ -404,7 +403,7 @@ Window {
                         upperDangerValue: 150
                         coloredZones: true
                     }
-                    value: valueStorage.power
+                    value: bleHandler.mechPower
                 }
 
                 Row {
@@ -423,7 +422,7 @@ Window {
                         width: smallGaugeWidth
                         height: width
                         maximumValue: 1
-                        value: valueStorage.motorTemp / 140.0
+                        value: bleHandler.motorTemperature / 140.0
                         style: IconGaugeStyle {
                             id: motorGaugeStyle
                             description: "Motor Temp"
@@ -446,7 +445,7 @@ Window {
                         width: smallGaugeWidth
                         height: width
                         maximumValue: 1
-                        value: valueStorage.inverterTemp / 140.0
+                        value: bleHandler.inverterTemperature / 140.0
                         style: IconGaugeStyle {
                             id: controllerGaugeStyle
                             description: "Controller Temp"
@@ -642,7 +641,7 @@ Window {
                 ComboBox {
                     id: cbNumPots
                     model: [ "1","2" ]
-                    currentIndex: valueStorage.numThrottles
+                    currentIndex: bleHandler.numThrottleADC
                     implicitWidth: comboboxSize
                     font.pointSize: smallTextSize
                 }
@@ -655,7 +654,7 @@ Window {
                 ComboBox {
                     id: cbThrottleType
                     model: [ "Std Pot", "Inv Pot", "Hall Effect" ]
-                    currentIndex: valueStorage.throttleType
+                    currentIndex: bleHandler.throttleType
                     implicitWidth: comboboxSize
                     font.pointSize: smallTextSize
                 }
@@ -670,7 +669,7 @@ Window {
                     id: sliderMinSig1
                     minimumValue: 0
                     maximumValue: adcMaxValue
-                    value: valueStorage.sig1Min
+                    value: bleHandler.throttle1Min
                     stepSize: 10
                     implicitWidth: sliderWidth                    
                 }
@@ -684,7 +683,7 @@ Window {
                    id: sliderRegenMaxPedal
                    minimumValue: 0
                    maximumValue: 100
-                   value: valueStorage.regenMaxPedal
+                   value: bleHandler.regenMaxPedalPos
                    stepSize: 1
                    implicitWidth: sliderWidth
                }
@@ -698,7 +697,7 @@ Window {
                 SliderWithText {
                     minimumValue: 0
                     maximumValue: adcMaxValue
-                    value: valueStorage.sig1Max
+                    value: bleHandler.throttle1Max
                     stepSize: 10
                     id: sliderMaxSig1
                     implicitWidth: sliderWidth
@@ -713,7 +712,7 @@ Window {
                    id: sliderRegenMinPedal
                    minimumValue: 0
                    maximumValue: adcMaxValue
-                   value: valueStorage.regenMinPedal
+                   value: bleHandler.regenMinPedalPos
                    stepSize: 10
                    implicitWidth: sliderWidth
                }
@@ -728,7 +727,7 @@ Window {
                     id: sliderMinSig2
                     minimumValue: 0
                     maximumValue: adcMaxValue
-                    value: valueStorage.sig2Min
+                    value: bleHandler.throttle2Min
                     stepSize: 10
                     implicitWidth: sliderWidth
                }
@@ -742,7 +741,7 @@ Window {
                    id: sliderMotionStart
                    minimumValue: 0
                    maximumValue: 100
-                   value: valueStorage.motionStartPedal
+                   value: bleHandler.fwdMotionPedalPos
                    stepSize: 1
                    implicitWidth: sliderWidth
                }
@@ -757,7 +756,7 @@ Window {
                     id: sliderMaxSig2
                     minimumValue: 0
                     maximumValue: adcMaxValue
-                    value: valueStorage.sig2Max
+                    value: bleHandler.throttle2Max
                     stepSize: 10
                     implicitWidth: sliderWidth
                 }
@@ -771,7 +770,7 @@ Window {
                    id: sliderHalfThrottle
                    minimumValue: 0
                    maximumValue: 100
-                   value: valueStorage.halfMotionPedal
+                   value: bleHandler.mapPedalPos
                    stepSize: 1
                    implicitWidth: sliderWidth
                }
@@ -786,7 +785,7 @@ Window {
                     id: sliderCreepLevel
                     minimumValue: 0
                     maximumValue: 100
-                    value: valueStorage.creepLevel
+                    value: bleHandler.creepThrottle
                     stepSize: 1
                     implicitWidth: sliderWidth
                 }
@@ -800,7 +799,7 @@ Window {
                    id: sliderMinThrottleRegen
                    minimumValue: 0
                    maximumValue: 100
-                   value: valueStorage.minRegenThrottle
+                   value: bleHandler.regenThrottleMin
                    stepSize: 1
                    implicitWidth: sliderWidth
                }
@@ -833,7 +832,7 @@ Window {
                     id: sliderMinSigBrake
                     minimumValue: 0
                     maximumValue: adcMaxValue
-                    value: valueStorage.brakeSigMin
+                    value: bleHandler.brakeMinADC
                     stepSize: 10
                     implicitWidth: sliderWidth
                 }
@@ -847,7 +846,7 @@ Window {
                    id: sliderMinBrakeRegen
                    minimumValue: 0
                    maximumValue: 100
-                   value: valueStorage.brakeRegenMin
+                   value: bleHandler.regenBrakeMin
                    stepSize: 1
                    implicitWidth: sliderWidth
                }
@@ -862,7 +861,7 @@ Window {
                     id: sliderMaxSigBrake
                     minimumValue: 0
                     maximumValue: adcMaxValue
-                    value: valueStorage.brakeSigMax
+                    value: bleHandler.brakeMaxADC
                     stepSize: 10
                     implicitWidth: sliderWidth
                 }
@@ -876,7 +875,7 @@ Window {
                    id: sliderMaxBrakeRegen
                    minimumValue: 0
                    maximumValue: 100
-                   value: valueStorage.brakeRegenMax
+                   value: bleHandler.regenBrakeMax
                    stepSize: 1
                    implicitWidth: sliderWidth
                }
@@ -908,7 +907,7 @@ Window {
                 TextField
                 {
                     id: maxSpeedText
-                    text: valueStorage.maxSpeed.toString()
+                    text: bleHandler.maxRPM.toString()
                     font.pointSize: medTextSize
                     color: "white"
                     implicitWidth: textboxSize
@@ -923,7 +922,7 @@ Window {
                 TextField
                 {
                     id: maxTorqueText
-                    text: valueStorage.maxTorque.toString()
+                    text: bleHandler.maxTorque.toString()
                     font.pointSize: medTextSize
                     color: "white"
                     implicitWidth: textboxSize
@@ -938,7 +937,7 @@ Window {
                 ComboBox {
                     id: cbMotorMode
                     model: [ "Torque Control", "Speed Control" ]
-                    currentIndex: valueStorage.motorMode
+                    currentIndex: bleHandler.powerMode
                     implicitWidth: comboboxSize
                     font.pointSize: smallTextSize
                 }
@@ -971,7 +970,7 @@ Window {
                 ComboBox {
                     id: cbLogMode
                     model: [ "Debug", "Info", "Warning", "Error", "Off" ]
-                    currentIndex: valueStorage.logLevel
+                    currentIndex: bleHandler.logLevel
                     implicitWidth: comboboxSize
                     font.pointSize: smallTextSize
                 }
@@ -985,7 +984,7 @@ Window {
                 TextField
                 {
                     id: nomVoltsText
-                    text: valueStorage.nomBattVolts.toString()
+                    text: bleHandler.nomBattVolts.toString()
                     implicitWidth: textboxSize
                     font.pointSize: medTextSize
                     color: "white"
@@ -1022,7 +1021,7 @@ Window {
                 ComboBox {
                     id: cbFanOutput
                     model: [ "None", "0", "1", "2", "3", "4", "5", "6", "7" ]
-                    currentIndex: valueStorage.fanPin
+                    currentIndex: bleHandler.coolingOutput
                     implicitWidth: comboboxSize
                     font.pointSize: smallTextSize
                 }
@@ -1036,7 +1035,7 @@ Window {
                 TextField
                 {
                     id:fanOnTempText
-                    text: valueStorage.fanOnTemp.toString()
+                    text: bleHandler.coolingOnTemp.toString()
                     font.pointSize: medTextSize
                     color: "white"
                     implicitWidth: textboxSize
@@ -1051,7 +1050,7 @@ Window {
                 TextField
                 {
                     id: fanOffTempText
-                    text: valueStorage.fanOffTemp.toString()
+                    text: bleHandler.coolingOffTemp.toString()
                     font.pointSize: medTextSize
                     color: "white"
                     implicitWidth: textboxSize
@@ -1067,7 +1066,7 @@ Window {
                 ComboBox {
                     id: cbPrechargeOutput
                     model: [ "None", "0", "1", "2", "3", "4", "5", "6", "7" ]
-                    currentIndex: valueStorage.prechargePin
+                    currentIndex: bleHandler.prechargeOutput
                     implicitWidth: comboboxSize
                     font.pointSize: smallTextSize
                 }
@@ -1081,7 +1080,7 @@ Window {
                 TextField
                 {
                     id:prechargeDelayText
-                    text: valueStorage.prechargeDelay.toString()
+                    text: bleHandler.prechargeR.toString()
                     font.pointSize: medTextSize
                     color: "white"
                     implicitWidth: textboxSize
@@ -1099,7 +1098,7 @@ Window {
                 ComboBox {
                     id: cbMainContOutput
                     model: [ "None", "0", "1", "2", "3", "4", "5", "6", "7" ]
-                    currentIndex: valueStorage.mainContPin
+                    currentIndex: bleHandler.mainContactorOutput
                     implicitWidth: comboboxSize
                     font.pointSize: smallTextSize
                 }
@@ -1116,7 +1115,7 @@ Window {
                 ComboBox {
                     id: cbBrakeLightOutput
                     model: [ "None", "0", "1", "2", "3", "4", "5", "6", "7" ]
-                    currentIndex: valueStorage.brakeLightPin
+                    currentIndex: bleHandler.brakeLightOutput
                     implicitWidth: comboboxSize
                     font.pointSize: smallTextSize
                 }
@@ -1133,7 +1132,7 @@ Window {
                 ComboBox {
                     id: cbReverseLightOutput
                     model: [ "None", "0", "1", "2", "3", "4", "5", "6", "7" ]
-                    currentIndex: valueStorage.reverseLightPin
+                    currentIndex: bleHandler.reverseLightOutput
                     implicitWidth: comboboxSize
                     font.pointSize: smallTextSize
                 }
@@ -1168,7 +1167,7 @@ Window {
                 ComboBox {
                     id: cbEnableInput
                     model: [ "None", "0", "1", "2", "3" ]
-                    currentIndex: valueStorage.enablePin
+                    currentIndex: bleHandler.enableMotorControlInput
                     implicitWidth: comboboxSize
                     font.pointSize: smallTextSize
                 }
@@ -1183,7 +1182,7 @@ Window {
                 ComboBox {
                     id: cbReverseInput
                     model: [ "None", "0", "1", "2", "3" ]
-                    currentIndex: valueStorage.reversePin
+                    currentIndex: bleHandler.reverseInput
                     font.pointSize: smallTextSize
                     implicitWidth: comboboxSize
                 }
