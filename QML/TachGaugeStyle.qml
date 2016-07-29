@@ -95,7 +95,7 @@ DefaultGaugeStyle {
             anchors.top: parent.verticalCenter
             anchors.topMargin: 20
 
-            readonly property int rpmInt: valueStorage.rpm
+            readonly property int rpmInt: bleHandler.actRPM
         }
         Text {
             text: "x1000"

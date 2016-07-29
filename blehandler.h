@@ -257,8 +257,8 @@ private:
 
     //local store of all public properties values
     int m_timeRunning;
-    float m_reqTorque;
-    float m_actTorque;
+    int m_reqTorque;
+    int m_actTorque;
     int m_rawThrottle;
     int m_rawBrake;
     int m_reqRPM;
@@ -269,18 +269,18 @@ private:
     bool m_isFaulted;
     bool m_isWarning;
     int m_logLevel;
-    float m_busVoltage;
-    float m_busCurrent;
-    float m_motorCurrent;
-    float m_kilowattHours;
-    float m_mechPower;
+    int m_busVoltage;
+    int m_busCurrent;
+    int m_motorCurrent;
+    int m_kilowattHours;
+    int m_mechPower;
     quint32 m_bitField1;
     quint32 m_bitField2;
     quint32 m_bitField3;
     quint32 m_bitField4;
-    float m_motorTemperature;
-    float m_inverterTemperature;
-    float m_systemTemperature;
+    int m_motorTemperature;
+    int m_inverterTemperature;
+    int m_systemTemperature;
     int m_prechargeR;
     int m_prechargeOutput;
     int m_mainContactorOutput;

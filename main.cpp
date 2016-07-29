@@ -1,6 +1,7 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
+#include <QQuickView>
 #include "blehandler.h"
 
 int main(int argc, char *argv[])
@@ -9,9 +10,10 @@ int main(int argc, char *argv[])
 
     BLEHandler bleHandler;
 
-    QQmlApplicationEngine engine;
-    engine.load(QUrl(QStringLiteral("qrc:/QML/MainForm.qml")));
-    engine.rootContext()->setContextProperty("bleHandler", &bleHandler);
-
+    QQuickView *view = new QQuickView;
+    view->rootContext()->setContextProperty("bleHandler", &bleHandler);
+    view->setSource(QUrl("qrc:/QML/MainForm.qml"));
+    view->setResizeMode(QQuickView::SizeRootObjectToView);
+    view->show();
     return app.exec();
 }

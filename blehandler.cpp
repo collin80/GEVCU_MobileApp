@@ -13,6 +13,62 @@ BLEHandler::BLEHandler()
     bleController = 0;
     bleService = 0;
 
+    m_timeRunning = 0;
+    m_reqTorque = 0;
+    m_actTorque = 0;
+    m_rawThrottle = 0;
+    m_rawBrake = 0;
+    m_reqRPM = 0;
+    m_actRPM = 0;
+    m_powerMode = 0;
+    m_gear = 0;
+    m_isRunning = false;
+    m_isFaulted = false;
+    m_isWarning = false;
+    m_logLevel = 0;
+    m_busVoltage = 0;
+    m_busCurrent = 0;
+    m_motorCurrent = 0;
+    m_kilowattHours = 0;
+    m_mechPower = 0.0f;
+    m_bitField1 = 0;
+    m_bitField2 = 0;
+    m_bitField3 = 0;
+    m_bitField4 = 0;
+    m_motorTemperature = 0;
+    m_inverterTemperature = 0;
+    m_systemTemperature = 0;
+    m_prechargeR = 0;
+    m_prechargeOutput = 0;
+    m_mainContactorOutput = 0;
+    m_coolingOutput = 0;
+    m_coolingOnTemp = 0;
+    m_coolingOffTemp = 0;
+    m_brakeLightOutput = 0;
+    m_reverseLightOutput = 0;
+    m_enableMotorControlInput = 0;
+    m_reverseInput = 0;
+    m_numThrottleADC = 0;
+    m_throttleType = 0;
+    m_throttle1Min = 0;
+    m_throttle2Min = 0;
+    m_throttle1Max = 0;
+    m_throttle2Max = 0;
+    m_regenMaxPedalPos = 0;
+    m_regenMinPedalPos = 0;
+    m_fwdMotionPedalPos = 0;
+    m_mapPedalPos = 0;
+    m_regenThrottleMin = 0;
+    m_regenThrottleMax = 0;
+    m_creepThrottle = 0;
+    m_brakeMinADC = 0;
+    m_brakeMaxADC = 0;
+    m_regenBrakeMin = 0;
+    m_regenBrakeMax = 0;
+    m_nomBattVolts = 0;
+    m_maxRPM = 0;
+    m_maxTorque = 0;
+
     discoveryAgent->start();
 }
 
@@ -521,44 +577,43 @@ void BLEHandler::interpretCharacteristic310A(const quint8 *data)
 {
     quint16 val;
 
-    if (data[0] != m_numThrottleADC)
-    {
-        m_numThrottleADC = data[0];
-        emit numThrottleADCChanged();
-    }
-
-    if (data[1] != m_throttleType)
-    {
-        m_throttleType = data[1];
-        emit throttleTypeChanged();
-    }
-
-    val = quint16(data[2] * (data[3] * 256ul));
+    val = quint16(data[0] * (data[1] * 256ul));
     if (val != m_throttle1Min)
     {
         m_throttle1Min = val;
         emit throttle1MinChanged();
     }
 
-    val = quint16(data[4] * (data[5] * 256ul));
+    val = quint16(data[2] * (data[3] * 256ul));
     if (val != m_throttle2Min)
     {
         m_throttle2Min = val;
         emit throttle2MinChanged();
     }
 
-    val = quint16(data[6] * (data[7] * 256ul));
+    val = quint16(data[4] * (data[5] * 256ul));
     if (val != m_throttle1Max)
     {
         m_throttle1Max = val;
         emit throttle1MaxChanged();
     }
 
-    val = quint16(data[8] * (data[9] * 256ul));
+    val = quint16(data[6] * (data[7] * 256ul));
     if (val != m_throttle2Max)
     {
         m_throttle2Max = val;
         emit throttle2MaxChanged();
+    }
+    if (data[8] != m_numThrottleADC)
+    {
+        m_numThrottleADC = data[8];
+        emit numThrottleADCChanged();
+    }
+
+    if (data[9] != m_throttleType)
+    {
+        m_throttleType = data[9];
+        emit throttleTypeChanged();
     }
 }
 

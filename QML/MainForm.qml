@@ -6,13 +6,11 @@ import QtQuick.Layouts 1.1
 import QtQuick.Controls.Styles 1.4
 import Qt.labs.controls 1.0
 
-Window {
+Item {
     id: root
     visible: true
     width: 1440
     height: 900
-    color: "#000000"
-
 
     ValueStorage {
         id: valueStorage
