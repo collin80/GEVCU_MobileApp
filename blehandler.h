@@ -14,8 +14,11 @@ class BLEHandler : public QObject
     Q_PROPERTY(int timeRunning READ getTimeRunning NOTIFY timeRunningChanged)
     Q_PROPERTY(float reqTorque READ getRequestedTorque NOTIFY reqTorqueChanged)
     Q_PROPERTY(float actTorque READ getActualTorque NOTIFY actTorqueChanged)
-    Q_PROPERTY(int rawThrottle READ getRawThrottle NOTIFY rawThrottleChanged)
+    Q_PROPERTY(int rawThrottle1 READ getRawThrottle1 NOTIFY rawThrottle1Changed)
+    Q_PROPERTY(int rawThrottle2 READ getRawThrottle2 NOTIFY rawThrottle2Changed)
     Q_PROPERTY(int rawBrake READ getRawBrake NOTIFY rawBrakeChanged)
+    Q_PROPERTY(int percThrottle READ getPercThrottle NOTIFY percThrottleChanged)
+    Q_PROPERTY(int percBrake READ getPercBrake NOTIFY percBrakeChanged)
     Q_PROPERTY(int reqRPM READ getRequestedRPM NOTIFY reqRPMChanged)
     Q_PROPERTY(int actRPM READ getActualRPM NOTIFY actRPMChanged)
     Q_PROPERTY(int powerMode READ getPowerMode WRITE setPowerMode NOTIFY powerModeChanged)
@@ -24,19 +27,20 @@ class BLEHandler : public QObject
     Q_PROPERTY(bool isFaulted READ getIsFaulted NOTIFY isFaultedChanged)
     Q_PROPERTY(bool isWarning READ getIsWarning NOTIFY isWarningChanged)
     Q_PROPERTY(int logLevel READ getLogLevel WRITE setLogLevel NOTIFY logLevelChanged)
+    Q_PROPERTY(int SOC READ getSOC NOTIFY SOCChanged)
     Q_PROPERTY(float busVoltage READ getBusVoltage NOTIFY busVoltageChanged)
-    Q_PROPERTY(float busCurrent READ getBusCurrent NOTIFY busCurrentChanged)
+    Q_PROPERTY(float busCurrent READ getBusCurrent NOTIFY busCurrentChanged)    
     Q_PROPERTY(float motorCurrent READ getMotorCurrent NOTIFY motorCurrentChanged)
     Q_PROPERTY(float kilowattHours READ getKWH NOTIFY kilowattHoursChanged)
     Q_PROPERTY(float mechPower READ getMechPower NOTIFY mechPowerChanged)
     Q_PROPERTY(quint32 bitField1 READ getBitfield1 NOTIFY bitField1Changed)
     Q_PROPERTY(quint32 bitField2 READ getBitfield2 NOTIFY bitField2Changed)
-    Q_PROPERTY(quint32 bitField3 READ getBitfield3 NOTIFY bitField3Changed)
-    Q_PROPERTY(quint32 bitField4 READ getBitfield4 NOTIFY bitField4Changed)
+    Q_PROPERTY(quint32 digitalInputs READ getDigitalInputs NOTIFY digitalInputsChanged)
+    Q_PROPERTY(quint32 digitalOutputs READ getDigitalOutputs NOTIFY digitalOutputsChanged)
     Q_PROPERTY(float motorTemperature READ getMotorTemp NOTIFY motorTemperatureChanged)
     Q_PROPERTY(float inverterTemperature READ getInverterTemp NOTIFY inverterTemperatureChanged)
     Q_PROPERTY(float systemTemperature READ getSysTemp NOTIFY systemTemperatureChanged)
-    Q_PROPERTY(int prechargeR READ getPrechargeR WRITE setPrechargeR NOTIFY prechargeRChanged)
+    Q_PROPERTY(int prechargeDuration READ getPrechargeDuration WRITE setPrechargeDuration NOTIFY prechargeDurationChanged)
     Q_PROPERTY(int prechargeOutput READ getPrechargeOutput WRITE setPrechargeOutput NOTIFY prechargeOutputChanged)
     Q_PROPERTY(int mainContactorOutput READ getMainContactorOutput WRITE setMainContactorOutput NOTIFY mainContactorOutputChanged)
     Q_PROPERTY(int coolingOutput READ getCoolingOutput WRITE setCoolingOutput NOTIFY coolingOutputChanged)
@@ -75,8 +79,11 @@ public:
     int getTimeRunning();
     float getRequestedTorque() const;
     float getActualTorque() const;
-    int getRawThrottle() const;
+    int getRawThrottle1() const;
+    int getRawThrottle2() const;
     int getRawBrake() const;
+    int getPercThrottle() const;
+    int getPercBrake() const;
     int getRequestedRPM() const;
     int getActualRPM() const;
     int getPowerMode() const;
@@ -87,20 +94,21 @@ public:
     bool getIsWarning() const;
     int getLogLevel() const;
     void setLogLevel(const int newLevel);
+    int getSOC() const;
     float getBusVoltage() const;
     float getBusCurrent() const;
     float getMotorCurrent() const;
-    float getKWH() const;
+    float getKWH() const;    
     float getMechPower() const;
     quint32 getBitfield1() const;
     quint32 getBitfield2() const;
-    quint32 getBitfield3() const;
-    quint32 getBitfield4() const;
+    quint32 getDigitalInputs() const;
+    quint32 getDigitalOutputs() const;
     float getMotorTemp() const;
     float getInverterTemp() const;
     float getSysTemp() const;
-    int getPrechargeR() const;
-    void setPrechargeR(const int newVal);
+    int getPrechargeDuration() const;
+    void setPrechargeDuration(const int newVal);
     int getPrechargeOutput() const;
     void setPrechargeOutput(const int newVal);
     int getMainContactorOutput() const;
@@ -164,8 +172,11 @@ signals:
     void timeRunningChanged();
     void reqTorqueChanged();
     void actTorqueChanged();
-    void rawThrottleChanged();
+    void rawThrottle1Changed();
+    void rawThrottle2Changed();
     void rawBrakeChanged();
+    void percThrottleChanged();
+    void percBrakeChanged();
     void reqRPMChanged();
     void actRPMChanged();
     void powerModeChanged();
@@ -174,6 +185,7 @@ signals:
     void isFaultedChanged();
     void isWarningChanged();
     void logLevelChanged();
+    void SOCChanged();
     void busVoltageChanged();
     void busCurrentChanged();
     void motorCurrentChanged();
@@ -181,12 +193,12 @@ signals:
     void mechPowerChanged();
     void bitField1Changed();
     void bitField2Changed();
-    void bitField3Changed();
-    void bitField4Changed();
+    void digitalInputsChanged();
+    void digitalOutputsChanged();
     void motorTemperatureChanged();
     void inverterTemperatureChanged();
     void systemTemperatureChanged();
-    void prechargeRChanged();
+    void prechargeDurationChanged();
     void prechargeOutputChanged();
     void mainContactorOutputChanged();
     void coolingOutputChanged();
@@ -259,8 +271,11 @@ private:
     int m_timeRunning;
     int m_reqTorque;
     int m_actTorque;
-    int m_rawThrottle;
+    int m_rawThrottle1;
+    int m_rawThrottle2;
     int m_rawBrake;
+    int m_percThrottle;
+    int m_percBrake;
     int m_reqRPM;
     int m_actRPM;
     int m_powerMode;
@@ -268,6 +283,7 @@ private:
     bool m_isRunning;
     bool m_isFaulted;
     bool m_isWarning;
+    int m_SOC;
     int m_logLevel;
     int m_busVoltage;
     int m_busCurrent;
@@ -276,12 +292,12 @@ private:
     int m_mechPower;
     quint32 m_bitField1;
     quint32 m_bitField2;
-    quint32 m_bitField3;
-    quint32 m_bitField4;
+    quint32 m_digitalInputs;
+    quint32 m_digitalOutputs;
     int m_motorTemperature;
     int m_inverterTemperature;
     int m_systemTemperature;
-    int m_prechargeR;
+    int m_prechargeDuration;
     int m_prechargeOutput;
     int m_mainContactorOutput;
     int m_coolingOutput;

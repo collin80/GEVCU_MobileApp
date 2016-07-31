@@ -9,22 +9,22 @@ import Qt.labs.controls 1.0
 Item {
     id: root
     visible: true
-    width: 1440
-    height: 900
+    width: root.width
+    height: root.height
 
     ValueStorage {
         id: valueStorage
     }
 
     property real stretchFactor: (root.width / 1920)
-    property real smallTextSize: 15 * stretchFactor
-    property real medTextSize: 20 * stretchFactor
-    property real largeTextSize: 25 * stretchFactor
+    property real smallTextSize: 9 * stretchFactor
+    property real medTextSize: 12 * stretchFactor
+    property real largeTextSize: 15 * stretchFactor
     property real textboxSize: 175 * stretchFactor
     property real comboboxSize: 320 * stretchFactor
     property real bigGaugeWidth: 440 * stretchFactor
-    property real smallGaugeWidth: 180 * stretchFactor
-    property real sliderWidth: 450 * stretchFactor
+    property real smallGaugeWidth: 220 * stretchFactor
+    property real sliderWidth: 375 * stretchFactor
     property real sliderBuffer: 100 * stretchFactor
     property int adcMaxValue: 4096
 
@@ -48,7 +48,7 @@ Item {
             GridLayout
             {
                 id: statusGrid
-                columns: 6
+                columns: 4
                 anchors.top: undefined
                 anchors.topMargin: medTextSize
                 width: root.width
@@ -56,22 +56,12 @@ Item {
                 Label
                 {
                     id: mcLabel
-                    text: "Motor Control"
+                    text: "Motor Control Information"
                     font.pointSize: largeTextSize
                     color: "#AAAAFF"
                     Layout.row: 0
                     Layout.column: 0
-                    Layout.columnSpan: 2
-                }
-                Label
-                {
-                    id: thLabel
-                    text: "Throttle/Brake"
-                    font.pointSize: largeTextSize
-                    color: "#AAAAFF"
-                    Layout.row: 0
-                    Layout.column: 4
-                    Layout.columnSpan: 2
+                    Layout.columnSpan: 4
                 }
 
                 Label
@@ -90,11 +80,12 @@ Item {
                     text: bleHandler.isRunning.toString()
                     font.pointSize: smallTextSize
                     color: "white"
+                    Layout.fillWidth: true
                 }
                 Label
                 {
                     id: optimeLabel
-                    text: "Operating Time:"
+                    text: "Up Time:"
                     font.pointSize: smallTextSize
                     color: "white"
                 }
@@ -105,6 +96,7 @@ Item {
                     text: bleHandler.timeRunning.toString()
                     font.pointSize: smallTextSize
                     color: "white"
+                    Layout.fillWidth: true
                 }
                 Label
                 {
@@ -117,41 +109,11 @@ Item {
                 Label
                 {
                     id: tlevValueLabel
-                    text: bleHandler.rawThrottle.toString()
+                    text: bleHandler.rawThrottle1.toString()
                     font.pointSize: smallTextSize
                     color: "white"
                 }
 
-                Label
-                {
-                    id: faultLabel
-                    text: "Fault:"
-                    font.pointSize: smallTextSize
-                    color: "white"
-                }
-
-                Label
-                {
-                    id: faultValueLabel
-                    text: bleHandler.isFaulted.toString()
-                    font.pointSize: smallTextSize
-                    color: "white"
-                }
-                Label
-                {
-                    id: warningLabel
-                    text: "Warning:"
-                    font.pointSize: smallTextSize
-                    color: "white"
-                }
-
-                Label
-                {
-                    id: warningValueLabel
-                    text: bleHandler.isWarning.toString()
-                    font.pointSize: smallTextSize
-                    color: "white"
-                }
                 Label
                 {
                     id: blevLabel
@@ -168,6 +130,40 @@ Item {
                     color: "white"
                 }
 
+                Label
+                {
+                    id: faultLabel
+                    text: "Fault:"
+                    font.pointSize: smallTextSize
+                    color: "white"
+                    Layout.row: 4
+                    Layout.column: 0
+                }
+
+                Label
+                {
+                    id: faultValueLabel
+                    text: bleHandler.isFaulted.toString()
+                    font.pointSize: smallTextSize
+                    color: "white"
+                }
+                Label
+                {
+                    id: warningLabel
+                    text: "Warning:"
+                    font.pointSize: smallTextSize
+                    color: "white"
+                    Layout.row: 5
+                    Layout.column: 0
+                }
+
+                Label
+                {
+                    id: warningValueLabel
+                    text: bleHandler.isWarning.toString()
+                    font.pointSize: smallTextSize
+                    color: "white"
+                }
 
                 Label
                 {
@@ -175,6 +171,8 @@ Item {
                     text: "Gear Switch:"
                     font.pointSize: smallTextSize
                     color: "white"
+                    Layout.row: 6
+                    Layout.column: 0
                 }
 
                 Label
@@ -187,10 +185,10 @@ Item {
 
                 Label
                 {
-                    Layout.row: 4
+                    Layout.row: 7
                     Layout.column: 0
                     id: motorTempLabel
-                    text: "Motor Temperature:"
+                    text: "Motor Temp:"
                     font.pointSize: smallTextSize
                     color: "white"
                 }
@@ -205,7 +203,7 @@ Item {
                 Label
                 {
                     id: inverterTempLabel
-                    text: "Inverter Temperature:"
+                    text: "Inverter Temp:"
                     font.pointSize: smallTextSize
                     color: "white"
                 }
@@ -220,10 +218,10 @@ Item {
 
                 Label
                 {
-                    Layout.row: 5
+                    Layout.row: 8
                     Layout.column: 0
                     id: rTorqueLabel
-                    text: "Requested Torque:"
+                    text: "Torque Request:"
                     font.pointSize: smallTextSize
                     color: "white"
                 }
@@ -254,7 +252,7 @@ Item {
 
                 Label
                 {
-                    Layout.row: 6
+                    Layout.row: 9
                     Layout.column: 0
                     id: voltLabel
                     text: "Battery Voltage:"
@@ -286,6 +284,8 @@ Item {
                 }
                 Label
                 {
+                    Layout.row: 10
+                    Layout.column: 0
                     id: powerLabel
                     text: "Power:"
                     font.pointSize: smallTextSize
@@ -308,315 +308,189 @@ Item {
             //Bunch o' gauges
             id: gaugesPage
 
-
-            GridLayout
-            {
-                id: gaugesGrid
-                columns: 4
-                anchors.top: undefined
-                anchors.topMargin: 20 * stretchFactor
-                width: root.width
-
-                CircularGauge {
-                    id: throttleGauge
-                    width: bigGaugeWidth
-                    height: width
-                    minimumValue: -100
-                    maximumValue: 100
-                    style: DefaultGaugeStyle {
-                        unitText: "%"
-                        description: "Throttle"
-                        lowerDangerValue: -80
-                        upperDangerValue: 90
-                        coloredZones: true
-                    }
-                    value: bleHandler.rawThrottle
+            CircularGauge {
+                id: throttleGauge
+                width: bigGaugeWidth
+                height: width
+                x: 0
+                y: 0
+                minimumValue: -100
+                maximumValue: 100
+                style: DefaultGaugeStyle {
+                    unitText: "%"
+                    description: "Throttle"
+                    lowerDangerValue: -80
+                    upperDangerValue: 90
+                    coloredZones: true
                 }
+                value: bleHandler.percThrottle
+            }
 
-                CircularGauge {
-                    id: torqueGauge
-                    width: bigGaugeWidth
-                    height: width
-                    minimumValue: -150
-                    maximumValue: 600
-                    style: DefaultGaugeStyle {
-                        unitText: "Nm"
-                        description: "Torque"
-                        upperDangerValue: 500
-                        coloredZones: true
-                    }
-                    value: bleHandler.actTorque
+            CircularGauge {
+                id: torqueGauge
+                width: bigGaugeWidth
+                height: width
+                x: bigGaugeWidth * 1.15
+                y: 0
+                minimumValue: -150
+                maximumValue: 600
+                style: DefaultGaugeStyle {
+                    unitText: "Nm"
+                    description: "Torque"
+                    upperDangerValue: 500
+                    coloredZones: true
                 }
+                value: bleHandler.actTorque
+            }
 
-                CircularGauge {
-                    id: currentGauge
-                    width: bigGaugeWidth
-                    height: width
-                    minimumValue: -200
-                    maximumValue: 400
-                    style: DefaultGaugeStyle {
-                        unitText: "A"
-                        description: "Pack Current"
-                        lowerDangerValue: -150
-                        upperDangerValue: 280
-                        coloredZones: true
-                    }
-                    value: bleHandler.busCurrent
+            CircularGauge {
+                id: rpmGauge
+                width: bigGaugeWidth
+                height: width
+                x: bigGaugeWidth * 2.3
+                y: 0
+                maximumValue: 8
+                style: TachGaugeStyle {
                 }
-
-                CircularGauge {
-                    id: rpmGauge
-                    width: bigGaugeWidth
-                    height: width
-                    maximumValue: 8
-                    style: TachGaugeStyle {
-                    }
-                    value: bleHandler.actRPM / 1000.0
+                value: bleHandler.actRPM / 1000.0
+            }
+            //second row of gauges
+            CircularGauge {
+                id: dcvoltsGauge
+                width: bigGaugeWidth
+                height: width
+                x: 0
+                y: bigGaugeWidth * 1.15
+                minimumValue: 200
+                maximumValue: 450
+                style: DefaultGaugeStyle {
+                    unitText: "V"
+                    description: "Pack Voltage"
+                    lowerDangerValue: 250
+                    upperDangerValue: 400
+                    coloredZones: true
                 }
-                 //second row of gauges
-                CircularGauge {
-                    id: dcvoltsGauge
-                    width: bigGaugeWidth
-                    height: width
-                    minimumValue: 200
-                    maximumValue: 450
-                    style: DefaultGaugeStyle {
-                        unitText: "V"
-                        description: "Pack Voltage"
-                        lowerDangerValue: 250
-                        upperDangerValue: 400
-                        coloredZones: true
-                    }
-                    value: bleHandler.busVoltage
+                value: bleHandler.busVoltage
+            }
+
+            CircularGauge {
+                id: currentGauge
+                width: bigGaugeWidth
+                height: width
+                x: bigGaugeWidth * 1.15
+                y: bigGaugeWidth * 1.15
+                minimumValue: -200
+                maximumValue: 400
+                style: DefaultGaugeStyle {
+                    unitText: "A"
+                    description: "Pack Current"
+                    lowerDangerValue: -150
+                    upperDangerValue: 280
+                    coloredZones: true
                 }
-                CircularGauge {
-                    id: powerGauge
-                    width: bigGaugeWidth
-                    height: width
-                    minimumValue: -50
-                    maximumValue: 250
-                    style: DefaultGaugeStyle {
-                        unitText: "kW"
-                        description: "Power"
-                        upperDangerValue: 150
-                        coloredZones: true
-                    }
-                    value: bleHandler.mechPower
+                value: bleHandler.busCurrent
+            }
+
+            CircularGauge {
+                id: powerGauge
+                width: bigGaugeWidth
+                height: width
+                x: bigGaugeWidth * 2.3
+                y: bigGaugeWidth * 1.15
+                minimumValue: -50
+                maximumValue: 250
+                style: DefaultGaugeStyle {
+                    unitText: "kW"
+                    description: "Power"
+                    upperDangerValue: 150
+                    coloredZones: true
                 }
+                value: bleHandler.mechPower
+            }
 
-                Row {
-                    id: gaugesRow3
-                    spacing: 60 * stretchFactor
-                    //anchors.left: powerGauge.right
-                    //anchors.top: rpmGauge.bottom
-                    //anchors.topMargin: 120 * stretchFactor
-                    //anchors.leftMargin: 40 * stretchFactor
-                    Layout.row: 1
-                    Layout.column: 2
-                    Layout.columnSpan: 2
+            CircularGauge {
+                id: motorTempGauge
+                width: smallGaugeWidth
+                height: width
+                x: bigGaugeWidth * 3.5
+                y: bigGaugeWidth / 3
+                maximumValue: 1
+                value: bleHandler.motorTemperature / 140.0
+                style: IconGaugeStyle {
+                    id: motorGaugeStyle
+                    description: "Motor Temp"
 
-                    CircularGauge {
-                        id: motorTempGauge
-                        width: smallGaugeWidth
-                        height: width
-                        maximumValue: 1
-                        value: bleHandler.motorTemperature / 140.0
-                        style: IconGaugeStyle {
-                            id: motorGaugeStyle
-                            description: "Motor Temp"
+                    icon: "qrc:/images/temperature-icon.png"
+                    maxWarningColor: Qt.rgba(0.5, 0, 0, 1)
 
-                            icon: "qrc:/images/temperature-icon.png"
-                            maxWarningColor: Qt.rgba(0.5, 0, 0, 1)
-
-                            tickmarkLabel: Text {
-                                color: "white"
-                                visible: styleData.value === 0
-                                     || styleData.value === 1
-                                font.pixelSize: motorGaugeStyle.toPixels(0.225)
-                                text: styleData.value === 0 ? "C" : (styleData.value === 1 ? "H" : "")
-                            }
-                        }
-                    }
-
-                    CircularGauge {
-                        id: controllerTempGauge
-                        width: smallGaugeWidth
-                        height: width
-                        maximumValue: 1
-                        value: bleHandler.inverterTemperature / 140.0
-                        style: IconGaugeStyle {
-                            id: controllerGaugeStyle
-                            description: "Controller Temp"
-
-                            icon: "qrc:/images/temperature-icon.png"
-                            maxWarningColor: Qt.rgba(0.5, 0, 0, 1)
-
-                            tickmarkLabel: Text {
-                                color: "white"
-                                visible: styleData.value === 0
-                                     || styleData.value === 1
-                                font.pixelSize: controllerGaugeStyle.toPixels(0.225)
-                                text: styleData.value === 0 ? "C" : (styleData.value === 1 ? "H" : "")
-                            }
-                        }
-                    }
-
-                    CircularGauge {
-                        id: energyGauge
-                        width: smallGaugeWidth
-                        height: width
-                        maximumValue: 1
-                        value: valueStorage.battSOC / 100.0
-                        style: IconGaugeStyle {
-                            id: energyGaugeStyle
-                            description: "Battery Capacity"
-
-                            icon: "qrc:/images/fuel-icon.png"
-                            minWarningColor: Qt.rgba(0.5, 0, 0, 1)
-
-                            tickmarkLabel: Text {
-                                color: "white"
-                                visible: styleData.value === 0
-                                     || styleData.value === 1
-                                font.pixelSize: energyGaugeStyle.toPixels(0.225)
-                                text: styleData.value === 0 ? "E" : (styleData.value === 1 ? "F" : "")
-                            }
-                        }
+                    tickmarkLabel: Text {
+                        color: "white"
+                        visible: styleData.value === 0
+                                 || styleData.value === 1
+                        font.pixelSize: motorGaugeStyle.toPixels(0.225)
+                        text: styleData.value === 0 ? "C" : (styleData.value === 1 ? "H" : "")
                     }
                 }
+            }
 
-                Row {
-                    id: dashboardRow1
-                    spacing: 20 * stretchFactor
-                    anchors.left: gaugesRow3.left
-                    anchors.top: gaugesRow3.bottom
-                    anchors.topMargin: 20 * stretchFactor
-                    anchors.leftMargin: 50 * stretchFactor
-                    Layout.row: 1
-                    Layout.column: 2
-                    Layout.columnSpan: 2
+            CircularGauge {
+                id: controllerTempGauge
+                width: smallGaugeWidth
+                height: width
+                x: bigGaugeWidth * 3.5
+                y: bigGaugeWidth
+                maximumValue: 1
+                value: bleHandler.inverterTemperature / 140.0
+                style: IconGaugeStyle {
+                    id: controllerGaugeStyle
+                    description: "Controller Temp"
 
+                    icon: "qrc:/images/temperature-icon.png"
+                    maxWarningColor: Qt.rgba(0.5, 0, 0, 1)
 
-                    Label {
-                        id: label1
-                        color: "#1fcaff"
-                        text: qsTr("Inputs:")
-                        font.pointSize: smallTextSize
-                    }
-
-                    StatusIndicator {
-                        id: statusInput1
-                        active: valueStorage.input1
-                    }
-
-                    StatusIndicator {
-                        id: statusInput2
-                        active: valueStorage.input2
-                    }
-
-                    StatusIndicator {
-                        id: statusInput3
-                        active: valueStorage.input3
-                    }
-
-                    StatusIndicator {
-                        id: statusInput4
-                        active: valueStorage.input4
+                    tickmarkLabel: Text {
+                        color: "white"
+                        visible: styleData.value === 0
+                                 || styleData.value === 1
+                        font.pixelSize: controllerGaugeStyle.toPixels(0.225)
+                        text: styleData.value === 0 ? "C" : (styleData.value === 1 ? "H" : "")
                     }
                 }
+            }
 
-                Row {
-                    id: dashboardRow2
-                    spacing: 20 * stretchFactor
-                    anchors.left: gaugesRow3.left
-                    anchors.top: dashboardRow1.bottom
-                    anchors.topMargin: 20 * stretchFactor
-                    anchors.leftMargin: 50 * stretchFactor
-                    Layout.row: 1
-                    Layout.column: 2
-                    Layout.columnSpan: 2
+            CircularGauge {
+                id: energyGauge
+                width: smallGaugeWidth
+                height: width
+                x: bigGaugeWidth * 3.5
+                y: bigGaugeWidth * 1.8
+                maximumValue: 1
+                value: bleHandler.SOC / 100.0
+                style: IconGaugeStyle {
+                    id: energyGaugeStyle
+                    description: "Battery Capacity"
 
+                    icon: "qrc:/images/fuel-icon.png"
+                    minWarningColor: Qt.rgba(0.5, 0, 0, 1)
 
-                    Label {
-                        id: label2
-                        color: "#1fcaff"
-                        text: qsTr("Outputs:")
-                        font.pointSize: smallTextSize
-                    }
-
-                    StatusIndicator {
-                        id: statusOutput1
-                        active: valueStorage.output1
-                    }
-
-                    StatusIndicator {
-                        id: statusOutput2
-                        active: valueStorage.output2
-                    }
-
-                    StatusIndicator {
-                        id: statusOutput3
-                        active: valueStorage.output3
-                    }
-
-                    StatusIndicator {
-                        id: statusOutput4
-                        active: valueStorage.output4
-                    }
-
-                    StatusIndicator {
-                        id: statusOutput5
-                        active: valueStorage.output5
-                    }
-
-                    StatusIndicator {
-                        id: statusOutput6
-                        active: valueStorage.output6
-                    }
-                    StatusIndicator {
-                        id: statusOutput7
-                        active: valueStorage.output7
-                    }
-
-                    StatusIndicator {
-                        id: statusOutput8
-                        active: valueStorage.output8
-                    }
-                }
-
-                Row {
-                    id: dashboardRow3
-                    spacing: 20 * stretchFactor
-                    anchors.left: gaugesRow3.left
-                    anchors.top: dashboardRow2.bottom
-                    anchors.topMargin: 20 * stretchFactor
-                    anchors.leftMargin: 50 * stretchFactor
-                    Layout.row: 1
-                    Layout.column: 2
-                    Layout.columnSpan: 2
-
-
-                    Label {
-                        id: label3
-                        color: "#1fcaff"
-                        text: qsTr("System Status:")
-                        font.pointSize: smallTextSize
-                    }
-
-                    StatusIndicator {
-                        id: statusSystem
-                        active: valueStorage.sysStatus
+                    tickmarkLabel: Text {
+                        color: "white"
+                        visible: styleData.value === 0
+                                 || styleData.value === 1
+                        font.pixelSize: energyGaugeStyle.toPixels(0.225)
+                        text: styleData.value === 0 ? "E" : (styleData.value === 1 ? "F" : "")
                     }
                 }
             }
         }
+
         Item {
             //general configuration page
             id: throttleConfigPage
             Label {
                 id: label10
                 color: "#AAAAFF"
-                text: qsTr("Throttle:")
+                text: qsTr("Throttle Configuration:")
                 font.pointSize: largeTextSize
                 anchors.top: throttleConfigPage.top
                 anchors.left: throttleConfigPage.left
@@ -638,7 +512,7 @@ Item {
                 }
                 ComboBox {
                     id: cbNumPots
-                    model: [ "1","2" ]
+                    model: [ "1","2"]
                     currentIndex: bleHandler.numThrottleADC
                     implicitWidth: comboboxSize
                     font.pointSize: smallTextSize
@@ -669,8 +543,56 @@ Item {
                     maximumValue: adcMaxValue
                     value: bleHandler.throttle1Min
                     stepSize: 10
-                    implicitWidth: sliderWidth                    
+                    implicitWidth: sliderWidth
+                    Layout.fillWidth: true;
                 }
+
+                Label {
+                     id: label15
+                     color: "white"
+                     text: qsTr("Max Level Sig 1")
+                     font.pointSize: smallTextSize
+                 }
+                 SliderWithText {
+                     minimumValue: 0
+                     maximumValue: adcMaxValue
+                     value: bleHandler.throttle1Max
+                     stepSize: 10
+                     id: sliderMaxSig1
+                     implicitWidth: sliderWidth
+                     Layout.fillWidth: true;
+                 }
+                 Label {
+                      id: label17
+                      color: "white"
+                      text: qsTr("Min Level Sig 2")
+                      font.pointSize: smallTextSize
+                  }
+                  SliderWithText {
+                      id: sliderMinSig2
+                      minimumValue: 0
+                      maximumValue: adcMaxValue
+                      value: bleHandler.throttle2Min
+                      stepSize: 10
+                      implicitWidth: sliderWidth
+                 }
+                  Label {
+                       id: label19
+                       color: "white"
+                       text: qsTr("Max Level Sig 2")
+                       font.pointSize: smallTextSize
+                   }
+                   SliderWithText {
+                       id: sliderMaxSig2
+                       minimumValue: 0
+                       maximumValue: adcMaxValue
+                       value: bleHandler.throttle2Max
+                       stepSize: 10
+                       implicitWidth: sliderWidth
+                   }
+
+
+
                Label {
                     id: label14
                     color: "white"
@@ -687,20 +609,6 @@ Item {
                }
 
                Label {
-                    id: label15
-                    color: "white"
-                    text: qsTr("Max Level Sig 1")
-                    font.pointSize: smallTextSize
-                }
-                SliderWithText {
-                    minimumValue: 0
-                    maximumValue: adcMaxValue
-                    value: bleHandler.throttle1Max
-                    stepSize: 10
-                    id: sliderMaxSig1
-                    implicitWidth: sliderWidth
-                }
-               Label {
                     id: label16
                     color: "white"
                     text: qsTr("Regen Min Pedal Position")
@@ -716,20 +624,6 @@ Item {
                }
 
                Label {
-                    id: label17
-                    color: "white"
-                    text: qsTr("Min Level Sig 2")
-                    font.pointSize: smallTextSize
-                }
-                SliderWithText {
-                    id: sliderMinSig2
-                    minimumValue: 0
-                    maximumValue: adcMaxValue
-                    value: bleHandler.throttle2Min
-                    stepSize: 10
-                    implicitWidth: sliderWidth
-               }
-               Label {
                     id: label18
                     color: "white"
                     text: qsTr("Motion Start Pedal Position")
@@ -744,20 +638,6 @@ Item {
                    implicitWidth: sliderWidth
                }
 
-               Label {
-                    id: label19
-                    color: "white"
-                    text: qsTr("Max Level Sig 2")
-                    font.pointSize: smallTextSize
-                }
-                SliderWithText {
-                    id: sliderMaxSig2
-                    minimumValue: 0
-                    maximumValue: adcMaxValue
-                    value: bleHandler.throttle2Max
-                    stepSize: 10
-                    implicitWidth: sliderWidth
-                }
                Label {
                     id: label20
                     color: "white"
@@ -801,7 +681,24 @@ Item {
                    stepSize: 1
                    implicitWidth: sliderWidth
                }
+               Label {
+                    id: label23
+                    color: "white"
+                    text: qsTr("Max. Throttle Regen")
+                    font.pointSize: smallTextSize
+                }
+               SliderWithText {
+                   id: sliderMaxThrottleRegen
+                   minimumValue: 0
+                   maximumValue: 100
+                   value: bleHandler.regenThrottleMax
+                   stepSize: 1
+                   implicitWidth: sliderWidth
+               }
             }
+        }
+        Item {
+            id: brakeSysConfig
 
             Label {
                 id: label100
@@ -988,8 +885,8 @@ Item {
                     color: "white"
                 }
             }
-
         }
+
         Item {
             id: outputConfigPage
 
@@ -1028,7 +925,7 @@ Item {
                     id: outputLabel3
                     color: "white"
                     font.pointSize: smallTextSize
-                    text: "Fan On Temp (Deg C)"
+                    text: "Fan On (Deg C)"
                 }
                 TextField
                 {
@@ -1043,7 +940,7 @@ Item {
                     id: outputLabel4
                     color: "white"
                     font.pointSize: smallTextSize
-                    text: "Fan Off Temp (Deg C)"
+                    text: "Fan Off (Deg C)"
                 }
                 TextField
                 {
@@ -1135,6 +1032,60 @@ Item {
                     font.pointSize: smallTextSize
                 }
             }
+
+            RowLayout {
+                id: dashboardRow2
+                spacing: 20 * stretchFactor
+                anchors.top: outputConfigGrid1.bottom
+                anchors.topMargin: 50 * scalingFactor
+
+                Label {
+                    id: label2
+                    color: "#1fcaff"
+                    text: qsTr("Outputs:")
+                    font.pointSize: medTextSize
+                }
+
+                StatusIndicator {
+                    id: statusOutput1
+                    active: bleHandler.digitalOutputs & 1
+                }
+
+                StatusIndicator {
+                    id: statusOutput2
+                    active: bleHandler.digitalOutputs & 2
+                }
+
+                StatusIndicator {
+                    id: statusOutput3
+                    active: bleHandler.digitalOutputs & 4
+                }
+
+                StatusIndicator {
+                    id: statusOutput4
+                    active: bleHandler.digitalOutputs & 8
+                }
+
+                StatusIndicator {
+                    id: statusOutput5
+                    active: bleHandler.digitalOutputs & 16
+                }
+
+                StatusIndicator {
+                    id: statusOutput6
+                    active: bleHandler.digitalOutputs & 32
+                }
+                StatusIndicator {
+                    id: statusOutput7
+                    active: bleHandler.digitalOutputs & 64
+                }
+
+                StatusIndicator {
+                    id: statusOutput8
+                    active: bleHandler.digitalOutputs & 128
+                }
+            }
+
         }
         Item {
             id: inputsConfigPage
@@ -1183,6 +1134,40 @@ Item {
                     currentIndex: bleHandler.reverseInput
                     font.pointSize: smallTextSize
                     implicitWidth: comboboxSize
+                }
+            }
+
+            RowLayout {
+                id: dashboardRow1
+                spacing: 20 * stretchFactor
+                anchors.top: inputConfigGrid1.bottom
+                anchors.topMargin: 50 * stretchFactor
+
+                Label {
+                    id: label1
+                    color: "#1fcaff"
+                    text: qsTr("Inputs:")
+                    font.pointSize: medTextSize
+                }
+
+                StatusIndicator {
+                    id: statusInput1
+                    active: bleHandler.digitalInputs & 1
+                }
+
+                StatusIndicator {
+                    id: statusInput2
+                    active: bleHandler.digitalInputs & 2
+                }
+
+                StatusIndicator {
+                    id: statusInput3
+                    active: bleHandler.digitalInputs & 4
+                }
+
+                StatusIndicator {
+                    id: statusInput4
+                    active: bleHandler.digitalInputs & 8
                 }
             }
         }
@@ -1455,7 +1440,7 @@ Item {
             id: aboutPage
 
             TextArea {
-                font.pointSize: medTextSize
+                font.pointSize: smallTextSize
                 color: "white"
                 text:
                     "About GEVCU Mobile App and GEVCU Hardware/Software:\n\n" +

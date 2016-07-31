@@ -16,8 +16,11 @@ BLEHandler::BLEHandler()
     m_timeRunning = 0;
     m_reqTorque = 0;
     m_actTorque = 0;
-    m_rawThrottle = 0;
+    m_rawThrottle1 = 0;
+    m_rawThrottle2 = 0;
     m_rawBrake = 0;
+    m_percBrake = 0;
+    m_percThrottle = 0;
     m_reqRPM = 0;
     m_actRPM = 0;
     m_powerMode = 0;
@@ -26,6 +29,7 @@ BLEHandler::BLEHandler()
     m_isFaulted = false;
     m_isWarning = false;
     m_logLevel = 0;
+    m_SOC = 0;
     m_busVoltage = 0;
     m_busCurrent = 0;
     m_motorCurrent = 0;
@@ -33,12 +37,12 @@ BLEHandler::BLEHandler()
     m_mechPower = 0.0f;
     m_bitField1 = 0;
     m_bitField2 = 0;
-    m_bitField3 = 0;
-    m_bitField4 = 0;
+    m_digitalInputs = 0;
+    m_digitalOutputs = 0;
     m_motorTemperature = 0;
     m_inverterTemperature = 0;
     m_systemTemperature = 0;
-    m_prechargeR = 0;
+    m_prechargeDuration = 0;
     m_prechargeOutput = 0;
     m_mainContactorOutput = 0;
     m_coolingOutput = 0;
@@ -316,14 +320,14 @@ void BLEHandler::interpretCharacteristic3101(const quint8 *data)
 void BLEHandler::interpretCharacteristic3102(const quint8 *data)
 {
     qint16 temp;
-    temp = (qint16)(data[0] * (data[1] * 256ul));
+    temp = (qint16)(data[0] + ((qint16)data[1] * 256l));
     if (temp != m_reqTorque)
     {
         m_reqTorque = temp;
         emit reqTorqueChanged();
     }
 
-    temp = qint16(data[2] * (data[3] * 256ul));
+    temp = qint16(data[2] + ((qint16)data[3] * 256l));
     if (temp != m_actTorque)
     {
         m_actTorque = temp;
@@ -335,32 +339,52 @@ void BLEHandler::interpretCharacteristic3103(const quint8 *data)
 {
     quint16 temp;
 
-    temp = (quint16)(data[0] * (data[1] * 256ul));
-    if (temp != m_rawThrottle)
+    temp = (quint16)(data[0] + (data[1] * 256ul));
+    if (temp != m_rawThrottle1)
     {
-        m_rawThrottle = temp;
-        emit rawThrottleChanged();
+        m_rawThrottle1 = temp;
+        emit rawThrottle1Changed();
     }
 
-    temp = (quint16)(data[2] * (data[3] * 256ul));
+    temp = (quint16)(data[2] + (data[3] * 256ul));
+    if (temp != m_rawThrottle2)
+    {
+        m_rawThrottle2 = temp;
+        emit rawThrottle2Changed();
+    }
+
+    temp = (quint16)(data[4] + (data[5] * 256ul));
     if (temp != m_rawBrake)
     {
         m_rawBrake = temp;
         emit rawBrakeChanged();
     }
+
+    if (data[6] != m_percThrottle)
+    {
+        m_percThrottle = data[6];
+        emit percThrottleChanged();
+    }
+
+    if (data[7] != m_percBrake)
+    {
+        m_percBrake = data[7];
+        emit percBrakeChanged();
+    }
+
 }
 
 void BLEHandler::interpretCharacteristic3104(const quint8 *data)
 {
     quint16 temp;
-    temp = (quint16)(data[0] * (data[1] * 256ul));
+    temp = (quint16)(data[0] + (data[1] * 256ul));
     if (temp != m_reqRPM)
     {
         m_reqRPM = temp;
         emit reqRPMChanged();
     }
 
-    temp = quint16(data[2] * (data[3] * 256ul));
+    temp = quint16(data[2] + (data[3] * 256ul));
     if (temp != m_actRPM)
     {
         m_actRPM = temp;
@@ -412,39 +436,45 @@ void BLEHandler::interpretCharacteristic3106(const quint8 *data)
     qint16 signedVal;
     quint16 unsignedVal;
 
-    unsignedVal = quint16(data[0] * (data[1] * 256ul));
+    unsignedVal = quint16(data[0] + (data[1] * 256ul));
     if (unsignedVal != m_busVoltage)
     {
         m_busVoltage = unsignedVal;
         emit busVoltageChanged();
     }
 
-    signedVal = qint16(data[2] * (data[3] * 256ul));
+    signedVal = qint16(data[2] + (data[3] * 256l));
     if (signedVal != m_busCurrent)
     {
         m_busCurrent = signedVal;
         emit busCurrentChanged();
     }
 
-    signedVal = qint16(data[4] * (data[5] * 256ul));
+    signedVal = qint16(data[4] + (data[5] * 256l));
     if (signedVal != m_motorCurrent)
     {
         m_motorCurrent = signedVal;
         emit motorCurrentChanged();
     }
 
-    unsignedVal = quint16(data[6] * (data[7] * 256ul));
+    unsignedVal = quint16(data[6] + (data[7] * 256l));
     if (unsignedVal != m_kilowattHours)
     {
         m_kilowattHours = unsignedVal;
         emit kilowattHoursChanged();
     }
 
-    signedVal = qint16(data[8] * (data[9] * 256ul));
+    signedVal = qint16(data[8] + (data[9] * 256l));
     if (signedVal != m_mechPower)
     {
         m_mechPower = signedVal;
         emit mechPowerChanged();
+    }
+
+    if (data[10] != m_SOC)
+    {
+        m_SOC = data[10];
+        emit SOCChanged();
     }
 }
 
@@ -467,17 +497,17 @@ void BLEHandler::interpretCharacteristic3107(const quint8 *data)
     }
 
     val = data[8] + (data[9] * 256ul) + (data[10] * 65536ul) + (data[11] * 16777216ul);
-    if (val != m_bitField3)
+    if (val != m_digitalInputs)
     {
-        m_bitField3 = val;
-        emit bitField3Changed();
+        m_digitalInputs = val;
+        emit digitalInputsChanged();
     }
 
     val = data[12] + (data[13] * 256ul) + (data[14] * 65536ul) + (data[15] * 16777216ul);
-    if (val != m_bitField4)
+    if (val != m_digitalOutputs)
     {
-        m_bitField4 = val;
-        emit bitField4Changed();
+        m_digitalOutputs = val;
+        emit digitalOutputsChanged();
     }
 }
 
@@ -485,21 +515,21 @@ void BLEHandler::interpretCharacteristic3108(const quint8 *data)
 {
     qint16 signedVal;
 
-    signedVal = qint16(data[0] * (data[1] * 256ul));
+    signedVal = qint16(data[0] + (data[1] * 256l));
     if (signedVal != m_motorTemperature)
     {
         m_motorTemperature = signedVal;
         emit motorTemperatureChanged();
     }
 
-    signedVal = qint16(data[2] * (data[3] * 256ul));
+    signedVal = qint16(data[2] + (data[3] * 256l));
     if (signedVal != m_inverterTemperature)
     {
         m_inverterTemperature = signedVal;
         emit inverterTemperatureChanged();
     }
 
-    signedVal = qint16(data[4] * (data[5] * 256ul));
+    signedVal = qint16(data[4] + (data[5] * 256l));
     if (signedVal != m_systemTemperature)
     {
         m_systemTemperature = signedVal;
@@ -511,11 +541,11 @@ void BLEHandler::interpretCharacteristic3109(const quint8 *data)
 {
     quint16 val;
 
-    val = quint16(data[0] * (data[1] * 256ul));
-    if (val != m_prechargeR)
+    val = quint16(data[0] + (data[1] * 256ul));
+    if (val != m_prechargeDuration)
     {
-        m_prechargeR = val;
-        emit prechargeRChanged();
+        m_prechargeDuration = val;
+        emit prechargeDurationChanged();
     }
 
     if (data[1] != m_prechargeOutput)
@@ -577,28 +607,28 @@ void BLEHandler::interpretCharacteristic310A(const quint8 *data)
 {
     quint16 val;
 
-    val = quint16(data[0] * (data[1] * 256ul));
+    val = quint16(data[0] + (data[1] * 256ul));
     if (val != m_throttle1Min)
     {
         m_throttle1Min = val;
         emit throttle1MinChanged();
     }
 
-    val = quint16(data[2] * (data[3] * 256ul));
+    val = quint16(data[2] + (data[3] * 256ul));
     if (val != m_throttle2Min)
     {
         m_throttle2Min = val;
         emit throttle2MinChanged();
     }
 
-    val = quint16(data[4] * (data[5] * 256ul));
+    val = quint16(data[4] + (data[5] * 256ul));
     if (val != m_throttle1Max)
     {
         m_throttle1Max = val;
         emit throttle1MaxChanged();
     }
 
-    val = quint16(data[6] * (data[7] * 256ul));
+    val = quint16(data[6] + (data[7] * 256ul));
     if (val != m_throttle2Max)
     {
         m_throttle2Max = val;
@@ -621,28 +651,28 @@ void BLEHandler::interpretCharacteristic310B(const quint8 *data)
 {
     quint16 val;
 
-    val = quint16(data[0] * (data[1] * 256ul));
+    val = quint16(data[0] + (data[1] * 256ul));
     if (val != m_regenMaxPedalPos)
     {
         m_regenMaxPedalPos = val;
         emit regenMaxPedalPosChanged();
     }
 
-    val = quint16(data[2] * (data[3] * 256ul));
+    val = quint16(data[2] + (data[3] * 256ul));
     if (val != m_regenMinPedalPos)
     {
         m_regenMinPedalPos = val;
         emit regenMinPedalPosChanged();
     }
 
-    val = quint16(data[4] * (data[5] * 256ul));
+    val = quint16(data[4] + (data[5] * 256ul));
     if (val != m_fwdMotionPedalPos)
     {
         m_fwdMotionPedalPos = val;
         emit fwdMotionPedalPosChanged();
     }
 
-    val = quint16(data[6] * (data[7] * 256ul));
+    val = quint16(data[6] + (data[7] * 256ul));
     if (val != m_mapPedalPos)
     {
         m_mapPedalPos = val;
@@ -672,14 +702,14 @@ void BLEHandler::interpretCharacteristic310C(const quint8 *data)
 {
     quint16 val;
 
-    val = quint16(data[0] * (data[1] * 256ul));
+    val = quint16(data[0] + (data[1] * 256ul));
     if (val != m_brakeMinADC)
     {
         m_brakeMinADC = val;
         emit brakeMinADCChanged();
     }
 
-    val = quint16(data[2] * (data[3] * 256ul));
+    val = quint16(data[2] + (data[3] * 256ul));
     if (val != m_brakeMaxADC)
     {
         m_brakeMaxADC = val;
@@ -703,21 +733,21 @@ void BLEHandler::interpretCharacteristic310D(const quint8 *data)
 {
     quint16 val;
 
-    val = quint16(data[0] * (data[1] * 256ul));
+    val = quint16(data[0] + (data[1] * 256ul));
     if (val != m_nomBattVolts)
     {
         m_nomBattVolts = val;
         emit nomBattVoltsChanged();
     }
 
-    val = quint16(data[2] * (data[3] * 256ul));
+    val = quint16(data[2] + (data[3] * 256ul));
     if (val != m_maxRPM)
     {
         m_maxRPM = val;
         emit maxRPMChanged();
     }
 
-    val = quint16(data[4] * (data[5] * 256ul));
+    val = quint16(data[4] + (data[5] * 256ul));
     if (val != m_maxTorque)
     {
         m_maxTorque = val;
@@ -855,14 +885,29 @@ float BLEHandler::getActualTorque() const
     return m_actTorque / 10.0f;
 }
 
-int BLEHandler::getRawThrottle() const
+int BLEHandler::getRawThrottle1() const
 {
-    return m_rawThrottle;
+    return m_rawThrottle1;
+}
+
+int BLEHandler::getRawThrottle2() const
+{
+    return m_rawThrottle2;
 }
 
 int BLEHandler::getRawBrake() const
 {
     return m_rawBrake;
+}
+
+int BLEHandler::getPercThrottle() const
+{
+    return m_percThrottle;
+}
+
+int BLEHandler::getPercBrake() const
+{
+    return m_percBrake;
 }
 
 int BLEHandler::getRequestedRPM() const
@@ -914,6 +959,11 @@ bool BLEHandler::getIsFaulted() const
 bool BLEHandler::getIsWarning() const
 {
     return m_isWarning;
+}
+
+int BLEHandler::getSOC() const
+{
+    return m_SOC;
 }
 
 int BLEHandler::getLogLevel() const
@@ -972,14 +1022,14 @@ quint32 BLEHandler::getBitfield2() const
     return m_bitField2;
 }
 
-quint32 BLEHandler::getBitfield3() const
+quint32 BLEHandler::getDigitalInputs() const
 {
-    return m_bitField3;
+    return m_digitalInputs;
 }
 
-quint32 BLEHandler::getBitfield4() const
+quint32 BLEHandler::getDigitalOutputs() const
 {
-    return m_bitField4;
+    return m_digitalOutputs;
 }
 
 float BLEHandler::getMotorTemp() const
@@ -997,24 +1047,24 @@ float BLEHandler::getSysTemp() const
     return m_systemTemperature / 10.0f;
 }
 
-int BLEHandler::getPrechargeR() const
+int BLEHandler::getPrechargeDuration() const
 {
-    return m_prechargeR;
+    return m_prechargeDuration;
 }
 
-void BLEHandler::setPrechargeR(const int newVal)
+void BLEHandler::setPrechargeDuration(const int newVal)
 {
-    if (newVal == m_prechargeR) return;
+    if (newVal == m_prechargeDuration) return;
 
     if (newVal > -1)
     {
-        m_prechargeR = newVal;
+        m_prechargeDuration = newVal;
         sendCharacteristic3109();
     }
     else
     {
         //cause the value to revert back to our saved value.
-        emit prechargeRChanged();
+        emit prechargeDurationChanged();
     }
 }
 

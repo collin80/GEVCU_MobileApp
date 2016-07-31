@@ -6,8 +6,8 @@ Slider
 {
     Label
     {
-        anchors.left: parent.right
-        anchors.leftMargin: 15
+        anchors.left: parent.left
+        anchors.leftMargin: parent.width / 2.5
         anchors.top: parent.top
         text: Math.floor(parent.value)
         font.pointSize: 15
