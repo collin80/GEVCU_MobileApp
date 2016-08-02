@@ -263,6 +263,9 @@ void BLEHandler::updateBLECharacteristic(const QLowEnergyCharacteristic &c, cons
 
     const quint8 *data = reinterpret_cast<const quint8 *>(value.constData());
 
+    for (int i = 0; i < value.length(); i++)
+        qWarning() << QString::number(data[i], 16);
+
     switch (c.uuid().toUInt16())
     {
     case 0x3101:
@@ -362,13 +365,13 @@ void BLEHandler::interpretCharacteristic3103(const quint8 *data)
 
     if (data[6] != m_percThrottle)
     {
-        m_percThrottle = data[6];
+        m_percThrottle = (signed char)data[6];
         emit percThrottleChanged();
     }
 
     if (data[7] != m_percBrake)
     {
-        m_percBrake = data[7];
+        m_percBrake = (signed char)data[7];
         emit percBrakeChanged();
     }
 
@@ -814,7 +817,7 @@ void BLEHandler::serviceStateChanged(QLowEnergyService::ServiceState s)
             bleChar = bleService->characteristic(QBluetoothUuid((quint16)i));
             if (!bleChar.isValid()) {
                 qWarning() << "Could not get characteristic " << QString::number(i, 16);
-                break;
+                //break;
             }
 
             //pretend we just got a notification in so that this char. is parsed
@@ -1140,7 +1143,7 @@ void BLEHandler::setCoolingOnTemp(const int newVal)
 {
     if (newVal == m_coolingOnTemp) return;
 
-    if (newVal > -1 && newVal < 8)
+    if (newVal > -1 && newVal < 250)
     {
         m_coolingOnTemp = newVal;
         sendCharacteristic3109();
@@ -1161,7 +1164,7 @@ void BLEHandler::setCoolingOffTemp(const int newVal)
 {
     if (newVal == m_coolingOffTemp) return;
 
-    if (newVal > -1 && newVal < 8)
+    if (newVal > -1 && newVal < 250)
     {
         m_coolingOffTemp = newVal;
         sendCharacteristic3109();
@@ -1388,7 +1391,7 @@ void BLEHandler::setThrottle2Max(const int newVal)
 
 int BLEHandler::getRegenMaxPedalPos() const
 {
-    return m_regenMaxPedalPos;
+    return m_regenMaxPedalPos / 10;
 }
 
 void BLEHandler::setRegenMaxPedalPos(const int newVal)
@@ -1410,7 +1413,7 @@ void BLEHandler::setRegenMaxPedalPos(const int newVal)
 
 int BLEHandler::getRegenMinPedalPos() const
 {
-    return m_regenMinPedalPos;
+    return m_regenMinPedalPos / 10;
 }
 
 void BLEHandler::setRegenMinPedalPos(const int newVal)
@@ -1431,7 +1434,7 @@ void BLEHandler::setRegenMinPedalPos(const int newVal)
 
 int BLEHandler::getFWDMotionPedalPos() const
 {
-    return m_fwdMotionPedalPos;
+    return m_fwdMotionPedalPos / 10;
 }
 
 void BLEHandler::setFWDMotionPedalPos(const int newVal)
@@ -1452,7 +1455,7 @@ void BLEHandler::setFWDMotionPedalPos(const int newVal)
 
 int BLEHandler::getMapPedalPos() const
 {
-    return m_mapPedalPos;
+    return m_mapPedalPos / 10;
 }
 
 void BLEHandler::setMapPedalPos(const int newVal)
@@ -1473,14 +1476,14 @@ void BLEHandler::setMapPedalPos(const int newVal)
 
 int BLEHandler::getRegenThrottleMin() const
 {
-    return m_regenThrottleMin;
+    return m_regenThrottleMin / 10;
 }
 
 void BLEHandler::setRegenThrottleMin(const int newVal)
 {
     if (newVal == m_regenThrottleMin) return;
 
-    if (newVal > -1 && newVal < 101)
+    if (newVal > -1 && newVal < 1001)
     {
         m_regenThrottleMin = newVal;
         sendCharacteristic310B();
@@ -1494,14 +1497,14 @@ void BLEHandler::setRegenThrottleMin(const int newVal)
 
 int BLEHandler::getRegenThrottleMax() const
 {
-    return m_regenThrottleMax;
+    return m_regenThrottleMax / 10;
 }
 
 void BLEHandler::setRegenThrottleMax(const int newVal)
 {
     if (newVal == m_regenThrottleMax) return;
 
-    if (newVal > -1 && newVal < 101)
+    if (newVal > -1 && newVal < 1001)
     {
         m_regenThrottleMax = newVal;
         sendCharacteristic310B();
@@ -1515,14 +1518,14 @@ void BLEHandler::setRegenThrottleMax(const int newVal)
 
 int BLEHandler::getCreepThrottle() const
 {
-    return m_creepThrottle;
+    return m_creepThrottle / 10;
 }
 
 void BLEHandler::setCreepThrottle(const int newVal)
 {
     if (newVal == m_creepThrottle) return;
 
-    if (newVal > -1 && newVal < 101)
+    if (newVal > -1 && newVal < 1001)
     {
         m_creepThrottle = newVal;
         sendCharacteristic310B();

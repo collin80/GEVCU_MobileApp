@@ -705,8 +705,8 @@ Item {
                 color: "#AAAAFF"
                 text: qsTr("Brake:")
                 font.pointSize: largeTextSize
-                anchors.top: throttleConfigGrid.bottom
-                anchors.left: throttleConfigPage.left
+                anchors.top: brakeSysConfig.top
+                anchors.left: brakeSysConfig.left
             }
 
             GridLayout
@@ -782,13 +782,13 @@ Item {
                 text: qsTr("Motor Control:")
                 font.pointSize: largeTextSize
                 anchors.top: throttleConfigGrid2.bottom
-                anchors.left: throttleConfigPage.left
+                anchors.left: brakeSysConfig.left
             }
 
             Row {
                 id: configRow9
                 spacing: 80 * stretchFactor
-                anchors.left: throttleConfigPage.left
+                anchors.left: brakeSysConfig.left
                 anchors.top: label150.bottom
                 anchors.topMargin: 20 * stretchFactor
                 anchors.leftMargin: 50 * stretchFactor
@@ -845,13 +845,13 @@ Item {
                 text: qsTr("System:")
                 font.pointSize: largeTextSize
                 anchors.top: configRow9.bottom
-                anchors.left: throttleConfigPage.left
+                anchors.left: brakeSysConfig.left
             }
 
             Row {
                 id: configRow10
                 spacing: 80 * stretchFactor
-                anchors.left: throttleConfigPage.left
+                anchors.left: brakeSysConfig.left
                 anchors.top: label200.bottom
                 anchors.topMargin: 20 * stretchFactor
                 anchors.leftMargin: 50 * stretchFactor
@@ -975,7 +975,7 @@ Item {
                 TextField
                 {
                     id:prechargeDelayText
-                    text: bleHandler.prechargeR.toString()
+                    text: bleHandler.prechargeDuration.toString()
                     font.pointSize: medTextSize
                     color: "white"
                     implicitWidth: textboxSize
@@ -1037,7 +1037,7 @@ Item {
                 id: dashboardRow2
                 spacing: 20 * stretchFactor
                 anchors.top: outputConfigGrid1.bottom
-                anchors.topMargin: 50 * scalingFactor
+                anchors.topMargin: 50 * stretchFactor
 
                 Label {
                     id: label2
