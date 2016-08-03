@@ -11,6 +11,7 @@
 class BLEHandler : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(QString bleStatus READ getBLEStatus NOTIFY bleStatusChanged)
     Q_PROPERTY(int timeRunning READ getTimeRunning NOTIFY timeRunningChanged)
     Q_PROPERTY(float reqTorque READ getRequestedTorque NOTIFY reqTorqueChanged)
     Q_PROPERTY(float actTorque READ getActualTorque NOTIFY actTorqueChanged)
@@ -76,6 +77,7 @@ public:
     ~BLEHandler();
 
     //All the getter/setter methods for the above properties that were defined for QML use:
+    QString getBLEStatus();
     int getTimeRunning();
     float getRequestedTorque() const;
     float getActualTorque() const;
@@ -169,6 +171,7 @@ public:
     void setMaxTorque(const int newVal);
 
 signals:
+    void bleStatusChanged();
     void timeRunningChanged();
     void reqTorqueChanged();
     void actTorqueChanged();
@@ -268,6 +271,7 @@ private:
     QLowEnergyService *bleService;
 
     //local store of all public properties values
+    QString m_bleStatus;
     int m_timeRunning;
     int m_reqTorque;
     int m_actTorque;

@@ -301,7 +301,16 @@ Item {
                 }
 
             }
-
+            Label
+            {
+                 id: statusLabel
+                 text: bleHandler.bleStatus
+                 color: "red"
+                 font.pointSize: largeTextSize * 2.0
+                 anchors.top: statusGrid.bottom
+                 anchors.topMargin: 100 * stretchFactor
+                 horizontalAlignment: Text.AlignHCenter
+            }
         }
 
         Item {

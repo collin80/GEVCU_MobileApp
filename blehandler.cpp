@@ -72,6 +72,7 @@ BLEHandler::BLEHandler()
     m_nomBattVolts = 0;
     m_maxRPM = 0;
     m_maxTorque = 0;
+    m_bleStatus = tr("Scanning for GEVCU");
 
     discoveryAgent->start();
 }
@@ -108,17 +109,24 @@ void BLEHandler::scanFinished()
     {
         //setMessage("No Low Energy devices found");
         qWarning() << "No BLE devices found!";
+        m_bleStatus = "No devices found!";
+        emit bleStatusChanged();
     }
     //Q_EMIT nameChanged();
     for (int i = 0; i < bleDevices.size(); i++)
     {
         if ( ((BLEDeviceInfo*)bleDevices.at(i))->getName().contains("GEVCU"))
         {
+            m_bleStatus = tr("Connecting");
+            emit bleStatusChanged();
             connectToService(((BLEDeviceInfo*)bleDevices.at(i))->getAddress() );
             return;
         }
     }
     qWarning() << "No GEVCU devices found to connect to!";
+    m_bleStatus = "No GEVCU Found!";
+    emit bleStatusChanged();
+
 }
 
 void BLEHandler::deviceScanError(QBluetoothDeviceDiscoveryAgent::Error error)
@@ -143,7 +151,6 @@ void BLEHandler::connectToService(const QString &address)
     for (int i = 0; i < bleDevices.size(); i++) {
         if (((BLEDeviceInfo*)bleDevices.at(i))->getAddress() == address ) {
             currentDevice.setDevice(((BLEDeviceInfo*)bleDevices.at(i))->getDevice());
-            //setMessage("Connecting to device...");
             qWarning() << "Connecting to device " << ((BLEDeviceInfo*)bleDevices.at(i))->getAddress();
             deviceFound = true;
             break;
@@ -183,7 +190,8 @@ void BLEHandler::deviceConnected()
 
 void BLEHandler::deviceDisconnected()
 {
-    //setMessage("Heart Rate service disconnected");
+    m_bleStatus = "Disconnected";
+    emit bleStatusChanged();
     qWarning() << "Remote device disconnected";
 }
 
@@ -215,8 +223,12 @@ void BLEHandler::serviceScanDone()
 
     if (!bleService) {
         //setMessage("GEVCU Service not found.");
+        m_bleStatus = "Service Error!";
+        emit bleStatusChanged();
         return;
     }
+
+
 
     connect(bleService, SIGNAL(stateChanged(QLowEnergyService::ServiceState)),
             this, SLOT(serviceStateChanged(QLowEnergyService::ServiceState)));
@@ -829,6 +841,8 @@ void BLEHandler::serviceStateChanged(QLowEnergyService::ServiceState s)
                 bleService->writeDescriptor(bleNotificationDesc, QByteArray::fromHex("0100"));
             }
         }
+        m_bleStatus = "Connected";
+        emit bleStatusChanged();
         break;
     }
     default:
@@ -845,7 +859,7 @@ void BLEHandler::serviceError(QLowEnergyService::ServiceError e)
         //setMessage("Cannot obtain HR notifications");
         break;
     default:
-        qWarning() << "HR service error:" << e;
+        qWarning() << "BLE service error:" << e;
     }
 }
 
@@ -1684,3 +1698,7 @@ void BLEHandler::setMaxTorque(const int newVal)
     }
 }
 
+QString BLEHandler::getBLEStatus()
+{
+    return m_bleStatus;
+}
