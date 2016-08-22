@@ -18,3 +18,8 @@ include(deployment.pri)
 HEADERS += \
     blehandler.h \
     bledeviceinfo.h
+
+DISTFILES += \
+    android-sources/AndroidManifest.xml
+
+ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android-sources
