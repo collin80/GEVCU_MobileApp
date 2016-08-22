@@ -72,6 +72,25 @@ class BLEHandler : public QObject
     Q_PROPERTY(int maxRPM READ getMaxRPM WRITE setMaxRPM NOTIFY maxRPMChanged)
     Q_PROPERTY(int maxTorque READ getMaxTorque WRITE setMaxTorque NOTIFY maxTorqueChanged)
 
+    Q_PROPERTY(int deviceDMOC READ getDeviceDMOC WRITE setDeviceDMOC NOTIFY deviceDMOCChanged)
+    Q_PROPERTY(int deviceBrusaDMC5 READ getDeviceBrusaDMC5 WRITE setDeviceBrusaDMC5 NOTIFY deviceBrusaDMC5Changed)
+    Q_PROPERTY(int deviceCodaUQM READ getDeviceCodaUQM WRITE setDeviceCodaUQM NOTIFY deviceCodaUQMChanged)
+    Q_PROPERTY(int deviceCKInverter READ getDeviceCKInverter WRITE setDeviceCKInverter NOTIFY deviceCKInverterChanged)
+    Q_PROPERTY(int deviceTestInverter READ getDeviceTestInverter WRITE setDeviceTestInverter NOTIFY deviceTestInverterChanged)
+    Q_PROPERTY(int deviceBrusaCharger READ getDeviceBrusaCharger WRITE setDeviceBrusaCharger NOTIFY deviceBrusaChargerChanged)
+    Q_PROPERTY(int deviceTCCH READ getDeviceTCCH WRITE setDeviceTCCH NOTIFY deviceTCCHChanged)
+    Q_PROPERTY(int deviceLearCharger READ getDeviceLearCharger WRITE setDeviceLearCharger NOTIFY deviceLearChargerChanged)
+    Q_PROPERTY(int devicePotAccel READ getDevicePotAccel WRITE setDevicePotAccel NOTIFY devicePotAccelChanged)
+    Q_PROPERTY(int devicePotBrake READ getDevicePotBrake WRITE setDevicePotBrake NOTIFY devicePotBrakeChanged)
+    Q_PROPERTY(int deviceCANAccel READ getDeviceCANAccel WRITE setDeviceCANAccel NOTIFY deviceCANAccelChanged)
+    Q_PROPERTY(int deviceCANBrake READ getDeviceCANBrake WRITE setDeviceCANBrake NOTIFY deviceCANBrakeChanged)
+    Q_PROPERTY(int deviceTestAccel READ getDeviceTestAccel WRITE setDeviceTestAccel NOTIFY deviceTestAccelChanged)
+    Q_PROPERTY(int deviceEVIC READ getDeviceEVIC WRITE setDeviceEVIC NOTIFY deviceEVICChanged)
+    Q_PROPERTY(int deviceAdaBlue READ getDeviceAdaBlue WRITE setDeviceAdaBlue NOTIFY deviceAdaBlueChanged)
+    Q_PROPERTY(int deviceThinkBMS READ getDeviceThinkBMS WRITE setDeviceThinkBMS NOTIFY deviceThinkBMSChanged)
+    Q_PROPERTY(int devicePIDListen READ getDevicePIDListen WRITE setDevicePIDListen NOTIFY devicePIDListenChanged)
+    Q_PROPERTY(int deviceELM327Emu READ getDeviceELM327Emu WRITE setDeviceELM327Emu NOTIFY deviceELM327EmuChanged)
+
 public:
     BLEHandler();
     ~BLEHandler();
@@ -170,6 +189,43 @@ public:
     int getMaxTorque() const;
     void setMaxTorque(const int newVal);
 
+    int getDeviceDMOC() const;
+    void setDeviceDMOC(const int newVal);
+    int getDeviceBrusaDMC5() const;
+    void setDeviceBrusaDMC5(const int newVal);
+    int getDeviceCodaUQM() const;
+    void setDeviceCodaUQM(const int newVal);
+    int getDeviceCKInverter() const;
+    void setDeviceCKInverter(const int newVal);
+    int getDeviceTestInverter() const;
+    void setDeviceTestInverter(const int newVal);
+    int getDeviceBrusaCharger() const;
+    void setDeviceBrusaCharger(const int newVal);
+    int getDeviceTCCH() const;
+    void setDeviceTCCH(const int newVal);
+    int getDeviceLearCharger() const;
+    void setDeviceLearCharger(const int newVal);
+    int getDevicePotAccel() const;
+    void setDevicePotAccel(const int newVal);
+    int getDevicePotBrake() const;
+    void setDevicePotBrake(const int newVal);
+    int getDeviceCANAccel() const;
+    void setDeviceCANAccel(const int newVal);
+    int getDeviceCANBrake() const;
+    void setDeviceCANBrake(const int newVal);
+    int getDeviceTestAccel() const;
+    void setDeviceTestAccel(const int newVal);
+    int getDeviceEVIC() const;
+    void setDeviceEVIC(const int newVal);
+    int getDeviceAdaBlue() const;
+    void setDeviceAdaBlue(const int newVal);
+    int getDeviceThinkBMS() const;
+    void setDeviceThinkBMS(const int newVal);
+    int getDevicePIDListen() const;
+    void setDevicePIDListen(const int newVal);
+    int getDeviceELM327Emu() const;
+    void setDeviceELM327Emu(const int newVal);
+
 signals:
     void bleStatusChanged();
     void timeRunningChanged();
@@ -231,6 +287,25 @@ signals:
     void nomBattVoltsChanged();
     void maxRPMChanged();
     void maxTorqueChanged();
+
+    void deviceDMOCChanged();
+    void deviceBrusaDMC5Changed();
+    void deviceCodaUQMChanged();
+    void deviceCKInverterChanged();
+    void deviceTestInverterChanged();
+    void deviceBrusaChargerChanged();
+    void deviceTCCHChanged();
+    void deviceLearChargerChanged();
+    void devicePotAccelChanged();
+    void devicePotBrakeChanged();
+    void deviceCANAccelChanged();
+    void deviceCANBrakeChanged();
+    void deviceTestAccelChanged();
+    void deviceEVICChanged();
+    void deviceAdaBlueChanged();
+    void deviceThinkBMSChanged();
+    void devicePIDListenChanged();
+    void deviceELM327EmuChanged();
 
 public slots:
     void deviceSearch();
@@ -331,6 +406,7 @@ private:
     int m_nomBattVolts;
     int m_maxRPM;
     int m_maxTorque;
+    quint32 m_devicesEnabled;
 
     void interpretCharacteristic3101(const quint8 *data);
     void interpretCharacteristic3102(const quint8 *data);
@@ -345,6 +421,7 @@ private:
     void interpretCharacteristic310B(const quint8 *data);
     void interpretCharacteristic310C(const quint8 *data);
     void interpretCharacteristic310D(const quint8 *data);
+    void interpretCharacteristic310E(const quint8 *data);
     void interpretCharacteristic31D0(const quint8 *data);
 
     void sendCharacteristic3105();
@@ -353,6 +430,7 @@ private:
     void sendCharacteristic310B();
     void sendCharacteristic310C();
     void sendCharacteristic310D();
+    void sendCharacteristic310E();
 };
 
 #endif // BLEHANDLER_H

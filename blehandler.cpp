@@ -73,6 +73,7 @@ BLEHandler::BLEHandler()
     m_maxRPM = 0;
     m_maxTorque = 0;
     m_bleStatus = tr("Scanning for GEVCU");
+    m_devicesEnabled = 0;
 
     discoveryAgent->start();
 }
@@ -89,6 +90,8 @@ void BLEHandler::deviceSearch()
     discoveryAgent->stop();
     qDeleteAll(bleDevices);
     bleDevices.clear();
+    m_bleStatus = tr("Scanning for GEVCU");
+    emit bleStatusChanged();
     discoveryAgent->start();
 }
 
@@ -319,6 +322,9 @@ void BLEHandler::updateBLECharacteristic(const QLowEnergyCharacteristic &c, cons
     case 0x310D:
         interpretCharacteristic310D(data);
         break;
+    case 0x310E:
+        interpretCharacteristic310E(data);
+        break;
     case 0x31D0:
         interpretCharacteristic31D0(data);
         break;
@@ -446,6 +452,24 @@ void BLEHandler::interpretCharacteristic3105(const quint8 *data)
     }
 }
 
+void BLEHandler::sendCharacteristic3105()
+{
+    QLowEnergyCharacteristic bleChar;
+    QByteArray data;
+    bleChar = bleService->characteristic(QBluetoothUuid((quint16)0x3105));
+    if (bleChar.isValid())
+    {
+        data.append((char)m_powerMode);
+        data.append((char)m_gear);
+        data.append((char)m_isRunning);
+        data.append((char)m_isWarning);
+        data.append((char)m_isFaulted);
+        data.append((char)m_logLevel);
+
+        bleService->writeCharacteristic(bleChar, data, bleService->WriteWithResponse);
+    }
+}
+
 void BLEHandler::interpretCharacteristic3106(const quint8 *data)
 {
     qint16 signedVal;
@@ -563,58 +587,81 @@ void BLEHandler::interpretCharacteristic3109(const quint8 *data)
         emit prechargeDurationChanged();
     }
 
-    if (data[1] != m_prechargeOutput)
+    if (data[2] != m_prechargeOutput)
     {
-        m_prechargeOutput = data[1];
+        m_prechargeOutput = data[2];
         emit prechargeOutputChanged();
     }
 
-    if (data[2] != m_mainContactorOutput)
+    if (data[3] != m_mainContactorOutput)
     {
-        m_mainContactorOutput = data[2];
+        m_mainContactorOutput = data[3];
         emit mainContactorOutputChanged();
     }
 
-    if (data[3] != m_coolingOutput)
+    if (data[4] != m_coolingOutput)
     {
-        m_coolingOutput = data[3];
+        m_coolingOutput = data[4];
         emit coolingOutputChanged();
     }
 
-    if (data[4] != m_coolingOnTemp)
+    if (data[5] != m_coolingOnTemp)
     {
-        m_coolingOnTemp = data[4];
+        m_coolingOnTemp = data[5];
         emit coolingOnTempChanged();
     }
 
-    if (data[5] != m_coolingOffTemp)
+    if (data[6] != m_coolingOffTemp)
     {
-        m_coolingOffTemp = data[5];
+        m_coolingOffTemp = data[6];
         emit coolingOffTempChanged();
     }
 
-    if (data[6] != m_brakeLightOutput)
+    if (data[7] != m_brakeLightOutput)
     {
-        m_brakeLightOutput = data[6];
+        m_brakeLightOutput = data[7];
         emit brakeLightOutputChanged();
     }
 
-    if (data[7] != m_reverseLightOutput)
+    if (data[8] != m_reverseLightOutput)
     {
-        m_reverseLightOutput = data[7];
+        m_reverseLightOutput = data[8];
         emit reverseLightOutputChanged();
     }
 
-    if (data[8] != m_enableMotorControlInput)
+    if (data[9] != m_enableMotorControlInput)
     {
-        m_enableMotorControlInput = data[8];
+        m_enableMotorControlInput = data[9];
         emit enableMotorControlInputChanged();
     }
 
-    if (data[9] != m_reverseInput)
+    if (data[10] != m_reverseInput)
     {
-        m_reverseInput = data[9];
+        m_reverseInput = data[10];
         emit reverseInputChanged();
+    }
+}
+
+void BLEHandler::sendCharacteristic3109()
+{
+    QLowEnergyCharacteristic bleChar;
+    QByteArray data;
+    bleChar = bleService->characteristic(QBluetoothUuid((quint16)0x3109));
+    if (bleChar.isValid())
+    {
+        data.append((char)(m_prechargeDuration & 0xFF));
+        data.append((char)(m_prechargeDuration >> 8));
+        data.append((char)m_prechargeOutput);
+        data.append((char)m_mainContactorOutput);
+        data.append((char)m_coolingOutput);
+        data.append((char)m_coolingOnTemp);
+        data.append((char)m_coolingOffTemp);
+        data.append((char)m_brakeLightOutput);
+        data.append((char)m_reverseLightOutput);
+        data.append((char)m_enableMotorControlInput);
+        data.append((char)m_reverseInput);
+
+        bleService->writeCharacteristic(bleChar, data, bleService->WriteWithResponse);
     }
 }
 
@@ -659,6 +706,28 @@ void BLEHandler::interpretCharacteristic310A(const quint8 *data)
     {
         m_throttleType = data[9];
         emit throttleTypeChanged();
+    }
+}
+
+void BLEHandler::sendCharacteristic310A()
+{
+    QLowEnergyCharacteristic bleChar;
+    QByteArray data;
+    bleChar = bleService->characteristic(QBluetoothUuid((quint16)0x310A));
+    if (bleChar.isValid())
+    {
+        data.append((char)(m_throttle1Min & 0xFF));
+        data.append((char)(m_throttle1Min >> 8));
+        data.append((char)(m_throttle2Min & 0xFF));
+        data.append((char)(m_throttle2Min >> 8));
+        data.append((char)(m_throttle1Max & 0xFF));
+        data.append((char)(m_throttle1Max >> 8));
+        data.append((char)(m_throttle2Max & 0xFF));
+        data.append((char)(m_throttle2Max >> 8));
+        data.append((char)m_numThrottleADC);
+        data.append((char)m_throttleType);
+
+        bleService->writeCharacteristic(bleChar, data, bleService->WriteWithResponse);
     }
 }
 
@@ -713,6 +782,29 @@ void BLEHandler::interpretCharacteristic310B(const quint8 *data)
     }
 }
 
+void BLEHandler::sendCharacteristic310B()
+{
+    QLowEnergyCharacteristic bleChar;
+    QByteArray data;
+    bleChar = bleService->characteristic(QBluetoothUuid((quint16)0x3105));
+    if (bleChar.isValid())
+    {
+        data.append((char)(m_regenMaxPedalPos & 0xFF));
+        data.append((char)(m_regenMaxPedalPos >> 8));
+        data.append((char)(m_regenMinPedalPos & 0xFF));
+        data.append((char)(m_regenMinPedalPos >> 8));
+        data.append((char)(m_fwdMotionPedalPos & 0xFF));
+        data.append((char)(m_fwdMotionPedalPos >> 8));
+        data.append((char)(m_mapPedalPos & 0xFF));
+        data.append((char)(m_mapPedalPos >> 8));
+        data.append((char)m_regenThrottleMin);
+        data.append((char)m_regenThrottleMax);
+        data.append((char)m_creepThrottle);
+
+        bleService->writeCharacteristic(bleChar, data, bleService->WriteWithResponse);
+    }
+}
+
 void BLEHandler::interpretCharacteristic310C(const quint8 *data)
 {
     quint16 val;
@@ -744,6 +836,24 @@ void BLEHandler::interpretCharacteristic310C(const quint8 *data)
     }
 }
 
+void BLEHandler::sendCharacteristic310C()
+{
+    QLowEnergyCharacteristic bleChar;
+    QByteArray data;
+    bleChar = bleService->characteristic(QBluetoothUuid((quint16)0x3105));
+    if (bleChar.isValid())
+    {
+        data.append((char)(m_brakeMinADC & 0xFF));
+        data.append((char)(m_brakeMinADC >> 8));
+        data.append((char)(m_brakeMaxADC & 0xFF));
+        data.append((char)(m_brakeMaxADC >> 8));
+        data.append((char)m_regenBrakeMin);
+        data.append((char)m_regenBrakeMax);
+
+        bleService->writeCharacteristic(bleChar, data, bleService->WriteWithResponse);
+    }
+}
+
 void BLEHandler::interpretCharacteristic310D(const quint8 *data)
 {
     quint16 val;
@@ -770,38 +880,75 @@ void BLEHandler::interpretCharacteristic310D(const quint8 *data)
     }
 }
 
+void BLEHandler::sendCharacteristic310D()
+{
+    QLowEnergyCharacteristic bleChar;
+    QByteArray data;
+    bleChar = bleService->characteristic(QBluetoothUuid((quint16)0x3105));
+    if (bleChar.isValid())
+    {
+        data.append((char)(m_nomBattVolts & 0xFF));
+        data.append((char)(m_nomBattVolts >> 8));
+        data.append((char)(m_maxRPM & 0xFF));
+        data.append((char)(m_maxRPM >> 8));
+        data.append((char)(m_maxTorque & 0xFF));
+        data.append((char)(m_maxTorque >> 8));
+
+        bleService->writeCharacteristic(bleChar, data, bleService->WriteWithResponse);
+    }
+}
+
+void BLEHandler::interpretCharacteristic310E(const quint8 *data)
+{
+    quint32 val;
+
+    val = data[0] + (data[1] * 256ul) + (data[2] * 65536ul) + (data[3] * 16777216ul);
+    if (val != m_devicesEnabled)
+    {
+        m_devicesEnabled = val;
+        emit deviceDMOCChanged();
+        emit deviceBrusaDMC5Changed();
+        emit deviceCodaUQMChanged();
+        emit deviceCKInverterChanged();
+        emit deviceTestInverterChanged();
+        emit deviceBrusaChargerChanged();
+        emit deviceTCCHChanged();
+        emit deviceLearChargerChanged();
+        emit devicePotAccelChanged();
+        emit devicePotBrakeChanged();
+        emit deviceCANAccelChanged();
+        emit deviceCANBrakeChanged();
+        emit deviceTestAccelChanged();
+        emit deviceEVICChanged();
+        emit deviceAdaBlueChanged();
+        emit deviceThinkBMSChanged();
+        emit devicePIDListenChanged();
+        emit deviceELM327EmuChanged();
+    }
+}
+
+void BLEHandler::sendCharacteristic310E()
+{
+    QLowEnergyCharacteristic bleChar;
+    QByteArray data;
+    bleChar = bleService->characteristic(QBluetoothUuid((quint16)0x3105));
+    if (bleChar.isValid())
+    {
+        data.append((char)(m_devicesEnabled & 0xFF));
+        data.append((char)((m_devicesEnabled >> 8) & 0xFF));
+        data.append((char)((m_devicesEnabled >> 16) & 0xFF));
+        data.append((char)((m_devicesEnabled >> 24) & 0xFF));
+        data.append((char)0); //fill second parameter with all zeros for now
+        data.append((char)0);
+        data.append((char)0);
+        data.append((char)0);
+
+        bleService->writeCharacteristic(bleChar, data, bleService->WriteWithResponse);
+    }
+}
+
 //don't even really care... just ignore it.
 void BLEHandler::interpretCharacteristic31D0(const quint8 *data)
-{
-
-}
-
-void BLEHandler::sendCharacteristic3105()
-{
-
-}
-
-void BLEHandler::sendCharacteristic3109()
-{
-
-}
-
-void BLEHandler::sendCharacteristic310A()
-{
-
-}
-
-void BLEHandler::sendCharacteristic310B()
-{
-
-}
-
-void BLEHandler::sendCharacteristic310C()
-{
-
-}
-
-void BLEHandler::sendCharacteristic310D()
 {
 
 }
@@ -809,12 +956,8 @@ void BLEHandler::sendCharacteristic310D()
 /*
  *Called when discoverDetails() has gotten all of the characteristics and
  * their details. At this point it is possible to subscribe to characteristic
- * notifications.
+ * notifications. Also, the current value of all characteristics is available here.
  *
- * FIXME: We also need to do a full read of every characteristic upon first start up.
- * This is required because thereafter only things that updated will be sent to us.
- * We really need the current value. Which, maybe we already have here in this method
- * since we're getting each characteristic. But, the values have to be extracted regardless.
 */
 void BLEHandler::serviceStateChanged(QLowEnergyService::ServiceState s)
 {
@@ -824,7 +967,14 @@ void BLEHandler::serviceStateChanged(QLowEnergyService::ServiceState s)
     switch (s) {
     case QLowEnergyService::ServiceDiscovered:
     {
-        for (int i = 0x3101; i < 0x310E; i++)
+        QList<QLowEnergyCharacteristic> chars = bleService->characteristics();
+        qWarning() << "Listing all chars";
+        for (QLowEnergyCharacteristic bchar: chars)
+        {
+            qWarning() << "Char: " << QString::number(bchar.uuid().toUInt16(), 16);
+        }
+
+        for (int i = 0x3101; i < 0x310F; i++)
         {
             bleChar = bleService->characteristic(QBluetoothUuid((quint16)i));
             if (!bleChar.isValid()) {
@@ -1701,4 +1851,257 @@ void BLEHandler::setMaxTorque(const int newVal)
 QString BLEHandler::getBLEStatus()
 {
     return m_bleStatus;
+}
+
+int BLEHandler::getDeviceDMOC() const
+{
+    if (m_devicesEnabled & 1) return 1;
+    return 0;
+}
+
+void BLEHandler::setDeviceDMOC(const int newVal)
+{
+    if (newVal == 1) m_devicesEnabled |= 1;
+    else m_devicesEnabled &= ~1;
+
+    sendCharacteristic310E();
+}
+
+int BLEHandler::getDeviceBrusaDMC5() const
+{
+    if (m_devicesEnabled & 2) return 1;
+    return 0;
+}
+
+void BLEHandler::setDeviceBrusaDMC5(const int newVal)
+{
+    if (newVal == 1) m_devicesEnabled |= 2;
+    else m_devicesEnabled &= ~2;
+
+    sendCharacteristic310E();
+}
+
+int BLEHandler::getDeviceCodaUQM() const
+{
+    if (m_devicesEnabled & 4) return 1;
+    return 0;
+}
+
+void BLEHandler::setDeviceCodaUQM(const int newVal)
+{
+    if (newVal == 1) m_devicesEnabled |= 4;
+    else m_devicesEnabled &= ~4;
+
+    sendCharacteristic310E();
+}
+
+int BLEHandler::getDeviceCKInverter() const
+{
+    if (m_devicesEnabled & 8) return 1;
+    return 0;
+}
+
+void BLEHandler::setDeviceCKInverter(const int newVal)
+{
+    if (newVal == 1) m_devicesEnabled |= 8;
+    else m_devicesEnabled &= ~8;
+
+    sendCharacteristic310E();
+}
+
+int BLEHandler::getDeviceTestInverter() const
+{
+    if (m_devicesEnabled & 0x10) return 1;
+    return 0;
+}
+
+void BLEHandler::setDeviceTestInverter(const int newVal)
+{
+    if (newVal == 1) m_devicesEnabled |= 0x10;
+    else m_devicesEnabled &= ~0x10;
+
+    sendCharacteristic310E();
+}
+
+int BLEHandler::getDeviceBrusaCharger() const
+{
+    if (m_devicesEnabled & 0x20) return 1;
+    return 0;
+}
+
+void BLEHandler::setDeviceBrusaCharger(const int newVal)
+{
+    if (newVal == 1) m_devicesEnabled |= 0x20;
+    else m_devicesEnabled &= ~0x20;
+
+    sendCharacteristic310E();
+}
+
+int BLEHandler::getDeviceTCCH() const
+{
+    if (m_devicesEnabled & 0x40) return 1;
+    return 0;
+}
+
+void BLEHandler::setDeviceTCCH(const int newVal)
+{
+    if (newVal == 1) m_devicesEnabled |= 0x40;
+    else m_devicesEnabled &= ~0x40;
+
+    sendCharacteristic310E();
+}
+
+int BLEHandler::getDeviceLearCharger() const
+{
+    if (m_devicesEnabled & 0x80) return 1;
+    return 0;
+}
+
+void BLEHandler::setDeviceLearCharger(const int newVal)
+{
+    if (newVal == 1) m_devicesEnabled |= 0x80;
+    else m_devicesEnabled &= ~0x80;
+
+    sendCharacteristic310E();
+}
+
+int BLEHandler::getDevicePotAccel() const
+{
+    if (m_devicesEnabled & 0x100) return 1;
+    return 0;
+}
+
+void BLEHandler::setDevicePotAccel(const int newVal)
+{
+    if (newVal == 1) m_devicesEnabled |= 0x100;
+    else m_devicesEnabled &= ~0x100;
+
+    sendCharacteristic310E();
+}
+
+int BLEHandler::getDevicePotBrake() const
+{
+    if (m_devicesEnabled & 0x200) return 1;
+    return 0;
+}
+
+void BLEHandler::setDevicePotBrake(const int newVal)
+{
+    if (newVal == 1) m_devicesEnabled |= 0x200;
+    else m_devicesEnabled &= ~0x200;
+
+    sendCharacteristic310E();
+}
+
+int BLEHandler::getDeviceCANAccel() const
+{
+    if (m_devicesEnabled & 0x400) return 1;
+    return 0;
+}
+
+void BLEHandler::setDeviceCANAccel(const int newVal)
+{
+    if (newVal == 1) m_devicesEnabled |= 0x400;
+    else m_devicesEnabled &= ~0x400;
+
+    sendCharacteristic310E();
+}
+
+int BLEHandler::getDeviceCANBrake() const
+{
+    if (m_devicesEnabled & 0x800) return 1;
+    return 0;
+}
+
+void BLEHandler::setDeviceCANBrake(const int newVal)
+{
+
+    if (newVal == 1) m_devicesEnabled |= 0x800;
+    else m_devicesEnabled &= ~0x800;
+
+    sendCharacteristic310E();
+}
+
+int BLEHandler::getDeviceTestAccel() const
+{
+    if (m_devicesEnabled & 0x1000) return 1;
+    return 0;
+}
+
+void BLEHandler::setDeviceTestAccel(const int newVal)
+{
+    if (newVal == 1) m_devicesEnabled |= 0x1000;
+    else m_devicesEnabled &= ~0x1000;
+
+    sendCharacteristic310E();
+}
+
+int BLEHandler::getDeviceEVIC() const
+{
+    if (m_devicesEnabled & 0x2000) return 1;
+    return 0;
+}
+
+void BLEHandler::setDeviceEVIC(const int newVal)
+{
+    if (newVal == 1) m_devicesEnabled |= 0x2000;
+    else m_devicesEnabled &= ~0x2000;
+
+    sendCharacteristic310E();
+}
+
+int BLEHandler::getDeviceAdaBlue() const
+{
+    if (m_devicesEnabled & 0x4000) return 1;
+    return 0;
+}
+
+void BLEHandler::setDeviceAdaBlue(const int newVal)
+{
+    if (newVal == 1) m_devicesEnabled |= 0x4000;
+    else m_devicesEnabled &= ~0x4000;
+
+    sendCharacteristic310E();
+}
+
+int BLEHandler::getDeviceThinkBMS() const
+{
+    if (m_devicesEnabled & 0x8000) return 1;
+    return 0;
+}
+
+void BLEHandler::setDeviceThinkBMS(const int newVal)
+{
+    if (newVal == 1) m_devicesEnabled |= 0x8000;
+    else m_devicesEnabled &= ~0x8000;
+
+    sendCharacteristic310E();
+}
+
+int BLEHandler::getDevicePIDListen() const
+{
+    if (m_devicesEnabled & 0x10000) return 1;
+    return 0;
+}
+
+void BLEHandler::setDevicePIDListen(const int newVal)
+{
+    if (newVal == 1) m_devicesEnabled |= 0x10000;
+    else m_devicesEnabled &= ~0x10000;
+
+    sendCharacteristic310E();
+}
+
+int BLEHandler::getDeviceELM327Emu() const
+{
+    if (m_devicesEnabled & 0x20000) return 1;
+    return 0;
+}
+
+void BLEHandler::setDeviceELM327Emu(const int newVal)
+{
+    if (newVal == 1) m_devicesEnabled |= 0x20000;
+    else m_devicesEnabled &= ~0x20000;
+
+    sendCharacteristic310E();
 }
