@@ -17,12 +17,14 @@ Item {
     }
 
     property real stretchFactor: (root.width / 1920)
-    property real smallTextSize: 9 * stretchFactor
-    property real medTextSize: 12 * stretchFactor
-    property real largeTextSize: 15 * stretchFactor
+    property real smallTextSize: 30 * stretchFactor
+    property real medTextSize: 45 * stretchFactor
+    property real largeTextSize: 60 * stretchFactor
     property real textboxSize: 175 * stretchFactor
-    property real comboboxSize: 320 * stretchFactor
+    property real comboboxSize: 240 * stretchFactor
     property real bigGaugeWidth: 440 * stretchFactor
+    property real hugeGaugeWidth: 880 * stretchFactor
+    property real medGaugeWidth: 330 * stretchFactor
     property real smallGaugeWidth: 220 * stretchFactor
     property real sliderWidth: 375 * stretchFactor
     property real sliderBuffer: 100 * stretchFactor
@@ -57,7 +59,7 @@ Item {
                 {
                     id: mcLabel
                     text: "Motor Control Information"
-                    font.pointSize: largeTextSize
+                    font.pixelSize: largeTextSize
                     color: "#AAAAFF"
                     Layout.row: 0
                     Layout.column: 0
@@ -68,7 +70,7 @@ Item {
                 {
                     id: runningLabel
                     text: "Running:"
-                    font.pointSize: smallTextSize
+                    font.pixelSize: smallTextSize
                     color: "white"
                     Layout.row: 1
                     Layout.column: 0
@@ -78,7 +80,7 @@ Item {
                 {
                     id: runningValueLabel
                     text: bleHandler.isRunning.toString()
-                    font.pointSize: smallTextSize
+                    font.pixelSize: smallTextSize
                     color: "white"
                     Layout.fillWidth: true
                 }
@@ -86,7 +88,7 @@ Item {
                 {
                     id: optimeLabel
                     text: "Up Time:"
-                    font.pointSize: smallTextSize
+                    font.pixelSize: smallTextSize
                     color: "white"
                 }
 
@@ -94,7 +96,7 @@ Item {
                 {
                     id: optimeValueLabel
                     text: bleHandler.timeRunning.toString()
-                    font.pointSize: smallTextSize
+                    font.pixelSize: smallTextSize
                     color: "white"
                     Layout.fillWidth: true
                 }
@@ -102,7 +104,7 @@ Item {
                 {
                     id: tlevLabel
                     text: "Throttle Level:"
-                    font.pointSize: smallTextSize
+                    font.pixelSize: smallTextSize
                     color: "white"
                 }
 
@@ -110,7 +112,7 @@ Item {
                 {
                     id: tlevValueLabel
                     text: bleHandler.rawThrottle1.toString()
-                    font.pointSize: smallTextSize
+                    font.pixelSize: smallTextSize
                     color: "white"
                 }
 
@@ -118,7 +120,7 @@ Item {
                 {
                     id: blevLabel
                     text: "Brake Level:"
-                    font.pointSize: smallTextSize
+                    font.pixelSize: smallTextSize
                     color: "white"
                 }
 
@@ -126,7 +128,7 @@ Item {
                 {
                     id: blevValueLabel
                     text: bleHandler.rawBrake.toString()
-                    font.pointSize: smallTextSize
+                    font.pixelSize: smallTextSize
                     color: "white"
                 }
 
@@ -134,7 +136,7 @@ Item {
                 {
                     id: faultLabel
                     text: "Fault:"
-                    font.pointSize: smallTextSize
+                    font.pixelSize: smallTextSize
                     color: "white"
                     Layout.row: 4
                     Layout.column: 0
@@ -144,14 +146,14 @@ Item {
                 {
                     id: faultValueLabel
                     text: bleHandler.isFaulted.toString()
-                    font.pointSize: smallTextSize
+                    font.pixelSize: smallTextSize
                     color: "white"
                 }
                 Label
                 {
                     id: warningLabel
                     text: "Warning:"
-                    font.pointSize: smallTextSize
+                    font.pixelSize: smallTextSize
                     color: "white"
                     Layout.row: 5
                     Layout.column: 0
@@ -161,7 +163,7 @@ Item {
                 {
                     id: warningValueLabel
                     text: bleHandler.isWarning.toString()
-                    font.pointSize: smallTextSize
+                    font.pixelSize: smallTextSize
                     color: "white"
                 }
 
@@ -169,7 +171,7 @@ Item {
                 {
                     id: gearLabel
                     text: "Gear Switch:"
-                    font.pointSize: smallTextSize
+                    font.pixelSize: smallTextSize
                     color: "white"
                     Layout.row: 6
                     Layout.column: 0
@@ -179,7 +181,7 @@ Item {
                 {
                     id: gearValueLabel
                     text: bleHandler.gear.toString()
-                    font.pointSize: smallTextSize
+                    font.pixelSize: smallTextSize
                     color: "white"
                 }
 
@@ -189,7 +191,7 @@ Item {
                     Layout.column: 0
                     id: motorTempLabel
                     text: "Motor Temp:"
-                    font.pointSize: smallTextSize
+                    font.pixelSize: smallTextSize
                     color: "white"
                 }
 
@@ -197,14 +199,14 @@ Item {
                 {
                     id: motorTempValueLabel
                     text: bleHandler.motorTemperature.toFixed(1)
-                    font.pointSize: smallTextSize
+                    font.pixelSize: smallTextSize
                     color: "white"
                 }
                 Label
                 {
                     id: inverterTempLabel
                     text: "Inverter Temp:"
-                    font.pointSize: smallTextSize
+                    font.pixelSize: smallTextSize
                     color: "white"
                 }
 
@@ -212,7 +214,7 @@ Item {
                 {
                     id: inverterTempValueLabel
                     text: bleHandler.inverterTemperature.toFixed(1)
-                    font.pointSize: smallTextSize
+                    font.pixelSize: smallTextSize
                     color: "white"
                 }
 
@@ -222,7 +224,7 @@ Item {
                     Layout.column: 0
                     id: rTorqueLabel
                     text: "Torque Request:"
-                    font.pointSize: smallTextSize
+                    font.pixelSize: smallTextSize
                     color: "white"
                 }
 
@@ -230,14 +232,14 @@ Item {
                 {
                     id: rTorqueValueLabel
                     text: bleHandler.reqTorque.toFixed(1)
-                    font.pointSize: smallTextSize
+                    font.pixelSize: smallTextSize
                     color: "white"
                 }
                 Label
                 {
                     id: aTorqueLabel
                     text: "Actual Torque:"
-                    font.pointSize: smallTextSize
+                    font.pixelSize: smallTextSize
                     color: "white"
                 }
 
@@ -245,7 +247,7 @@ Item {
                 {
                     id: aTorqueValueLabel
                     text: bleHandler.actTorque.toFixed(1)
-                    font.pointSize: smallTextSize
+                    font.pixelSize: smallTextSize
                     color: "white"
                 }
 
@@ -256,7 +258,7 @@ Item {
                     Layout.column: 0
                     id: voltLabel
                     text: "Battery Voltage:"
-                    font.pointSize: smallTextSize
+                    font.pixelSize: smallTextSize
                     color: "white"
                 }
 
@@ -264,14 +266,14 @@ Item {
                 {
                     id: voltValueLabel
                     text: bleHandler.busVoltage.toFixed(1)
-                    font.pointSize: smallTextSize
+                    font.pixelSize: smallTextSize
                     color: "white"
                 }
                 Label
                 {
                     id: currentLabel
                     text: "Battery Current:"
-                    font.pointSize: smallTextSize
+                    font.pixelSize: smallTextSize
                     color: "white"
                 }
 
@@ -279,7 +281,7 @@ Item {
                 {
                     id: currentValueLabel
                     text: bleHandler.busCurrent.toFixed(1)
-                    font.pointSize: smallTextSize
+                    font.pixelSize: smallTextSize
                     color: "white"
                 }
                 Label
@@ -288,7 +290,7 @@ Item {
                     Layout.column: 0
                     id: powerLabel
                     text: "Power:"
-                    font.pointSize: smallTextSize
+                    font.pixelSize: smallTextSize
                     color: "white"
                 }
 
@@ -296,7 +298,7 @@ Item {
                 {
                     id: powerValueLabel
                     text: bleHandler.mechPower.toFixed(1)
-                    font.pointSize: smallTextSize
+                    font.pixelSize: smallTextSize
                     color: "white"
                 }
 
@@ -306,10 +308,136 @@ Item {
                  id: statusLabel
                  text: bleHandler.bleStatus
                  color: "red"
-                 font.pointSize: largeTextSize * 2.0
+                 font.pixelSize: largeTextSize * 2.0
                  anchors.top: statusGrid.bottom
                  anchors.topMargin: 100 * stretchFactor
                  horizontalAlignment: Text.AlignHCenter
+            }
+            Button
+            {
+                id: scanButton
+                text: "Rescan for GEVCU"
+                font.pixelSize: medTextSize
+                anchors.top: statusLabel.bottom
+                anchors.topMargin: 50 * stretchFactor
+                onClicked: bleHandler.deviceSearch()
+                background: Rectangle {
+                    implicitWidth: 150 * stretchFactor
+                    implicitHeight: 45 * stretchFactor
+                    border.width: scanButton.activeFocus ? 2 : 1
+                    border.color: "#888"
+                    radius: 16 * stretchFactor
+                    gradient: Gradient {
+                        GradientStop { position: 0 ; color: scanButton.pressed ? "#eee" : "#eee" }
+                        GradientStop { position: 1 ; color: scanButton.pressed ? "#888" : "#ccc" }
+                    }
+                }
+            }
+        }
+
+        //RPM gauge large in the center
+        //two gauges on each side much smaller
+        //torque then current on left side, power then motor temperature on right
+
+        Item
+        {
+            id: largeGaugePage
+
+            CircularGauge {
+                id: rpmGauge1
+                width: hugeGaugeWidth
+                height: width
+                anchors.centerIn: largeGaugePage
+                maximumValue: 8
+                style: TachGaugeStyle {
+                }
+                value: bleHandler.actRPM / 1000.0
+            }
+
+            CircularGauge {
+                id: currentGauge1
+                width: medGaugeWidth
+                height: width
+                anchors.right: rpmGauge1.left
+                anchors.top: rpmGauge1.top
+                anchors.topMargin: largeTextSize
+                anchors.rightMargin: largeTextSize
+                minimumValue: -200
+                maximumValue: 400
+                style: DefaultGaugeStyle {
+                    unitText: "A"
+                    description: "Pack Current"
+                    lowerDangerValue: -150
+                    upperDangerValue: 280
+                    coloredZones: true
+                }
+                value: bleHandler.busCurrent
+            }
+
+            CircularGauge {
+                id: torqueGauge1
+                width: medGaugeWidth
+                height: width
+                anchors.right: rpmGauge1.left
+                anchors.bottom: rpmGauge1.bottom
+                anchors.bottomMargin: largeTextSize
+                anchors.rightMargin: largeTextSize
+                minimumValue: -150
+                maximumValue: 600
+                style: DefaultGaugeStyle {
+                    unitText: "Nm"
+                    description: "Torque"
+                    upperDangerValue: 500
+                    coloredZones: true
+                }
+                value: bleHandler.actTorque
+            }
+
+
+            CircularGauge {
+                id: powerGauge1
+                width: medGaugeWidth
+                height: width
+                anchors.left: rpmGauge1.right
+                anchors.top: rpmGauge1.top
+                anchors.topMargin: largeTextSize
+                anchors.leftMargin: largeTextSize
+                minimumValue: -50
+                maximumValue: 250
+                style: DefaultGaugeStyle {
+                    unitText: "kW"
+                    description: "Power"
+                    upperDangerValue: 150
+                    coloredZones: true
+                }
+                value: bleHandler.mechPower
+            }
+
+            CircularGauge {
+                id: motorTempGauge1
+                width: medGaugeWidth
+                height: width
+                anchors.left: rpmGauge1.right
+                anchors.bottom: rpmGauge1.bottom
+                anchors.bottomMargin: largeTextSize
+                anchors.leftMargin: largeTextSize
+                maximumValue: 1
+                value: bleHandler.motorTemperature / 140.0
+                style: IconGaugeStyle {
+                    id: motorGaugeStyle
+                    description: "Motor Temp"
+
+                    icon: "qrc:/images/temperature-icon.png"
+                    maxWarningColor: Qt.rgba(0.5, 0, 0, 1)
+
+                    tickmarkLabel: Text {
+                        color: "white"
+                        visible: styleData.value === 0
+                                 || styleData.value === 1
+                        font.pixelSize: motorGaugeStyle.toPixels(0.225)
+                        text: styleData.value === 0 ? "C" : (styleData.value === 1 ? "H" : "")
+                    }
+                }
             }
         }
 
@@ -500,7 +628,7 @@ Item {
                 id: label10
                 color: "#AAAAFF"
                 text: qsTr("Throttle Configuration:")
-                font.pointSize: largeTextSize
+                font.pixelSize: largeTextSize
                 anchors.top: throttleConfigPage.top
                 anchors.left: throttleConfigPage.left
             }
@@ -517,34 +645,34 @@ Item {
                     id: label11
                     color: "white"
                     text: qsTr("Num of throttle pots:")
-                    font.pointSize: smallTextSize
+                    font.pixelSize: smallTextSize
                 }
                 ComboBox {
                     id: cbNumPots
                     model: [ "1","2"]
                     currentIndex: bleHandler.numThrottleADC
                     implicitWidth: comboboxSize
-                    font.pointSize: smallTextSize
+                    font.pixelSize: smallTextSize
                 }
                 Label {
                     id: label12
                     color: "white"
                     text: qsTr("Throttle type:")
-                    font.pointSize: smallTextSize
+                    font.pixelSize: smallTextSize
                 }
                 ComboBox {
                     id: cbThrottleType
                     model: [ "Std Pot", "Inv Pot", "Hall Effect" ]
                     currentIndex: bleHandler.throttleType
                     implicitWidth: comboboxSize
-                    font.pointSize: smallTextSize
+                    font.pixelSize: smallTextSize
                 }
 
                 Label {
                     id: label13
                     color: "white"
                     text: qsTr("Min Level Sig 1")
-                    font.pointSize: smallTextSize
+                    font.pixelSize: smallTextSize
                 }
                 SliderWithText {
                     id: sliderMinSig1
@@ -560,7 +688,7 @@ Item {
                      id: label15
                      color: "white"
                      text: qsTr("Max Level Sig 1")
-                     font.pointSize: smallTextSize
+                     font.pixelSize: smallTextSize
                  }
                  SliderWithText {
                      minimumValue: 0
@@ -575,7 +703,7 @@ Item {
                       id: label17
                       color: "white"
                       text: qsTr("Min Level Sig 2")
-                      font.pointSize: smallTextSize
+                      font.pixelSize: smallTextSize
                   }
                   SliderWithText {
                       id: sliderMinSig2
@@ -589,7 +717,7 @@ Item {
                        id: label19
                        color: "white"
                        text: qsTr("Max Level Sig 2")
-                       font.pointSize: smallTextSize
+                       font.pixelSize: smallTextSize
                    }
                    SliderWithText {
                        id: sliderMaxSig2
@@ -606,7 +734,7 @@ Item {
                     id: label14
                     color: "white"
                     text: qsTr("Regen Max Pedal Position")
-                    font.pointSize: smallTextSize
+                    font.pixelSize: smallTextSize
                 }
                SliderWithText {
                    id: sliderRegenMaxPedal
@@ -621,7 +749,7 @@ Item {
                     id: label16
                     color: "white"
                     text: qsTr("Regen Min Pedal Position")
-                    font.pointSize: smallTextSize
+                    font.pixelSize: smallTextSize
                 }
                SliderWithText {
                    id: sliderRegenMinPedal
@@ -636,7 +764,7 @@ Item {
                     id: label18
                     color: "white"
                     text: qsTr("Motion Start Pedal Position")
-                    font.pointSize: smallTextSize
+                    font.pixelSize: smallTextSize
                 }
                SliderWithText {
                    id: sliderMotionStart
@@ -651,7 +779,7 @@ Item {
                     id: label20
                     color: "white"
                     text: qsTr("50% Throttle Pedal Position")
-                    font.pointSize: smallTextSize
+                    font.pixelSize: smallTextSize
                 }
                SliderWithText {
                    id: sliderHalfThrottle
@@ -666,7 +794,7 @@ Item {
                     id: label21
                     color: "white"
                     text: qsTr("Creep Level")
-                    font.pointSize: smallTextSize
+                    font.pixelSize: smallTextSize
                 }
                 SliderWithText {
                     id: sliderCreepLevel
@@ -680,7 +808,7 @@ Item {
                     id: label22
                     color: "white"
                     text: qsTr("Min. Throttle Regen")
-                    font.pointSize: smallTextSize
+                    font.pixelSize: smallTextSize
                 }
                SliderWithText {
                    id: sliderMinThrottleRegen
@@ -694,7 +822,7 @@ Item {
                     id: label23
                     color: "white"
                     text: qsTr("Max. Throttle Regen")
-                    font.pointSize: smallTextSize
+                    font.pixelSize: smallTextSize
                 }
                SliderWithText {
                    id: sliderMaxThrottleRegen
@@ -713,7 +841,7 @@ Item {
                 id: label100
                 color: "#AAAAFF"
                 text: qsTr("Brake:")
-                font.pointSize: largeTextSize
+                font.pixelSize: largeTextSize
                 anchors.top: brakeSysConfig.top
                 anchors.left: brakeSysConfig.left
             }
@@ -730,7 +858,7 @@ Item {
                     id: label101
                     color: "white"
                     text: qsTr("Min Signal Level")
-                    font.pointSize: smallTextSize
+                    font.pixelSize: smallTextSize
                 }
                 SliderWithText {
                     id: sliderMinSigBrake
@@ -744,7 +872,7 @@ Item {
                     id: label102
                     color: "white"
                     text: qsTr("Min Brake Regen")
-                    font.pointSize: smallTextSize
+                    font.pixelSize: smallTextSize
                 }
                SliderWithText {
                    id: sliderMinBrakeRegen
@@ -759,7 +887,7 @@ Item {
                     id: label103
                     color: "white"
                     text: qsTr("Max Signal Level")
-                    font.pointSize: smallTextSize
+                    font.pixelSize: smallTextSize
                 }
                 SliderWithText {
                     id: sliderMaxSigBrake
@@ -773,7 +901,7 @@ Item {
                     id: label104
                     color: "white"
                     text: qsTr("Max Brake Regen")
-                    font.pointSize: smallTextSize
+                    font.pixelSize: smallTextSize
                 }
                SliderWithText {
                    id: sliderMaxBrakeRegen
@@ -789,7 +917,7 @@ Item {
                 id: label150
                 color: "#AAAAFF"
                 text: qsTr("Motor Control:")
-                font.pointSize: largeTextSize
+                font.pixelSize: largeTextSize
                 anchors.top: throttleConfigGrid2.bottom
                 anchors.left: brakeSysConfig.left
             }
@@ -805,14 +933,14 @@ Item {
                 Label {
                     id: maxSpeedLabel
                     color: "white"
-                    font.pointSize: smallTextSize
+                    font.pixelSize: smallTextSize
                     text: "Max Speed (RPM):"
                 }
                 TextField
                 {
                     id: maxSpeedText
                     text: bleHandler.maxRPM.toString()
-                    font.pointSize: medTextSize
+                    font.pixelSize: medTextSize
                     color: "white"
                     implicitWidth: textboxSize
                 }
@@ -820,14 +948,14 @@ Item {
                 Label {
                     id: maxTorqueLabel
                     color: "white"
-                    font.pointSize: smallTextSize
+                    font.pixelSize: smallTextSize
                     text: "Max Torque (Nm):"
                 }
                 TextField
                 {
                     id: maxTorqueText
                     text: bleHandler.maxTorque.toString()
-                    font.pointSize: medTextSize
+                    font.pixelSize: medTextSize
                     color: "white"
                     implicitWidth: textboxSize
                 }
@@ -835,15 +963,15 @@ Item {
                 Label {
                     id: motorModeLabel
                     color: "white"
-                    font.pointSize: smallTextSize
+                    font.pixelSize: smallTextSize
                     text: "Motor Mode:"
                 }
                 ComboBox {
                     id: cbMotorMode
-                    model: [ "Torque Control", "Speed Control" ]
+                    model: [ "Torque Ctl", "Speed Ctl" ]
                     currentIndex: bleHandler.powerMode
                     implicitWidth: comboboxSize
-                    font.pointSize: smallTextSize
+                    font.pixelSize: smallTextSize
                 }
 
             }
@@ -852,7 +980,7 @@ Item {
                 id: label200
                 color: "#AAAAFF"
                 text: qsTr("System:")
-                font.pointSize: largeTextSize
+                font.pixelSize: largeTextSize
                 anchors.top: configRow9.bottom
                 anchors.left: brakeSysConfig.left
             }
@@ -868,7 +996,7 @@ Item {
                 Label {
                     id: loggingLabel
                     color: "white"
-                    font.pointSize: smallTextSize
+                    font.pixelSize: smallTextSize
                     text: "Log Level:"
                 }
                 ComboBox {
@@ -876,13 +1004,13 @@ Item {
                     model: [ "Debug", "Info", "Warning", "Error", "Off" ]
                     currentIndex: bleHandler.logLevel
                     implicitWidth: comboboxSize
-                    font.pointSize: smallTextSize
+                    font.pixelSize: smallTextSize
                 }
 
                 Label {
                     id: nomVoltsLabel
                     color: "white"
-                    font.pointSize: smallTextSize
+                    font.pixelSize: smallTextSize
                     text: "Nominal Battery Voltage:"
                 }
                 TextField
@@ -890,7 +1018,7 @@ Item {
                     id: nomVoltsText
                     text: bleHandler.nomBattVolts.toString()
                     implicitWidth: textboxSize
-                    font.pointSize: medTextSize
+                    font.pixelSize: medTextSize
                     color: "white"
                 }
             }
@@ -903,7 +1031,7 @@ Item {
             {
                 id:outputLabel1
                 color: "#AAAAFF"
-                font.pointSize: largeTextSize
+                font.pixelSize: largeTextSize
                 text: "Digital Outputs - DOUT0 - DOUT7"
             }
 
@@ -919,7 +1047,7 @@ Item {
                 {
                     id: outputLabel2
                     color: "white"
-                    font.pointSize: smallTextSize
+                    font.pixelSize: smallTextSize
                     text: "Fan Output"
                 }
                 ComboBox {
@@ -927,20 +1055,20 @@ Item {
                     model: [ "None", "0", "1", "2", "3", "4", "5", "6", "7" ]
                     currentIndex: bleHandler.coolingOutput
                     implicitWidth: comboboxSize
-                    font.pointSize: smallTextSize
+                    font.pixelSize: smallTextSize
                 }
                 Label
                 {
                     id: outputLabel3
                     color: "white"
-                    font.pointSize: smallTextSize
+                    font.pixelSize: smallTextSize
                     text: "Fan On (Deg C)"
                 }
                 TextField
                 {
                     id:fanOnTempText
                     text: bleHandler.coolingOnTemp.toString()
-                    font.pointSize: medTextSize
+                    font.pixelSize: medTextSize
                     color: "white"
                     implicitWidth: textboxSize
                 }
@@ -948,14 +1076,14 @@ Item {
                 {
                     id: outputLabel4
                     color: "white"
-                    font.pointSize: smallTextSize
+                    font.pixelSize: smallTextSize
                     text: "Fan Off (Deg C)"
                 }
                 TextField
                 {
                     id: fanOffTempText
                     text: bleHandler.coolingOffTemp.toString()
-                    font.pointSize: medTextSize
+                    font.pixelSize: medTextSize
                     color: "white"
                     implicitWidth: textboxSize
                 }
@@ -964,7 +1092,7 @@ Item {
                 {
                     id: outputLabel5
                     color: "white"
-                    font.pointSize: smallTextSize
+                    font.pixelSize: smallTextSize
                     text: "Precharge Output"
                 }
                 ComboBox {
@@ -972,20 +1100,20 @@ Item {
                     model: [ "None", "0", "1", "2", "3", "4", "5", "6", "7" ]
                     currentIndex: bleHandler.prechargeOutput
                     implicitWidth: comboboxSize
-                    font.pointSize: smallTextSize
+                    font.pixelSize: smallTextSize
                 }
                 Label
                 {
                     id: outputLabel6
                     color: "white"
-                    font.pointSize: smallTextSize
+                    font.pixelSize: smallTextSize
                     text: "Precharge Delay (ms)"
                 }
                 TextField
                 {
                     id:prechargeDelayText
                     text: bleHandler.prechargeDuration.toString()
-                    font.pointSize: medTextSize
+                    font.pixelSize: medTextSize
                     color: "white"
                     implicitWidth: textboxSize
                 }
@@ -994,7 +1122,7 @@ Item {
                 {
                     id: outputLabel7
                     color: "white"
-                    font.pointSize: smallTextSize
+                    font.pixelSize: smallTextSize
                     text: "Main Contactor Output"
                     Layout.row: 2
                     Layout.column: 0
@@ -1004,14 +1132,14 @@ Item {
                     model: [ "None", "0", "1", "2", "3", "4", "5", "6", "7" ]
                     currentIndex: bleHandler.mainContactorOutput
                     implicitWidth: comboboxSize
-                    font.pointSize: smallTextSize
+                    font.pixelSize: smallTextSize
                 }
 
                 Label
                 {
                     id: outputLabel8
                     color: "white"
-                    font.pointSize: smallTextSize
+                    font.pixelSize: smallTextSize
                     text: "Brake Light Output"
                     Layout.row: 3
                     Layout.column: 0
@@ -1021,14 +1149,14 @@ Item {
                     model: [ "None", "0", "1", "2", "3", "4", "5", "6", "7" ]
                     currentIndex: bleHandler.brakeLightOutput
                     implicitWidth: comboboxSize
-                    font.pointSize: smallTextSize
+                    font.pixelSize: smallTextSize
                 }
 
                 Label
                 {
                     id: outputLabel9
                     color: "white"
-                    font.pointSize: smallTextSize
+                    font.pixelSize: smallTextSize
                     text: "Reverse Light Output"
                     Layout.row: 4
                     Layout.column: 0
@@ -1038,7 +1166,7 @@ Item {
                     model: [ "None", "0", "1", "2", "3", "4", "5", "6", "7" ]
                     currentIndex: bleHandler.reverseLightOutput
                     implicitWidth: comboboxSize
-                    font.pointSize: smallTextSize
+                    font.pixelSize: smallTextSize
                 }
             }
 
@@ -1052,7 +1180,7 @@ Item {
                     id: label2
                     color: "#1fcaff"
                     text: qsTr("Outputs:")
-                    font.pointSize: medTextSize
+                    font.pixelSize: medTextSize
                 }
 
                 StatusIndicator {
@@ -1103,7 +1231,7 @@ Item {
             {
                 id:inputLabel1
                 color: "#AAAAFF"
-                font.pointSize: largeTextSize
+                font.pixelSize: largeTextSize
                 text: "Digital Inputs - DIN0 - DIN3"
             }
 
@@ -1119,7 +1247,7 @@ Item {
                 {
                     id: inputLabel2
                     color: "white"
-                    font.pointSize: smallTextSize
+                    font.pixelSize: smallTextSize
                     text: "Enable Input"
                 }
                 ComboBox {
@@ -1127,21 +1255,21 @@ Item {
                     model: [ "None", "0", "1", "2", "3" ]
                     currentIndex: bleHandler.enableMotorControlInput
                     implicitWidth: comboboxSize
-                    font.pointSize: smallTextSize
+                    font.pixelSize: smallTextSize
                 }
 
                 Label
                 {
                     id: inputLabel3
                     color: "white"
-                    font.pointSize: smallTextSize
+                    font.pixelSize: smallTextSize
                     text: "Reverse Input"
                 }
                 ComboBox {
                     id: cbReverseInput
                     model: [ "None", "0", "1", "2", "3" ]
                     currentIndex: bleHandler.reverseInput
-                    font.pointSize: smallTextSize
+                    font.pixelSize: smallTextSize
                     implicitWidth: comboboxSize
                 }
             }
@@ -1156,7 +1284,7 @@ Item {
                     id: label1
                     color: "#1fcaff"
                     text: qsTr("Inputs:")
-                    font.pointSize: medTextSize
+                    font.pixelSize: medTextSize
                 }
 
                 StatusIndicator {
@@ -1187,7 +1315,7 @@ Item {
             {
                 id:deviceLabel1
                 color: "#AAAAFF"
-                font.pointSize: largeTextSize
+                font.pixelSize: largeTextSize
                 text: "Device Selection / Activation"
             }
 
@@ -1203,14 +1331,14 @@ Item {
                 {
                     id:deviceLabel2
                     color: "#6666BB"
-                    font.pointSize: medTextSize
+                    font.pixelSize: medTextSize
                     text: "Motor Controllers"
                 }
                 Label
                 {
                     id:deviceLabel3
                     color: "#6666BB"
-                    font.pointSize: medTextSize
+                    font.pixelSize: medTextSize
                     text: "Throttle and Brake"
                     Layout.row: 0
                     Layout.column: 2
@@ -1220,7 +1348,7 @@ Item {
                 {
                     id:deviceLabel4
                     color: "white"
-                    font.pointSize: smallTextSize
+                    font.pixelSize: smallTextSize
                     text: "Azure Dynamics DMOC645"
                     Layout.row: 1
                     Layout.column: 0
@@ -1228,105 +1356,150 @@ Item {
                 ComboBox {
                     id: cbDMOC645
                     model: [ "Disabled", "Enabled" ]
-                    currentIndex: valueStorage.dmocEnabled
+                    currentIndex: bleHandler.deviceDMOC
                     implicitWidth: comboboxSize
-                    font.pointSize: smallTextSize
+                    font.pixelSize: smallTextSize
                 }
                 Label
                 {
                     id:deviceLabel5
                     color: "white"
-                    font.pointSize: smallTextSize
-                    text: "Potentiometer/Hall Effect Throttle"
+                    font.pixelSize: smallTextSize
+                    text: "Pot/Hall Effect Throttle"
                 }
                 ComboBox {
                     id: cbPotThrottle
                     model: [ "Disabled", "Enabled" ]
-                    currentIndex: valueStorage.potThrottleEnabled
+                    currentIndex: bleHandler.devicePotAccel
                     implicitWidth: comboboxSize
-                    font.pointSize: smallTextSize
+                    font.pixelSize: smallTextSize
                 }
 
                 Label
                 {
                     id:deviceLabel6
                     color: "white"
-                    font.pointSize: smallTextSize
+                    font.pixelSize: smallTextSize
                     text: "UQM Powerphase 100"
                 }
                 ComboBox {
                     id: cbUQMPowerPhase
                     model: [ "Disabled", "Enabled" ]
-                    currentIndex: valueStorage.uqmPowerphaseEnabled
+                    currentIndex: bleHandler.deviceCodaUQM
                     implicitWidth: comboboxSize
-                    font.pointSize: smallTextSize
+                    font.pixelSize: smallTextSize
                 }
                 Label
                 {
                     id:deviceLabel7
                     color: "white"
-                    font.pointSize: smallTextSize
-                    text: "Potentiometer/Hall Effect Brake"
+                    font.pixelSize: smallTextSize
+                    text: "Pot/Hall Effect Brake"
                 }
                 ComboBox {
                     id: cbPotBrake
                     model: [ "Disabled", "Enabled" ]
-                    currentIndex: valueStorage.potBrakeEnabled
+                    currentIndex: bleHandler.devicePotBrake
                     implicitWidth: comboboxSize
-                    font.pointSize: smallTextSize
+                    font.pixelSize: smallTextSize
                 }
 
                 Label
                 {
                     id:deviceLabel8
                     color: "white"
-                    font.pointSize: smallTextSize
+                    font.pixelSize: smallTextSize
                     text: "Brusa DMC5"
                 }
                 ComboBox {
                     id: cbBrusaDMC5
                     model: [ "Disabled", "Enabled" ]
-                    currentIndex: valueStorage.brusaDMCEnabled
+                    currentIndex: bleHandler.deviceBrusaDMC5
                     implicitWidth: comboboxSize
-                    font.pointSize: smallTextSize
+                    font.pixelSize: smallTextSize
                 }
                 Label
                 {
                     id:deviceLabel9
                     color: "white"
-                    font.pointSize: smallTextSize
+                    font.pixelSize: smallTextSize
                     text: "CANBus Throttle"
                 }
                 ComboBox {
                     id: cbCANThrottle
                     model: [ "Disabled", "Enabled" ]
-                    currentIndex: valueStorage.canThrottleEnabled
+                    currentIndex: bleHandler.deviceCANAccel
                     implicitWidth: comboboxSize
-                    font.pointSize: smallTextSize
+                    font.pixelSize: smallTextSize
+                }
+
+                Label
+                {
+                    id:deviceLabel93
+                    color: "white"
+                    font.pixelSize: smallTextSize
+                    text: "CK Inverter"
+                }
+                ComboBox {
+                    id: cbCKInverter
+                    model: [ "Disabled", "Enabled" ]
+                    currentIndex: bleHandler.deviceCKInverter
+                    implicitWidth: comboboxSize
+                    font.pixelSize: smallTextSize
                 }
 
                 Label
                 {
                     id:deviceLabel10
                     color: "white"
-                    font.pointSize: smallTextSize
+                    font.pixelSize: smallTextSize
                     text: "CANBus Brake"
                 }
                 ComboBox {
                     id: cbCANBrake
                     model: [ "Disabled", "Enabled" ]
-                    currentIndex: valueStorage.canBrakeEnabled
+                    currentIndex: bleHandler.deviceCANBrake
                     implicitWidth: comboboxSize
-                    font.pointSize: smallTextSize
+                    font.pixelSize: smallTextSize
+                }
+
+                Label
+                {
+                    id:deviceLabel94
+                    color: "white"
+                    font.pixelSize: smallTextSize
+                    text: "Test Inverter"
+                }
+                ComboBox {
+                    id: cbTestInverter
+                    model: [ "Disabled", "Enabled" ]
+                    currentIndex: bleHandler.deviceTestInverter
+                    implicitWidth: comboboxSize
+                    font.pixelSize: smallTextSize
+                }
+
+                Label
+                {
+                    id:deviceLabel50
+                    color: "white"
+                    font.pixelSize: smallTextSize
+                    text: "Test Throttle"
+                }
+                ComboBox {
+                    id: cbTestThrottle
+                    model: [ "Disabled", "Enabled" ]
+                    currentIndex: bleHandler.deviceTestAccel
+                    implicitWidth: comboboxSize
+                    font.pixelSize: smallTextSize
                 }
 
                 Label
                 {
                     id:deviceLabel20
                     color: "#6666BB"
-                    font.pointSize: medTextSize
+                    font.pixelSize: medTextSize
                     text: "Communication Interfaces"
-                    Layout.row: 5
+                    Layout.row: 6
                     Layout.column:0
                 }
 
@@ -1334,149 +1507,171 @@ Item {
                 {
                     id:deviceLabel21
                     color: "#6666BB"
-                    font.pointSize: medTextSize
-                    text: "Battery Chargers and Management"
-                    Layout.row: 5
+                    font.pixelSize: medTextSize
+                    text: "Battery Chargers and Mgmt"
+                    Layout.row: 6
                     Layout.column: 2
                 }
 
                 Label
                 {
-                    id:deviceLabel22
-                    color: "white"
-                    font.pointSize: smallTextSize
-                    text: "ConnectOne WiReach Wifi"
-                    Layout.row: 6
-                    Layout.column: 0
-                }
-                ComboBox {
-                    id: cbCOWifi
-                    model: [ "Disabled", "Enabled" ]
-                    currentIndex: valueStorage.wiReachEnabled
-                    implicitWidth: comboboxSize
-                    font.pointSize: smallTextSize
-                }
-                Label
-                {
                     id:deviceLabel23
                     color: "white"
-                    font.pointSize: smallTextSize
+                    font.pixelSize: smallTextSize
                     text: "Brusa NLG5 Charger"
+                    Layout.row: 7
+                    Layout.column: 0
                 }
                 ComboBox {
                     id: cbBrusaNLG5
                     model: [ "Disabled", "Enabled" ]
-                    currentIndex: valueStorage.brusaNLGEnabled
+                    currentIndex: bleHandler.deviceBrusaCharger
                     implicitWidth: comboboxSize
-                    font.pointSize: smallTextSize
+                    font.pixelSize: smallTextSize
                 }
 
                 Label
                 {
                     id:deviceLabel24
                     color: "white"
-                    font.pointSize: smallTextSize
+                    font.pixelSize: smallTextSize
                     text: "ELM327 OBDII Wireless"
                 }
                 ComboBox {
                     id: cbELM327
                     model: [ "Disabled", "Enabled" ]
-                    currentIndex: valueStorage.elm327Enabled
+                    currentIndex: bleHandler.deviceELM327Emu
                     implicitWidth: comboboxSize
-                    font.pointSize: smallTextSize
+                    font.pixelSize: smallTextSize
                 }
                 Label
                 {
                     id:deviceLabel25
                     color: "white"
-                    font.pointSize: smallTextSize
+                    font.pixelSize: smallTextSize
                     text: "TCCH/Elcon Charger"
                 }
                 ComboBox {
                     id: cbTCCH
                     model: [ "Disabled", "Enabled" ]
-                    currentIndex: valueStorage.tcchEnabled
+                    currentIndex: bleHandler.deviceTCCH
                     implicitWidth: comboboxSize
-                    font.pointSize: smallTextSize
+                    font.pixelSize: smallTextSize
                 }
 
                 Label
                 {
                     id:deviceLabel26
                     color: "white"
-                    font.pointSize: smallTextSize
+                    font.pixelSize: smallTextSize
                     text: "OBDII PID Listener (CANBus)"
                 }
                 ComboBox {
                     id: cbOBD2PID
                     model: [ "Disabled", "Enabled" ]
-                    currentIndex: valueStorage.pidListenerEnabled
+                    currentIndex: bleHandler.devicePIDListen
                     implicitWidth: comboboxSize
-                    font.pointSize: smallTextSize
+                    font.pixelSize: smallTextSize
                 }
                 Label
                 {
                     id:deviceLabel27
                     color: "white"
-                    font.pointSize: smallTextSize
+                    font.pixelSize: smallTextSize
                     text: "Lear Charger"
                 }
                 ComboBox {
                     id: cbLearCharger
                     model: [ "Disabled", "Enabled" ]
-                    currentIndex: valueStorage.learChargerEnabled
+                    currentIndex: bleHandler.deviceLearCharger
                     implicitWidth: comboboxSize
-                    font.pointSize: smallTextSize
+                    font.pixelSize: smallTextSize
+                }
+
+                Label
+                {
+                    id:deviceLabel72
+                    color: "white"
+                    font.pixelSize: smallTextSize
+                    text: "EVIC Display"
+                }
+                ComboBox {
+                    id: cbEvicDisplay
+                    model: [ "Disabled", "Enabled" ]
+                    currentIndex: bleHandler.deviceEVIC
+                    implicitWidth: comboboxSize
+                    font.pixelSize: smallTextSize
                 }
 
                 Label
                 {
                     id:deviceLabel28
                     color: "white"
-                    font.pointSize: smallTextSize
+                    font.pixelSize: smallTextSize
                     text: "Think BMS"
                 }
                 ComboBox {
                     id: cbThinkBMS
                     model: [ "Disabled", "Enabled" ]
-                    currentIndex: valueStorage.thinkBMSEnabled
+                    currentIndex: bleHandler.deviceThinkBMS
                     implicitWidth: comboboxSize
-                    font.pointSize: smallTextSize
+                    font.pixelSize: smallTextSize
                 }
+
+                Label
+                {
+                    id:deviceLabel73
+                    color: "white"
+                    font.pixelSize: smallTextSize
+                    text: "Adafruit BLE"
+                }
+                ComboBox {
+                    id: cbAdaBLE
+                    model: [ "Disabled", "Enabled" ]
+                    currentIndex: bleHandler.deviceAdaBlue
+                    implicitWidth: comboboxSize
+                    font.pixelSize: smallTextSize
+                }
+
+
             }
         }
         Item {
             id: aboutPage
 
             TextArea {
-                font.pointSize: smallTextSize
+                font.pixelSize: smallTextSize * .92
                 color: "white"
+                readOnly: true
+                width: root.width
+                height: root.height
+                wrapMode: TextEdit.Wrap
                 text:
                     "About GEVCU Mobile App and GEVCU Hardware/Software:\n\n" +
-                    "The Generalized Electric Vehicle Control Unit - GEVCU is an open source software and hardware \n"+
-                    "project to develop a Vehicle Control Unit (VCU) specifically for electric vehicles.\n"+
-                    "The purpose of GEVCU is to handle throttle control, regenerative braking, forward, reverse, \n"+
-                    "and such peculiarities as precharge, cooling system control, instrumentation etc.\n"+
-                    "It is essentially the driver interface of the car. GEVCU then manages torque and speed \n"+
-                    "commands to the power electronics via CAN bus to actually operate the vehicle in response\n"+
-                    "to driver input. But it also provides outputs to instrumentation, brake lights, reverse lights,\n"+
-                    "cooling systems, and other controls specific to that vehicle. GEVCU is both open-source and \n" +
-                    "object-oriented allowing easy addition of additional C++ object modules to incorporate multiple \n"+
-                    "standard power components. It is easily modified using the Arduino IDE to incorporate additional \n"+
-                    "features peculiar to any specific electric car conversion or build. For most operations, it is \n"+
-                    "easily configurable by non-programmers through simple web and serial port interfaces to adapt to\n"+
+                    "The Generalized Electric Vehicle Control Unit - GEVCU is an open source software and hardware"+
+                    "project to develop a Vehicle Control Unit (VCU) specifically for electric vehicles."+
+                    "The purpose of GEVCU is to handle throttle control, regenerative braking, forward, reverse,"+
+                    "and such peculiarities as precharge, cooling system control, instrumentation etc."+
+                    "It is essentially the driver interface of the car. GEVCU then manages torque and speed "+
+                    "commands to the power electronics via CAN bus to actually operate the vehicle in response "+
+                    "to driver input. But it also provides outputs to instrumentation, brake lights, reverse lights, "+
+                    "cooling systems, and other controls specific to that vehicle. GEVCU is both open-source and " +
+                    "object-oriented allowing easy addition of additional C++ object modules to incorporate multiple "+
+                    "standard power components. It is easily modified using the Arduino IDE to incorporate additional "+
+                    "features peculiar to any specific electric car conversion or build. For most operations, it is "+
+                    "easily configurable by non-programmers through simple web and serial port interfaces to adapt to"+
                     "a wide variety of power components and vehicle applications.\n\n" +
-                    "GEVCU was originally conceived of and proposed by Jack Rickard of Electric Vehicle Television\n"+
-                    "(http://EVtv.me) who wrote the original design specification. The main source of the program was\n"+
-                    "developed and is maintained by Collin Kidder and the latest version is always available at \n"+
-                    "http:/github.com/collin80/GEVCU. A list of major contributors to the project is maintained there.\n"+
-                    "Hardware was designed and developed by Ed Clausen, Collin Kidder, and Paulo Jorge Pires de Almeida\n"+
-                    "based on the Arduino Due. GEVCU is open source hardware and software and is presented as \n"+
-                    "EXPERIMENTAL - USE AT YOUR OWN RISK. It is offered strictly for experimental and educational purposes\n"+
-                    "and is NOT intended for actual use in any commercial product or for any specific useful purpose.\n\n" +
-                    "This mobile app was written by Collin Kidder and is meant as a companion to GEVCU. It allows for easy\n" +
+                    "GEVCU was originally conceived of and proposed by Jack Rickard of Electric Vehicle Television "+
+                    "(http://EVtv.me) who wrote the original design specification. The main source of the program was "+
+                    "developed and is maintained by Collin Kidder and the latest version is always available at "+
+                    "http:/github.com/collin80/GEVCU. A list of major contributors to the project is maintained there. "+
+                    "Hardware was designed and developed by Ed Clausen, Collin Kidder, and Paulo Jorge Pires de Almeida "+
+                    "based on the Arduino Due. GEVCU is open source hardware and software and is presented as "+
+                    "EXPERIMENTAL - USE AT YOUR OWN RISK. It is offered strictly for experimental and educational purposes "+
+                    "and is NOT intended for actual use in any commercial product or for any specific useful purpose." +
+                    "This mobile app was written by Collin Kidder and is meant as a companion to GEVCU. It allows for easy " +
                     "configuration and monitoring of GEVCU without having to gain physical access to the unit itself.\n\n" +
-                    "And, for God's sake, don't use this mobile application while you're driving down the road.\n"+
+                    "And, for God's sake, don't use this mobile application while you're driving down the road.\n\n"+
                     "Have some common sense man!"
             }
         }
