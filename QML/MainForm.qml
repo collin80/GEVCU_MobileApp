@@ -1,20 +1,15 @@
-import QtQuick 2.5
-import QtQuick.Controls 1.5
+import QtQuick 2.7
+import QtQuick.Controls 2.0
 import QtQuick.Extras 1.4
 import QtQuick.Window 2.0
-import QtQuick.Layouts 1.1
+import QtQuick.Layouts 1.3
 import QtQuick.Controls.Styles 1.4
-import Qt.labs.controls 1.0
 
 Item {
     id: root
     visible: true
     width: root.width
     height: root.height
-
-    ValueStorage {
-        id: valueStorage
-    }
 
     property real stretchFactor: (root.width / 1920)
     property real smallTextSize: 30 * stretchFactor
@@ -29,6 +24,62 @@ Item {
     property real sliderWidth: 375 * stretchFactor
     property real sliderBuffer: 100 * stretchFactor
     property int adcMaxValue: 4096
+    property int screenIndex: 0
+
+    /*
+      There are two sets of tabbar buttons now and so there is no direct way to get the index into the list of Views.
+      However, this function calculates the proper index and updates the screenIndex property which notifies
+      the system to change screens
+     */
+    function calcScreenIndex()
+    {
+        if (barTopLevel.currentIndex == 0) //status screens
+        {
+            switch (barTabsStatus.currentIndex)
+            {
+            case 0:
+                screenIndex = 0;
+                break;
+            case 1:
+                screenIndex = 1;
+                break;
+            case 2:
+                screenIndex = 2;
+                break;
+            case 3:
+                screenIndex = 10;
+                break;
+            }
+        }
+        else if (barTopLevel.currentIndex == 1) //config screens
+        {
+            switch (barTabsConfig.currentIndex)
+            {
+            case 0:
+                screenIndex = 3;
+                break;
+            case 1:
+                screenIndex = 4;
+                break;
+            case 2:
+                screenIndex = 5;
+                break;
+            case 3:
+                screenIndex = 6;
+                break;
+            case 4:
+                screenIndex = 7;
+                break;
+            case 5:
+                screenIndex = 8;
+                break;
+            case 6:
+                screenIndex = 9;
+                break;
+
+            }
+        }
+    }
 
     Image
     {
@@ -38,11 +89,93 @@ Item {
         fillMode: Image.Stretch
     }
 
-    SwipeView {
+    TabBar
+    {
+        id: barTopLevel
+        width: parent.width * 0.25
+        onCurrentIndexChanged: calcScreenIndex()
+
+        TabButton
+        {
+            text: qsTr("Status")
+        }
+        TabButton
+        {
+            text: qsTr("Config")
+        }
+    }
+
+    StackLayout
+    {
         id: swipedView
 
-        currentIndex: 0
+        currentIndex: barTopLevel.currentIndex
+        anchors.right: root.right
+        width: parent.width * 0.70
+
+        Item
+        {
+            id: statusButtons
+            TabBar
+            {
+                id: barTabsStatus
+                onCurrentIndexChanged: calcScreenIndex()
+
+                TabButton {
+                    text: qsTr("Status")
+                }
+                TabButton {
+                    text: qsTr("Gauges1")
+                }
+                TabButton {
+                    text: qsTr("Gauge2")
+                }
+                TabButton {
+                    text: qsTr("About")
+                }
+            }
+        }
+
+        Item
+        {
+            id: configButtons
+            TabBar
+            {
+                id: barTabsConfig
+                onCurrentIndexChanged: calcScreenIndex()
+
+                TabButton {
+                    text: qsTr("Throttle")
+                }
+                TabButton {
+                    text: qsTr("Brakes")
+                }
+                TabButton {
+                    text: qsTr("Motor Ctl")
+                }
+                TabButton {
+                    text: qsTr("System")
+                }
+                TabButton {
+                    text: qsTr("Output")
+                }
+                TabButton {
+                    text: qsTr("Input")
+                }
+                TabButton {
+                    text: qsTr("Devices")
+                }
+            }
+        }
+    }
+
+
+    StackLayout {
+        id: swipedView2
+
+        currentIndex: screenIndex
         anchors.fill: parent
+        anchors.topMargin: 80
 
         Item {
             id: statusPage
@@ -636,7 +769,7 @@ Item {
             GridLayout
             {
                 id: throttleConfigGrid
-                columns: 4
+                columns: 2
                 anchors.top: label10.bottom
                 anchors.topMargin: 20 * stretchFactor
                 columnSpacing: 120 * stretchFactor
@@ -653,6 +786,7 @@ Item {
                     currentIndex: bleHandler.numThrottleADC
                     implicitWidth: comboboxSize
                     font.pixelSize: smallTextSize
+                    onActivated: bleHandler.numThrottleADC = currentIndex
                 }
                 Label {
                     id: label12
@@ -666,6 +800,7 @@ Item {
                     currentIndex: bleHandler.throttleType
                     implicitWidth: comboboxSize
                     font.pixelSize: smallTextSize
+                    onActivated: bleHandler.throttleType = currentIndex
                 }
 
                 Label {
@@ -674,14 +809,15 @@ Item {
                     text: qsTr("Min Level Sig 1")
                     font.pixelSize: smallTextSize
                 }
-                SliderWithText {
-                    id: sliderMinSig1
-                    minimumValue: 0
-                    maximumValue: adcMaxValue
+                Slider {
+                    id: sliderMinSig1                   
+                    from: 0
+                    to: adcMaxValue
                     value: bleHandler.throttle1Min
                     stepSize: 10
                     implicitWidth: sliderWidth
                     Layout.fillWidth: true;
+                    onValueChanged: bleHandler.throttle1Min = value
                 }
 
                 Label {
@@ -690,14 +826,15 @@ Item {
                      text: qsTr("Max Level Sig 1")
                      font.pixelSize: smallTextSize
                  }
-                 SliderWithText {
-                     minimumValue: 0
-                     maximumValue: adcMaxValue
+                 Slider {
+                     from: 0
+                     to: adcMaxValue
                      value: bleHandler.throttle1Max
                      stepSize: 10
                      id: sliderMaxSig1
                      implicitWidth: sliderWidth
                      Layout.fillWidth: true;
+                     onValueChanged: bleHandler.throttle1Max = value
                  }
                  Label {
                       id: label17
@@ -705,13 +842,14 @@ Item {
                       text: qsTr("Min Level Sig 2")
                       font.pixelSize: smallTextSize
                   }
-                  SliderWithText {
+                  Slider {
                       id: sliderMinSig2
-                      minimumValue: 0
-                      maximumValue: adcMaxValue
+                      from: 0
+                      to: adcMaxValue
                       value: bleHandler.throttle2Min
                       stepSize: 10
                       implicitWidth: sliderWidth
+                      onValueChanged: bleHandler.throttle2Min = value
                  }
                   Label {
                        id: label19
@@ -719,13 +857,14 @@ Item {
                        text: qsTr("Max Level Sig 2")
                        font.pixelSize: smallTextSize
                    }
-                   SliderWithText {
+                   Slider {
                        id: sliderMaxSig2
-                       minimumValue: 0
-                       maximumValue: adcMaxValue
+                       from: 0
+                       to: adcMaxValue
                        value: bleHandler.throttle2Max
                        stepSize: 10
                        implicitWidth: sliderWidth
+                       onValueChanged: bleHandler.throttle2Max = value
                    }
 
 
@@ -736,13 +875,14 @@ Item {
                     text: qsTr("Regen Max Pedal Position")
                     font.pixelSize: smallTextSize
                 }
-               SliderWithText {
+               Slider {
                    id: sliderRegenMaxPedal
-                   minimumValue: 0
-                   maximumValue: 100
+                   from: 0
+                   to: 100
                    value: bleHandler.regenMaxPedalPos
                    stepSize: 1
                    implicitWidth: sliderWidth
+                   onValueChanged: bleHandler.regenMaxPedalPos = value
                }
 
                Label {
@@ -751,13 +891,14 @@ Item {
                     text: qsTr("Regen Min Pedal Position")
                     font.pixelSize: smallTextSize
                 }
-               SliderWithText {
+               Slider {
                    id: sliderRegenMinPedal
-                   minimumValue: 0
-                   maximumValue: adcMaxValue
+                   from: 0
+                   to: 100
                    value: bleHandler.regenMinPedalPos
                    stepSize: 10
                    implicitWidth: sliderWidth
+                   onValueChanged: bleHandler.regenMinPedalPos = value
                }
 
                Label {
@@ -766,13 +907,14 @@ Item {
                     text: qsTr("Motion Start Pedal Position")
                     font.pixelSize: smallTextSize
                 }
-               SliderWithText {
+               Slider {
                    id: sliderMotionStart
-                   minimumValue: 0
-                   maximumValue: 100
+                   from: 0
+                   to: 100
                    value: bleHandler.fwdMotionPedalPos
                    stepSize: 1
                    implicitWidth: sliderWidth
+                   onValueChanged: bleHandler.fwdMotionPedalPos = value
                }
 
                Label {
@@ -781,13 +923,14 @@ Item {
                     text: qsTr("50% Throttle Pedal Position")
                     font.pixelSize: smallTextSize
                 }
-               SliderWithText {
+               Slider {
                    id: sliderHalfThrottle
-                   minimumValue: 0
-                   maximumValue: 100
+                   from: 0
+                   to: 100
                    value: bleHandler.mapPedalPos
                    stepSize: 1
                    implicitWidth: sliderWidth
+                   onValueChanged: bleHandler.mapPedalPos = value
                }
 
                Label {
@@ -796,13 +939,14 @@ Item {
                     text: qsTr("Creep Level")
                     font.pixelSize: smallTextSize
                 }
-                SliderWithText {
+                Slider {
                     id: sliderCreepLevel
-                    minimumValue: 0
-                    maximumValue: 100
+                    from: 0
+                    to: 100
                     value: bleHandler.creepThrottle
                     stepSize: 1
                     implicitWidth: sliderWidth
+                    onValueChanged: bleHandler.creepThrottle = value
                 }
                Label {
                     id: label22
@@ -810,13 +954,14 @@ Item {
                     text: qsTr("Min. Throttle Regen")
                     font.pixelSize: smallTextSize
                 }
-               SliderWithText {
+               Slider {
                    id: sliderMinThrottleRegen
-                   minimumValue: 0
-                   maximumValue: 100
+                   from: 0
+                   to: 100
                    value: bleHandler.regenThrottleMin
                    stepSize: 1
                    implicitWidth: sliderWidth
+                   onValueChanged: bleHandler.regenThrottleMin = value
                }
                Label {
                     id: label23
@@ -824,13 +969,14 @@ Item {
                     text: qsTr("Max. Throttle Regen")
                     font.pixelSize: smallTextSize
                 }
-               SliderWithText {
+               Slider {
                    id: sliderMaxThrottleRegen
-                   minimumValue: 0
-                   maximumValue: 100
+                   from: 0
+                   to: 100
                    value: bleHandler.regenThrottleMax
                    stepSize: 1
                    implicitWidth: sliderWidth
+                   onValueChanged: bleHandler.regenThrottleMax = value
                }
             }
         }
@@ -849,7 +995,7 @@ Item {
             GridLayout
             {
                 id: throttleConfigGrid2
-                columns: 4
+                columns: 2
                 anchors.top: label100.bottom
                 anchors.topMargin: 20
                 columnSpacing: 120 * stretchFactor
@@ -860,13 +1006,14 @@ Item {
                     text: qsTr("Min Signal Level")
                     font.pixelSize: smallTextSize
                 }
-                SliderWithText {
+                Slider {
                     id: sliderMinSigBrake
-                    minimumValue: 0
-                    maximumValue: adcMaxValue
+                    from: 0
+                    to: adcMaxValue
                     value: bleHandler.brakeMinADC
                     stepSize: 10
                     implicitWidth: sliderWidth
+                    onValueChanged: bleHandler.brakeMinADC = value
                 }
                Label {
                     id: label102
@@ -874,13 +1021,14 @@ Item {
                     text: qsTr("Min Brake Regen")
                     font.pixelSize: smallTextSize
                 }
-               SliderWithText {
+               Slider {
                    id: sliderMinBrakeRegen
-                   minimumValue: 0
-                   maximumValue: 100
+                   from: 0
+                   to: 100
                    value: bleHandler.regenBrakeMin
                    stepSize: 1
                    implicitWidth: sliderWidth
+                   onValueChanged: bleHandler.regenBrakeMin = value
                }
 
                Label {
@@ -889,13 +1037,14 @@ Item {
                     text: qsTr("Max Signal Level")
                     font.pixelSize: smallTextSize
                 }
-                SliderWithText {
+                Slider {
                     id: sliderMaxSigBrake
-                    minimumValue: 0
-                    maximumValue: adcMaxValue
+                    from: 0
+                    to: adcMaxValue
                     value: bleHandler.brakeMaxADC
                     stepSize: 10
                     implicitWidth: sliderWidth
+                    onValueChanged: bleHandler.brakeMaxADC = value
                 }
                Label {
                     id: label104
@@ -903,15 +1052,21 @@ Item {
                     text: qsTr("Max Brake Regen")
                     font.pixelSize: smallTextSize
                 }
-               SliderWithText {
+               Slider {
                    id: sliderMaxBrakeRegen
-                   minimumValue: 0
-                   maximumValue: 100
+                   from: 0
+                   to: 100
                    value: bleHandler.regenBrakeMax
                    stepSize: 1
                    implicitWidth: sliderWidth
+                   onValueChanged: bleHandler.regenBrakeMax = value
                }
             }
+        }
+
+        Item
+        {
+            id: motorCtrlConfig
 
             Label {
                 id: label150
@@ -922,13 +1077,13 @@ Item {
                 anchors.left: brakeSysConfig.left
             }
 
-            Row {
-                id: configRow9
-                spacing: 80 * stretchFactor
-                anchors.left: brakeSysConfig.left
+            GridLayout
+            {
+                id: motorConfigGrid2
+                columns: 2
                 anchors.top: label150.bottom
-                anchors.topMargin: 20 * stretchFactor
-                anchors.leftMargin: 50 * stretchFactor
+                anchors.topMargin: 20
+                columnSpacing: 120 * stretchFactor
 
                 Label {
                     id: maxSpeedLabel
@@ -943,6 +1098,7 @@ Item {
                     font.pixelSize: medTextSize
                     color: "white"
                     implicitWidth: textboxSize
+                    onTextChanged: bleHandler.maxRPM = parseInt(text)
                 }
 
                 Label {
@@ -958,6 +1114,7 @@ Item {
                     font.pixelSize: medTextSize
                     color: "white"
                     implicitWidth: textboxSize
+                    onTextChanged: bleHandler.maxTorque = parseInt(text)
                 }
 
                 Label {
@@ -972,10 +1129,14 @@ Item {
                     currentIndex: bleHandler.powerMode
                     implicitWidth: comboboxSize
                     font.pixelSize: smallTextSize
+                    onActivated: bleHandler.powerMode = currentIndex
                 }
 
             }
+        }
 
+        Item
+        {
             Label {
                 id: label200
                 color: "#AAAAFF"
@@ -985,13 +1146,14 @@ Item {
                 anchors.left: brakeSysConfig.left
             }
 
-            Row {
-                id: configRow10
-                spacing: 80 * stretchFactor
-                anchors.left: brakeSysConfig.left
+            GridLayout
+            {
+                id: sysConfigGrid2
+                columns: 2
                 anchors.top: label200.bottom
-                anchors.topMargin: 20 * stretchFactor
-                anchors.leftMargin: 50 * stretchFactor
+                anchors.topMargin: 20
+                columnSpacing: 120 * stretchFactor
+
 
                 Label {
                     id: loggingLabel
@@ -1005,6 +1167,7 @@ Item {
                     currentIndex: bleHandler.logLevel
                     implicitWidth: comboboxSize
                     font.pixelSize: smallTextSize
+                    onActivated: bleHandler.logLevel = currentIndex
                 }
 
                 Label {
@@ -1020,6 +1183,7 @@ Item {
                     implicitWidth: textboxSize
                     font.pixelSize: medTextSize
                     color: "white"
+                    onTextChanged: bleHandler.nomBattVolts = parseInt(text)
                 }
             }
         }
@@ -1056,6 +1220,7 @@ Item {
                     currentIndex: bleHandler.coolingOutput
                     implicitWidth: comboboxSize
                     font.pixelSize: smallTextSize
+                    onActivated: bleHandler.coolingOutput = currentIndex
                 }
                 Label
                 {
@@ -1071,6 +1236,7 @@ Item {
                     font.pixelSize: medTextSize
                     color: "white"
                     implicitWidth: textboxSize
+                    onTextChanged: bleHandler.coolingOnTemp = parseInt(text)
                 }
                 Label
                 {
@@ -1086,6 +1252,7 @@ Item {
                     font.pixelSize: medTextSize
                     color: "white"
                     implicitWidth: textboxSize
+                    onTextChanged: bleHandler.coolingOffTemp = parseInt(text)
                 }
 
                 Label
@@ -1101,6 +1268,7 @@ Item {
                     currentIndex: bleHandler.prechargeOutput
                     implicitWidth: comboboxSize
                     font.pixelSize: smallTextSize
+                    onActivated: bleHandler.prechargeOutput = currentIndex;
                 }
                 Label
                 {
@@ -1116,6 +1284,7 @@ Item {
                     font.pixelSize: medTextSize
                     color: "white"
                     implicitWidth: textboxSize
+                    onTextChanged: bleHandler.prechargeDuration = parseInt(text)
                 }
 
                 Label
@@ -1133,6 +1302,7 @@ Item {
                     currentIndex: bleHandler.mainContactorOutput
                     implicitWidth: comboboxSize
                     font.pixelSize: smallTextSize
+                    onActivated: bleHandler.mainContactorOutput = currentIndex;
                 }
 
                 Label
@@ -1150,6 +1320,7 @@ Item {
                     currentIndex: bleHandler.brakeLightOutput
                     implicitWidth: comboboxSize
                     font.pixelSize: smallTextSize
+                    onActivated: bleHandler.brakeLightOutput = currentIndex;
                 }
 
                 Label
@@ -1167,6 +1338,7 @@ Item {
                     currentIndex: bleHandler.reverseLightOutput
                     implicitWidth: comboboxSize
                     font.pixelSize: smallTextSize
+                    onActivated: bleHandler.reverseLightOutput = currentIndex;
                 }
             }
 
@@ -1256,6 +1428,7 @@ Item {
                     currentIndex: bleHandler.enableMotorControlInput
                     implicitWidth: comboboxSize
                     font.pixelSize: smallTextSize
+                    onActivated: bleHandler.enableMotorControlInput = currentIndex;
                 }
 
                 Label
@@ -1271,6 +1444,7 @@ Item {
                     currentIndex: bleHandler.reverseInput
                     font.pixelSize: smallTextSize
                     implicitWidth: comboboxSize
+                    onActivated: bleHandler.reverseInput = currentIndex;
                 }
             }
 
@@ -1359,13 +1533,14 @@ Item {
                     currentIndex: bleHandler.deviceDMOC
                     implicitWidth: comboboxSize
                     font.pixelSize: smallTextSize
+                    onActivated: bleHandler.deviceDMOC = currentIndex;
                 }
                 Label
                 {
                     id:deviceLabel5
                     color: "white"
                     font.pixelSize: smallTextSize
-                    text: "Pot/Hall Effect Throttle"
+                    text: "Pot/Hall Effect Throttle"                    
                 }
                 ComboBox {
                     id: cbPotThrottle
@@ -1373,6 +1548,7 @@ Item {
                     currentIndex: bleHandler.devicePotAccel
                     implicitWidth: comboboxSize
                     font.pixelSize: smallTextSize
+                    onActivated: bleHandler.devicePotAccel = currentIndex;
                 }
 
                 Label
@@ -1388,6 +1564,7 @@ Item {
                     currentIndex: bleHandler.deviceCodaUQM
                     implicitWidth: comboboxSize
                     font.pixelSize: smallTextSize
+                    onActivated: bleHandler.deviceCodaUQM = currentIndex;
                 }
                 Label
                 {
@@ -1402,6 +1579,7 @@ Item {
                     currentIndex: bleHandler.devicePotBrake
                     implicitWidth: comboboxSize
                     font.pixelSize: smallTextSize
+                    onActivated: bleHandler.devicePotBrake = currentIndex;
                 }
 
                 Label
@@ -1417,6 +1595,7 @@ Item {
                     currentIndex: bleHandler.deviceBrusaDMC5
                     implicitWidth: comboboxSize
                     font.pixelSize: smallTextSize
+                    onActivated: bleHandler.deviceBrusaDMC5 = currentIndex;
                 }
                 Label
                 {
@@ -1431,6 +1610,7 @@ Item {
                     currentIndex: bleHandler.deviceCANAccel
                     implicitWidth: comboboxSize
                     font.pixelSize: smallTextSize
+                    onActivated: bleHandler.deviceCANAccel = currentIndex;
                 }
 
                 Label
@@ -1446,6 +1626,7 @@ Item {
                     currentIndex: bleHandler.deviceCKInverter
                     implicitWidth: comboboxSize
                     font.pixelSize: smallTextSize
+                    onActivated: bleHandler.deviceCKInverter = currentIndex;
                 }
 
                 Label
@@ -1461,6 +1642,7 @@ Item {
                     currentIndex: bleHandler.deviceCANBrake
                     implicitWidth: comboboxSize
                     font.pixelSize: smallTextSize
+                    onActivated: bleHandler.deviceCANBrake = currentIndex;
                 }
 
                 Label
@@ -1476,6 +1658,7 @@ Item {
                     currentIndex: bleHandler.deviceTestInverter
                     implicitWidth: comboboxSize
                     font.pixelSize: smallTextSize
+                    onActivated: bleHandler.deviceTestInverter = currentIndex;
                 }
 
                 Label
@@ -1491,6 +1674,7 @@ Item {
                     currentIndex: bleHandler.deviceTestAccel
                     implicitWidth: comboboxSize
                     font.pixelSize: smallTextSize
+                    onActivated: bleHandler.deviceTestAccel = currentIndex;
                 }
 
                 Label
@@ -1528,6 +1712,7 @@ Item {
                     currentIndex: bleHandler.deviceBrusaCharger
                     implicitWidth: comboboxSize
                     font.pixelSize: smallTextSize
+                    onActivated: bleHandler.deviceBrusaCharger = currentIndex;
                 }
 
                 Label
@@ -1543,6 +1728,7 @@ Item {
                     currentIndex: bleHandler.deviceELM327Emu
                     implicitWidth: comboboxSize
                     font.pixelSize: smallTextSize
+                    onActivated: bleHandler.deviceELM327Emu = currentIndex;
                 }
                 Label
                 {
@@ -1557,6 +1743,7 @@ Item {
                     currentIndex: bleHandler.deviceTCCH
                     implicitWidth: comboboxSize
                     font.pixelSize: smallTextSize
+                    onActivated: bleHandler.deviceTCCH = currentIndex;
                 }
 
                 Label
@@ -1572,6 +1759,7 @@ Item {
                     currentIndex: bleHandler.devicePIDListen
                     implicitWidth: comboboxSize
                     font.pixelSize: smallTextSize
+                    onActivated: bleHandler.devicePIDListen = currentIndex;
                 }
                 Label
                 {
@@ -1586,6 +1774,7 @@ Item {
                     currentIndex: bleHandler.deviceLearCharger
                     implicitWidth: comboboxSize
                     font.pixelSize: smallTextSize
+                    onActivated: bleHandler.deviceLearCharger = currentIndex;
                 }
 
                 Label
@@ -1601,6 +1790,7 @@ Item {
                     currentIndex: bleHandler.deviceEVIC
                     implicitWidth: comboboxSize
                     font.pixelSize: smallTextSize
+                    onActivated: bleHandler.deviceEVIC = currentIndex;
                 }
 
                 Label
@@ -1616,6 +1806,7 @@ Item {
                     currentIndex: bleHandler.deviceThinkBMS
                     implicitWidth: comboboxSize
                     font.pixelSize: smallTextSize
+                    onActivated: bleHandler.deviceThinkBMS = currentIndex;
                 }
 
                 Label
@@ -1631,6 +1822,7 @@ Item {
                     currentIndex: bleHandler.deviceAdaBlue
                     implicitWidth: comboboxSize
                     font.pixelSize: smallTextSize
+                    onActivated: bleHandler.deviceAdaBlue = currentIndex;
                 }
 
 
@@ -1675,15 +1867,5 @@ Item {
                     "Have some common sense man!"
             }
         }
-    }
-
-    PageIndicator {
-        id: indicator
-
-        count: swipedView.count
-        currentIndex: swipedView.currentIndex
-
-        anchors.bottom: swipedView.bottom
-        anchors.horizontalCenter: parent.horizontalCenter
     }
 }

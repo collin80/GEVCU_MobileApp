@@ -344,6 +344,7 @@ private:
     bool foundGEVCUService;
     QLowEnergyController *bleController;
     QLowEnergyService *bleService;
+    bool okToWrite;
 
     //local store of all public properties values
     QString m_bleStatus;

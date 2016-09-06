@@ -75,6 +75,8 @@ BLEHandler::BLEHandler()
     m_bleStatus = tr("Scanning for GEVCU");
     m_devicesEnabled = 0;
 
+    okToWrite = false;
+
     discoveryAgent->start();
 }
 
@@ -278,8 +280,9 @@ void BLEHandler::updateBLECharacteristic(const QLowEnergyCharacteristic &c, cons
 
     const quint8 *data = reinterpret_cast<const quint8 *>(value.constData());
 
-    for (int i = 0; i < value.length(); i++)
-        qWarning() << QString::number(data[i], 16);
+    //print out all bytes from the incoming message
+    //for (int i = 0; i < value.length(); i++)
+    //    qWarning() << QString::number(data[i], 16);
 
     switch (c.uuid().toUInt16())
     {
@@ -467,6 +470,7 @@ void BLEHandler::sendCharacteristic3105()
         data.append((char)m_logLevel);
 
         bleService->writeCharacteristic(bleChar, data, bleService->WriteWithResponse);
+        qWarning() << "Wrote char 0x3105";
     }
 }
 
@@ -662,6 +666,7 @@ void BLEHandler::sendCharacteristic3109()
         data.append((char)m_reverseInput);
 
         bleService->writeCharacteristic(bleChar, data, bleService->WriteWithResponse);
+        qWarning() << "Wrote char 0x3109";
     }
 }
 
@@ -728,6 +733,7 @@ void BLEHandler::sendCharacteristic310A()
         data.append((char)m_throttleType);
 
         bleService->writeCharacteristic(bleChar, data, bleService->WriteWithResponse);
+        qWarning() << "Wrote char 0x310A";
     }
 }
 
@@ -735,28 +741,28 @@ void BLEHandler::interpretCharacteristic310B(const quint8 *data)
 {
     quint16 val;
 
-    val = quint16(data[0] + (data[1] * 256ul));
+    val = quint16(data[0] + (data[1] * 256ul)) / 10;
     if (val != m_regenMaxPedalPos)
     {
         m_regenMaxPedalPos = val;
         emit regenMaxPedalPosChanged();
     }
 
-    val = quint16(data[2] + (data[3] * 256ul));
+    val = quint16(data[2] + (data[3] * 256ul)) / 10;
     if (val != m_regenMinPedalPos)
     {
         m_regenMinPedalPos = val;
         emit regenMinPedalPosChanged();
     }
 
-    val = quint16(data[4] + (data[5] * 256ul));
+    val = quint16(data[4] + (data[5] * 256ul)) / 10;
     if (val != m_fwdMotionPedalPos)
     {
         m_fwdMotionPedalPos = val;
         emit fwdMotionPedalPosChanged();
     }
 
-    val = quint16(data[6] + (data[7] * 256ul));
+    val = quint16(data[6] + (data[7] * 256ul)) / 10;
     if (val != m_mapPedalPos)
     {
         m_mapPedalPos = val;
@@ -786,22 +792,23 @@ void BLEHandler::sendCharacteristic310B()
 {
     QLowEnergyCharacteristic bleChar;
     QByteArray data;
-    bleChar = bleService->characteristic(QBluetoothUuid((quint16)0x3105));
+    bleChar = bleService->characteristic(QBluetoothUuid((quint16)0x310B));
     if (bleChar.isValid())
     {
-        data.append((char)(m_regenMaxPedalPos & 0xFF));
-        data.append((char)(m_regenMaxPedalPos >> 8));
-        data.append((char)(m_regenMinPedalPos & 0xFF));
-        data.append((char)(m_regenMinPedalPos >> 8));
-        data.append((char)(m_fwdMotionPedalPos & 0xFF));
-        data.append((char)(m_fwdMotionPedalPos >> 8));
-        data.append((char)(m_mapPedalPos & 0xFF));
-        data.append((char)(m_mapPedalPos >> 8));
+        data.append((char)((m_regenMaxPedalPos * 10) & 0xFF));
+        data.append((char)((m_regenMaxPedalPos * 10) >> 8));
+        data.append((char)((m_regenMinPedalPos * 10) & 0xFF));
+        data.append((char)((m_regenMinPedalPos * 10) >> 8));
+        data.append((char)((m_fwdMotionPedalPos * 10) & 0xFF));
+        data.append((char)((m_fwdMotionPedalPos * 10) >> 8));
+        data.append((char)((m_mapPedalPos * 10) & 0xFF));
+        data.append((char)((m_mapPedalPos * 10) >> 8));
         data.append((char)m_regenThrottleMin);
         data.append((char)m_regenThrottleMax);
         data.append((char)m_creepThrottle);
 
         bleService->writeCharacteristic(bleChar, data, bleService->WriteWithResponse);
+        qWarning() << "Wrote char 0x310B";
     }
 }
 
@@ -840,7 +847,7 @@ void BLEHandler::sendCharacteristic310C()
 {
     QLowEnergyCharacteristic bleChar;
     QByteArray data;
-    bleChar = bleService->characteristic(QBluetoothUuid((quint16)0x3105));
+    bleChar = bleService->characteristic(QBluetoothUuid((quint16)0x310C));
     if (bleChar.isValid())
     {
         data.append((char)(m_brakeMinADC & 0xFF));
@@ -851,6 +858,7 @@ void BLEHandler::sendCharacteristic310C()
         data.append((char)m_regenBrakeMax);
 
         bleService->writeCharacteristic(bleChar, data, bleService->WriteWithResponse);
+        qWarning() << "Wrote char 0x310C";
     }
 }
 
@@ -884,7 +892,7 @@ void BLEHandler::sendCharacteristic310D()
 {
     QLowEnergyCharacteristic bleChar;
     QByteArray data;
-    bleChar = bleService->characteristic(QBluetoothUuid((quint16)0x3105));
+    bleChar = bleService->characteristic(QBluetoothUuid((quint16)0x310D));
     if (bleChar.isValid())
     {
         data.append((char)(m_nomBattVolts & 0xFF));
@@ -895,6 +903,7 @@ void BLEHandler::sendCharacteristic310D()
         data.append((char)(m_maxTorque >> 8));
 
         bleService->writeCharacteristic(bleChar, data, bleService->WriteWithResponse);
+        qWarning() << "Wrote char 0x310D";
     }
 }
 
@@ -931,7 +940,7 @@ void BLEHandler::sendCharacteristic310E()
 {
     QLowEnergyCharacteristic bleChar;
     QByteArray data;
-    bleChar = bleService->characteristic(QBluetoothUuid((quint16)0x3105));
+    bleChar = bleService->characteristic(QBluetoothUuid((quint16)0x310E));
     if (bleChar.isValid())
     {
         data.append((char)(m_devicesEnabled & 0xFF));
@@ -943,7 +952,10 @@ void BLEHandler::sendCharacteristic310E()
         data.append((char)0);
         data.append((char)0);
 
+        qWarning() << "Sending " << data.size() << " bytes";
+
         bleService->writeCharacteristic(bleChar, data, bleService->WriteWithResponse);
+        qWarning() << "Wrote char 0x310E";
     }
 }
 
@@ -992,6 +1004,7 @@ void BLEHandler::serviceStateChanged(QLowEnergyService::ServiceState s)
             }
         }
         m_bleStatus = "Connected";
+        okToWrite = true;
         emit bleStatusChanged();
         break;
     }
@@ -1094,6 +1107,7 @@ int BLEHandler::getPowerMode() const
 
 void BLEHandler::setPowerMode(const int newMode)
 {
+    if (!okToWrite) return;
     if (newMode == m_powerMode) return; //nothing to do!
 
     if (newMode > -1 && newMode < 2)
@@ -1140,6 +1154,7 @@ int BLEHandler::getLogLevel() const
 
 void BLEHandler::setLogLevel(const int newLevel)
 {
+    if (!okToWrite) return;
     if (newLevel == m_logLevel) return;
 
     if (newLevel > -1 && newLevel < 5)
@@ -1221,6 +1236,7 @@ int BLEHandler::getPrechargeDuration() const
 
 void BLEHandler::setPrechargeDuration(const int newVal)
 {
+    if (!okToWrite) return;
     if (newVal == m_prechargeDuration) return;
 
     if (newVal > -1)
@@ -1242,6 +1258,7 @@ int BLEHandler::getPrechargeOutput() const
 
 void BLEHandler::setPrechargeOutput(const int newVal)
 {
+    if (!okToWrite) return;
     if (newVal == m_prechargeOutput) return;
 
     if (newVal > -1)
@@ -1263,6 +1280,7 @@ int BLEHandler::getMainContactorOutput() const
 
 void BLEHandler::setMainContactorOutput(const int newVal)
 {
+    if (!okToWrite) return;
     if (newVal == m_mainContactorOutput) return;
 
     if (newVal > -1 && newVal < 8)
@@ -1284,6 +1302,7 @@ int BLEHandler::getCoolingOutput() const
 
 void BLEHandler::setCoolingOutput(const int newVal)
 {
+    if (!okToWrite) return;
     if (newVal == m_coolingOutput) return;
 
     if (newVal > -1 && newVal < 8)
@@ -1305,6 +1324,7 @@ int BLEHandler::getCoolingOnTemp() const
 
 void BLEHandler::setCoolingOnTemp(const int newVal)
 {
+    if (!okToWrite) return;
     if (newVal == m_coolingOnTemp) return;
 
     if (newVal > -1 && newVal < 250)
@@ -1326,6 +1346,7 @@ int BLEHandler::getCoolingOffTemp() const
 
 void BLEHandler::setCoolingOffTemp(const int newVal)
 {
+    if (!okToWrite) return;
     if (newVal == m_coolingOffTemp) return;
 
     if (newVal > -1 && newVal < 250)
@@ -1347,6 +1368,7 @@ int BLEHandler::getBrakeLightOutput() const
 
 void BLEHandler::setBrakeLightOutput(const int newVal)
 {
+    if (!okToWrite) return;
     if (newVal == m_brakeLightOutput) return;
 
     if (newVal > -1 && newVal < 8)
@@ -1369,6 +1391,7 @@ int BLEHandler::getReverseLightOutput() const
 
 void BLEHandler::setReverseLightOutput(const int newVal)
 {
+    if (!okToWrite) return;
     if (newVal == m_reverseLightOutput) return;
 
     if (newVal > -1 && newVal < 8)
@@ -1390,6 +1413,7 @@ int BLEHandler::getEnableMotorControlInput() const
 
 void BLEHandler::setEnableMotorControlInput(const int newVal)
 {
+    if (!okToWrite) return;
     if (newVal == m_enableMotorControlInput) return;
 
     if (newVal > -1 && newVal < 4)
@@ -1411,6 +1435,7 @@ int BLEHandler::getReverseInput() const
 
 void BLEHandler::setReverseInput(const int newVal)
 {
+    if (!okToWrite) return;
     if (newVal == m_reverseInput) return;
 
     if (newVal > -1 && newVal < 4)
@@ -1432,6 +1457,7 @@ int BLEHandler::getNumThrottleADC() const
 
 void BLEHandler::setNumThrottleADC(const int newVal)
 {
+    if (!okToWrite) return;
     if (newVal == m_numThrottleADC) return;
 
     if (newVal > -1 && newVal < 4)
@@ -1453,6 +1479,7 @@ int BLEHandler::getThrottleType() const
 
 void BLEHandler::setThrottleType(const int newVal)
 {
+    if (!okToWrite) return;
     if (newVal == m_throttleType) return;
 
     if (newVal > -1 && newVal < 2)
@@ -1474,6 +1501,7 @@ int BLEHandler::getThrottle1Min() const
 
 void BLEHandler::setThrottle1Min(const int newVal)
 {
+    if (!okToWrite) return;
     if (newVal == m_throttle1Min) return;
 
     if (newVal > -1)
@@ -1495,6 +1523,7 @@ int BLEHandler::getThrottle2Min() const
 
 void BLEHandler::setThrottle2Min(const int newVal)
 {
+    if (!okToWrite) return;
     if (newVal == m_throttle2Min) return;
 
     if (newVal > -1)
@@ -1517,6 +1546,7 @@ int BLEHandler::getThrottle1Max() const
 
 void BLEHandler::setThrottle1Max(const int newVal)
 {
+    if (!okToWrite) return;
     if (newVal == m_throttle1Max) return;
 
     if (newVal > -1)
@@ -1539,6 +1569,7 @@ int BLEHandler::getThrottle2Max() const
 
 void BLEHandler::setThrottle2Max(const int newVal)
 {
+    if (!okToWrite) return;
     if (newVal == m_throttle2Max) return;
 
     if (newVal > -1)
@@ -1560,6 +1591,7 @@ int BLEHandler::getRegenMaxPedalPos() const
 
 void BLEHandler::setRegenMaxPedalPos(const int newVal)
 {
+    if (!okToWrite) return;
     if (newVal == m_regenMaxPedalPos) return;
 
     if (newVal > -1 && newVal < 1001)
@@ -1582,6 +1614,7 @@ int BLEHandler::getRegenMinPedalPos() const
 
 void BLEHandler::setRegenMinPedalPos(const int newVal)
 {
+    if (!okToWrite) return;
     if (newVal == m_regenMinPedalPos) return;
 
     if (newVal > -1 && newVal < 1001)
@@ -1603,6 +1636,7 @@ int BLEHandler::getFWDMotionPedalPos() const
 
 void BLEHandler::setFWDMotionPedalPos(const int newVal)
 {
+    if (!okToWrite) return;
     if (newVal == m_fwdMotionPedalPos) return;
 
     if (newVal > -1 && newVal < 1001)
@@ -1624,6 +1658,7 @@ int BLEHandler::getMapPedalPos() const
 
 void BLEHandler::setMapPedalPos(const int newVal)
 {
+    if (!okToWrite) return;
     if (newVal == m_mapPedalPos) return;
 
     if (newVal > -1 && newVal < 1001)
@@ -1645,6 +1680,7 @@ int BLEHandler::getRegenThrottleMin() const
 
 void BLEHandler::setRegenThrottleMin(const int newVal)
 {
+    if (!okToWrite) return;
     if (newVal == m_regenThrottleMin) return;
 
     if (newVal > -1 && newVal < 1001)
@@ -1666,6 +1702,7 @@ int BLEHandler::getRegenThrottleMax() const
 
 void BLEHandler::setRegenThrottleMax(const int newVal)
 {
+    if (!okToWrite) return;
     if (newVal == m_regenThrottleMax) return;
 
     if (newVal > -1 && newVal < 1001)
@@ -1687,6 +1724,7 @@ int BLEHandler::getCreepThrottle() const
 
 void BLEHandler::setCreepThrottle(const int newVal)
 {
+    if (!okToWrite) return;
     if (newVal == m_creepThrottle) return;
 
     if (newVal > -1 && newVal < 1001)
@@ -1708,6 +1746,7 @@ int BLEHandler::getBrakeMinADC() const
 
 void BLEHandler::setBrakeMinADC(const int newVal)
 {
+    if (!okToWrite) return;
     if (newVal == m_brakeMinADC) return;
 
     if (newVal > -1)
@@ -1729,6 +1768,7 @@ int BLEHandler::getBrakeMaxADC() const
 
 void BLEHandler::setBrakeMaxADC(const int newVal)
 {
+    if (!okToWrite) return;
     if (newVal == m_brakeMaxADC) return;
 
     if (newVal > -1)
@@ -1750,6 +1790,7 @@ int BLEHandler::getRegenBrakeMin() const
 
 void BLEHandler::setRegenBrakeMin(const int newVal)
 {
+    if (!okToWrite) return;
     if (newVal == m_brakeMinADC) return;
 
     if (newVal > -1)
@@ -1771,6 +1812,7 @@ int BLEHandler::getRegenBrakeMax() const
 
 void BLEHandler::setRegenBrakeMax(const int newVal)
 {
+    if (!okToWrite) return;
     if (newVal == m_brakeMaxADC) return;
 
     if (newVal > -1)
@@ -1792,6 +1834,7 @@ float BLEHandler::getNominalVoltage() const
 
 void BLEHandler::setNominalVoltage(const int newVal)
 {
+    if (!okToWrite) return;
     if (newVal == m_nomBattVolts) return;
 
     if (newVal > -1)
@@ -1813,6 +1856,7 @@ int BLEHandler::getMaxRPM() const
 
 void BLEHandler::setMaxRPM(const int newVal)
 {
+    if (!okToWrite) return;
     if (newVal == m_maxRPM) return;
 
     if (newVal > -1)
@@ -1834,6 +1878,7 @@ int BLEHandler::getMaxTorque() const
 
 void BLEHandler::setMaxTorque(const int newVal)
 {
+    if (!okToWrite) return;
     if (newVal == m_maxTorque) return;
 
     if (newVal > -1)
@@ -1861,6 +1906,7 @@ int BLEHandler::getDeviceDMOC() const
 
 void BLEHandler::setDeviceDMOC(const int newVal)
 {
+    if (!okToWrite) return;
     if (newVal == 1) m_devicesEnabled |= 1;
     else m_devicesEnabled &= ~1;
 
@@ -1875,6 +1921,7 @@ int BLEHandler::getDeviceBrusaDMC5() const
 
 void BLEHandler::setDeviceBrusaDMC5(const int newVal)
 {
+    if (!okToWrite) return;
     if (newVal == 1) m_devicesEnabled |= 2;
     else m_devicesEnabled &= ~2;
 
@@ -1889,6 +1936,7 @@ int BLEHandler::getDeviceCodaUQM() const
 
 void BLEHandler::setDeviceCodaUQM(const int newVal)
 {
+    if (!okToWrite) return;
     if (newVal == 1) m_devicesEnabled |= 4;
     else m_devicesEnabled &= ~4;
 
@@ -1903,6 +1951,7 @@ int BLEHandler::getDeviceCKInverter() const
 
 void BLEHandler::setDeviceCKInverter(const int newVal)
 {
+    if (!okToWrite) return;
     if (newVal == 1) m_devicesEnabled |= 8;
     else m_devicesEnabled &= ~8;
 
@@ -1917,6 +1966,7 @@ int BLEHandler::getDeviceTestInverter() const
 
 void BLEHandler::setDeviceTestInverter(const int newVal)
 {
+    if (!okToWrite) return;
     if (newVal == 1) m_devicesEnabled |= 0x10;
     else m_devicesEnabled &= ~0x10;
 
@@ -1931,6 +1981,7 @@ int BLEHandler::getDeviceBrusaCharger() const
 
 void BLEHandler::setDeviceBrusaCharger(const int newVal)
 {
+    if (!okToWrite) return;
     if (newVal == 1) m_devicesEnabled |= 0x20;
     else m_devicesEnabled &= ~0x20;
 
@@ -1945,6 +1996,7 @@ int BLEHandler::getDeviceTCCH() const
 
 void BLEHandler::setDeviceTCCH(const int newVal)
 {
+    if (!okToWrite) return;
     if (newVal == 1) m_devicesEnabled |= 0x40;
     else m_devicesEnabled &= ~0x40;
 
@@ -1959,6 +2011,7 @@ int BLEHandler::getDeviceLearCharger() const
 
 void BLEHandler::setDeviceLearCharger(const int newVal)
 {
+    if (!okToWrite) return;
     if (newVal == 1) m_devicesEnabled |= 0x80;
     else m_devicesEnabled &= ~0x80;
 
@@ -1973,6 +2026,7 @@ int BLEHandler::getDevicePotAccel() const
 
 void BLEHandler::setDevicePotAccel(const int newVal)
 {
+    if (!okToWrite) return;
     if (newVal == 1) m_devicesEnabled |= 0x100;
     else m_devicesEnabled &= ~0x100;
 
@@ -1987,6 +2041,7 @@ int BLEHandler::getDevicePotBrake() const
 
 void BLEHandler::setDevicePotBrake(const int newVal)
 {
+    if (!okToWrite) return;
     if (newVal == 1) m_devicesEnabled |= 0x200;
     else m_devicesEnabled &= ~0x200;
 
@@ -2001,6 +2056,7 @@ int BLEHandler::getDeviceCANAccel() const
 
 void BLEHandler::setDeviceCANAccel(const int newVal)
 {
+    if (!okToWrite) return;
     if (newVal == 1) m_devicesEnabled |= 0x400;
     else m_devicesEnabled &= ~0x400;
 
@@ -2015,7 +2071,7 @@ int BLEHandler::getDeviceCANBrake() const
 
 void BLEHandler::setDeviceCANBrake(const int newVal)
 {
-
+if (!okToWrite) return;
     if (newVal == 1) m_devicesEnabled |= 0x800;
     else m_devicesEnabled &= ~0x800;
 
@@ -2030,6 +2086,7 @@ int BLEHandler::getDeviceTestAccel() const
 
 void BLEHandler::setDeviceTestAccel(const int newVal)
 {
+    if (!okToWrite) return;
     if (newVal == 1) m_devicesEnabled |= 0x1000;
     else m_devicesEnabled &= ~0x1000;
 
@@ -2044,6 +2101,7 @@ int BLEHandler::getDeviceEVIC() const
 
 void BLEHandler::setDeviceEVIC(const int newVal)
 {
+    if (!okToWrite) return;
     if (newVal == 1) m_devicesEnabled |= 0x2000;
     else m_devicesEnabled &= ~0x2000;
 
@@ -2058,6 +2116,7 @@ int BLEHandler::getDeviceAdaBlue() const
 
 void BLEHandler::setDeviceAdaBlue(const int newVal)
 {
+    if (!okToWrite) return;
     if (newVal == 1) m_devicesEnabled |= 0x4000;
     else m_devicesEnabled &= ~0x4000;
 
@@ -2072,6 +2131,7 @@ int BLEHandler::getDeviceThinkBMS() const
 
 void BLEHandler::setDeviceThinkBMS(const int newVal)
 {
+    if (!okToWrite) return;
     if (newVal == 1) m_devicesEnabled |= 0x8000;
     else m_devicesEnabled &= ~0x8000;
 
@@ -2086,6 +2146,7 @@ int BLEHandler::getDevicePIDListen() const
 
 void BLEHandler::setDevicePIDListen(const int newVal)
 {
+    if (!okToWrite) return;
     if (newVal == 1) m_devicesEnabled |= 0x10000;
     else m_devicesEnabled &= ~0x10000;
 
@@ -2100,6 +2161,7 @@ int BLEHandler::getDeviceELM327Emu() const
 
 void BLEHandler::setDeviceELM327Emu(const int newVal)
 {
+    if (!okToWrite) return;
     if (newVal == 1) m_devicesEnabled |= 0x20000;
     else m_devicesEnabled &= ~0x20000;
 

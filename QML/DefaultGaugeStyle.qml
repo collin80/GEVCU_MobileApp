@@ -38,7 +38,7 @@
 **
 ****************************************************************************/
 
-import QtQuick 2.2
+import QtQuick 2.7
 import QtQuick.Controls.Styles 1.4
 
 CircularGaugeStyle {
@@ -185,13 +185,15 @@ CircularGaugeStyle {
     }
 
     background: Canvas {
-        anchors.fill: parent
+        anchors.fill: parent        
 
         onPaint: {
+            //console.log("drawing gauge background")
             var ctx = getContext("2d");
             ctx.reset();
             paintBackground(ctx);
         }
+
         Text {
             id: unit
             font.pixelSize: toPixels(0.15);
@@ -249,6 +251,7 @@ CircularGaugeStyle {
         property real yCenter: height / 2
 
         onPaint: {
+            //console.log("drawing needle")
             var ctx = getContext("2d");
             ctx.reset();
 

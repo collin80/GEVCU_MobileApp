@@ -6,8 +6,6 @@
         <file>QML/IconGaugeStyle.qml</file>
         <file>QML/TachGaugeStyle.qml</file>
         <file>QML/MainForm.qml</file>
-        <file>QML/SliderWithText.qml</file>
         <file>images/evtvbackground.png</file>
-        <file>QML/ValueStorage.qml</file>
     </qresource>
 </RCC>
