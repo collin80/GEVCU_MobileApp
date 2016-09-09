@@ -14,15 +14,15 @@ Item {
     property real stretchFactor: (root.width / 1920)
     property real smallTextSize: 30 * stretchFactor
     property real tabTextSize: 36 * stretchFactor
-    property real medTextSize: 45 * stretchFactor
-    property real largeTextSize: 60 * stretchFactor
+    property real medTextSize: 43 * stretchFactor
+    property real largeTextSize: 55 * stretchFactor
     property real textboxSize: 175 * stretchFactor
     property real comboboxSize: 240 * stretchFactor
     property real bigGaugeWidth: 440 * stretchFactor
     property real hugeGaugeWidth: 880 * stretchFactor
     property real medGaugeWidth: 330 * stretchFactor
     property real smallGaugeWidth: 220 * stretchFactor
-    property real sliderWidth: 375 * stretchFactor
+    property real sliderWidth: 800 * stretchFactor
     property real sliderBuffer: 100 * stretchFactor
     property int adcMaxValue: 4096
     property int screenIndex: 0
@@ -775,7 +775,7 @@ Item {
             GridLayout
             {
                 id: throttleConfigGrid
-                columns: 2
+                columns: 3
                 anchors.top: label10.bottom
                 anchors.topMargin: 20 * stretchFactor
                 columnSpacing: 120 * stretchFactor
@@ -799,6 +799,8 @@ Item {
                     color: "white"
                     text: qsTr("Throttle type:")
                     font.pixelSize: smallTextSize
+                    Layout.row: 1
+                    Layout.column: 0
                 }
                 ComboBox {
                     id: cbThrottleType
@@ -814,6 +816,20 @@ Item {
                     color: "white"
                     text: qsTr("Min Level Sig 1")
                     font.pixelSize: smallTextSize
+                    Layout.row: 2
+                    Layout.column: 0
+                }
+                TextField
+                {
+                    id: textMinSig1
+                    text: bleHandler.throttle1Min.toFixed(0)
+                    font.pixelSize: medTextSize
+                    color: "white"
+                    implicitWidth: textboxSize
+                    onEditingFinished:  {
+                        sliderMinSig1.value = parseInt(text)
+                        bleHandler.throttle1Min = sliderMinSig1.value
+                    }
                 }
                 Slider {
                     id: sliderMinSig1                   
@@ -823,15 +839,30 @@ Item {
                     stepSize: 10
                     implicitWidth: sliderWidth
                     Layout.fillWidth: true;
-                    onValueChanged: bleHandler.throttle1Min = value
+                    onValueChanged: {
+                        bleHandler.throttle1Min = value
+                        textMinSig1.text = value.toFixed(0)
+                    }
                 }
-
                 Label {
                      id: label15
                      color: "white"
                      text: qsTr("Max Level Sig 1")
                      font.pixelSize: smallTextSize
                  }
+                TextField
+                {
+                    id: textMaxSig1
+                    text: bleHandler.throttle1Max.toFixed(0)
+                    font.pixelSize: medTextSize
+                    color: "white"
+                    implicitWidth: textboxSize
+                    onEditingFinished:  {
+                        sliderMaxSig1.value = parseInt(text)
+                        bleHandler.throttle1Max = sliderMaxSig1.value
+                    }
+                }
+
                  Slider {
                      from: 0
                      to: adcMaxValue
@@ -840,7 +871,10 @@ Item {
                      id: sliderMaxSig1
                      implicitWidth: sliderWidth
                      Layout.fillWidth: true;
-                     onValueChanged: bleHandler.throttle1Max = value
+                     onValueChanged: {
+                         textMaxSig1.text = value.toFixed(0)
+                         bleHandler.throttle1Max = value
+                     }
                  }
                  Label {
                       id: label17
@@ -848,6 +882,18 @@ Item {
                       text: qsTr("Min Level Sig 2")
                       font.pixelSize: smallTextSize
                   }
+                 TextField
+                 {
+                     id: textMinSig2
+                     text: bleHandler.throttle2Min.toFixed(0)
+                     font.pixelSize: medTextSize
+                     color: "white"
+                     implicitWidth: textboxSize
+                     onEditingFinished:  {
+                         sliderMinSig2.value = parseInt(text)
+                         bleHandler.throttle2Min = sliderMinSig2.value
+                     }
+                 }
                   Slider {
                       id: sliderMinSig2
                       from: 0
@@ -855,7 +901,10 @@ Item {
                       value: bleHandler.throttle2Min
                       stepSize: 10
                       implicitWidth: sliderWidth
-                      onValueChanged: bleHandler.throttle2Min = value
+                      onValueChanged: {
+                          textMinSig2.text = value.toFixed(0)
+                          bleHandler.throttle2Min = value
+                      }
                  }
                   Label {
                        id: label19
@@ -863,6 +912,19 @@ Item {
                        text: qsTr("Max Level Sig 2")
                        font.pixelSize: smallTextSize
                    }
+                  TextField
+                  {
+                      id: textMaxSig2
+                      text: bleHandler.throttle2Max.toFixed(0)
+                      font.pixelSize: medTextSize
+                      color: "white"
+                      implicitWidth: textboxSize
+                      onEditingFinished:  {
+                          sliderMaxSig2.value = parseInt(text)
+                          bleHandler.throttle2Max = sliderMaxSig2.value
+                      }
+                  }
+
                    Slider {
                        id: sliderMaxSig2
                        from: 0
@@ -870,7 +932,10 @@ Item {
                        value: bleHandler.throttle2Max
                        stepSize: 10
                        implicitWidth: sliderWidth
-                       onValueChanged: bleHandler.throttle2Max = value
+                       onValueChanged: {
+                           textMaxSig2.text = value.toFixed(0)
+                           bleHandler.throttle2Max = value
+                       }
                    }
 
 
@@ -881,6 +946,18 @@ Item {
                     text: qsTr("Regen Max Pedal Position")
                     font.pixelSize: smallTextSize
                 }
+               TextField
+               {
+                   id: textRegenMaxPedal
+                   text: bleHandler.regenMaxPedalPos.toFixed(0)
+                   font.pixelSize: medTextSize
+                   color: "white"
+                   implicitWidth: textboxSize
+                   onEditingFinished:  {
+                       sliderRegenMaxPedal.value = parseInt(text)
+                       bleHandler.regenMaxPedalPos = sliderRegenMaxPedal.value
+                   }
+               }
                Slider {
                    id: sliderRegenMaxPedal
                    from: 0
@@ -888,7 +965,10 @@ Item {
                    value: bleHandler.regenMaxPedalPos
                    stepSize: 1
                    implicitWidth: sliderWidth
-                   onValueChanged: bleHandler.regenMaxPedalPos = value
+                   onValueChanged: {
+                       textRegenMaxPedal.text = value.toFixed(0)
+                       bleHandler.regenMaxPedalPos = value
+                   }
                }
 
                Label {
@@ -897,6 +977,18 @@ Item {
                     text: qsTr("Regen Min Pedal Position")
                     font.pixelSize: smallTextSize
                 }
+               TextField
+               {
+                   id: textRegenMinPedal
+                   text: bleHandler.regenMinPedalPos.toFixed(0)
+                   font.pixelSize: medTextSize
+                   color: "white"
+                   implicitWidth: textboxSize
+                   onEditingFinished:  {
+                       sliderRegenMinPedal.value = parseInt(text)
+                       bleHandler.regenMinPedalPos = sliderRegenMinPedal.value
+                   }
+               }
                Slider {
                    id: sliderRegenMinPedal
                    from: 0
@@ -904,7 +996,10 @@ Item {
                    value: bleHandler.regenMinPedalPos
                    stepSize: 10
                    implicitWidth: sliderWidth
-                   onValueChanged: bleHandler.regenMinPedalPos = value
+                   onValueChanged: {
+                       textRegenMinPedal.text = value.toFixed(0)
+                       bleHandler.regenMinPedalPos = value
+                   }
                }
 
                Label {
@@ -913,6 +1008,18 @@ Item {
                     text: qsTr("Motion Start Pedal Position")
                     font.pixelSize: smallTextSize
                 }
+               TextField
+               {
+                   id: textMotionStart
+                   text: bleHandler.fwdMotionPedalPos.toFixed(0)
+                   font.pixelSize: medTextSize
+                   color: "white"
+                   implicitWidth: textboxSize
+                   onEditingFinished:  {
+                       sliderMotionStart.value = parseInt(text)
+                       bleHandler.fwdMotionPedalPos = sliderMotionStart.value
+                   }
+               }
                Slider {
                    id: sliderMotionStart
                    from: 0
@@ -920,7 +1027,10 @@ Item {
                    value: bleHandler.fwdMotionPedalPos
                    stepSize: 1
                    implicitWidth: sliderWidth
-                   onValueChanged: bleHandler.fwdMotionPedalPos = value
+                   onValueChanged: {
+                       textMotionStart.text = value.toFixed(0)
+                       bleHandler.fwdMotionPedalPos = value
+                   }
                }
 
                Label {
@@ -929,6 +1039,18 @@ Item {
                     text: qsTr("50% Throttle Pedal Position")
                     font.pixelSize: smallTextSize
                 }
+               TextField
+               {
+                   id: textHalfThrottle
+                   text: bleHandler.mapPedalPos.toFixed(0)
+                   font.pixelSize: medTextSize
+                   color: "white"
+                   implicitWidth: textboxSize
+                   onEditingFinished:  {
+                       sliderHalfThrottle.value = parseInt(text)
+                       bleHandler.mapPedalPos = sliderHalfThrottle.value
+                   }
+               }
                Slider {
                    id: sliderHalfThrottle
                    from: 0
@@ -936,7 +1058,10 @@ Item {
                    value: bleHandler.mapPedalPos
                    stepSize: 1
                    implicitWidth: sliderWidth
-                   onValueChanged: bleHandler.mapPedalPos = value
+                   onValueChanged: {
+                       textHalfThrottle.text = value.toFixed(0)
+                       bleHandler.mapPedalPos = value
+                   }
                }
 
                Label {
@@ -945,6 +1070,18 @@ Item {
                     text: qsTr("Creep Level")
                     font.pixelSize: smallTextSize
                 }
+               TextField
+               {
+                   id: textCreepLevel
+                   text: bleHandler.creepThrottle.toFixed(0)
+                   font.pixelSize: medTextSize
+                   color: "white"
+                   implicitWidth: textboxSize
+                   onEditingFinished:  {
+                       sliderCreepLevel.value = parseInt(text)
+                       bleHandler.creepThrottle = sliderCreepLevel.value
+                   }
+               }
                 Slider {
                     id: sliderCreepLevel
                     from: 0
@@ -952,7 +1089,10 @@ Item {
                     value: bleHandler.creepThrottle
                     stepSize: 1
                     implicitWidth: sliderWidth
-                    onValueChanged: bleHandler.creepThrottle = value
+                    onValueChanged: {
+                        textCreepLevel.text = value.toFixed(0)
+                        bleHandler.creepThrottle = value
+                    }
                 }
                Label {
                     id: label22
@@ -960,6 +1100,19 @@ Item {
                     text: qsTr("Min. Throttle Regen")
                     font.pixelSize: smallTextSize
                 }
+               TextField
+               {
+                   id: textMinThrottleRegen
+                   text: bleHandler.regenThrottleMin.toFixed(0)
+                   font.pixelSize: medTextSize
+                   color: "white"
+                   implicitWidth: textboxSize
+                   onEditingFinished:  {
+                       sliderMinThrottleRegen.value = parseInt(text)
+                       bleHandler.regenThrottleMin = sliderMinThrottleRegen.value
+                   }
+               }
+
                Slider {
                    id: sliderMinThrottleRegen
                    from: 0
@@ -967,7 +1120,10 @@ Item {
                    value: bleHandler.regenThrottleMin
                    stepSize: 1
                    implicitWidth: sliderWidth
-                   onValueChanged: bleHandler.regenThrottleMin = value
+                   onValueChanged: {
+                       textMinThrottleRegen.text = value.toFixed(0)
+                       bleHandler.regenThrottleMin = value
+                   }
                }
                Label {
                     id: label23
@@ -975,6 +1131,18 @@ Item {
                     text: qsTr("Max. Throttle Regen")
                     font.pixelSize: smallTextSize
                 }
+               TextField
+               {
+                   id: textMaxThrottleRegen
+                   text: bleHandler.regenThrottleMax.toFixed(0)
+                   font.pixelSize: medTextSize
+                   color: "white"
+                   implicitWidth: textboxSize
+                   onEditingFinished:  {
+                       sliderMaxThrottleRegen.value = parseInt(text)
+                       bleHandler.regenThrottleMax = sliderMaxThrottleRegen.value
+                   }
+               }
                Slider {
                    id: sliderMaxThrottleRegen
                    from: 0
@@ -982,7 +1150,10 @@ Item {
                    value: bleHandler.regenThrottleMax
                    stepSize: 1
                    implicitWidth: sliderWidth
-                   onValueChanged: bleHandler.regenThrottleMax = value
+                   onValueChanged: {
+                       textMaxThrottleRegen.text = value.toFixed(0)
+                       bleHandler.regenThrottleMax = value
+                   }
                }
             }
         }
@@ -1001,7 +1172,7 @@ Item {
             GridLayout
             {
                 id: throttleConfigGrid2
-                columns: 2
+                columns: 3
                 anchors.top: label100.bottom
                 anchors.topMargin: 20
                 columnSpacing: 120 * stretchFactor
@@ -1012,6 +1183,18 @@ Item {
                     text: qsTr("Min Signal Level")
                     font.pixelSize: smallTextSize
                 }
+                TextField
+                {
+                    id: textMinSigBrake
+                    text: bleHandler.brakeMinADC.toFixed(0)
+                    font.pixelSize: medTextSize
+                    color: "white"
+                    implicitWidth: textboxSize
+                    onEditingFinished:  {
+                        sliderMinSigBrake.value = parseInt(text)
+                        bleHandler.brakeMinADC = sliderMinSigBrake.value
+                    }
+                }
                 Slider {
                     id: sliderMinSigBrake
                     from: 0
@@ -1019,7 +1202,10 @@ Item {
                     value: bleHandler.brakeMinADC
                     stepSize: 10
                     implicitWidth: sliderWidth
-                    onValueChanged: bleHandler.brakeMinADC = value
+                    onValueChanged: {
+                        textMinSigBrake.text = value.toFixed(0)
+                        bleHandler.brakeMinADC = value
+                    }
                 }
                Label {
                     id: label102
@@ -1027,6 +1213,18 @@ Item {
                     text: qsTr("Min Brake Regen")
                     font.pixelSize: smallTextSize
                 }
+               TextField
+               {
+                   id: textMinBrakeRegen
+                   text: bleHandler.regenBrakeMin.toFixed(0)
+                   font.pixelSize: medTextSize
+                   color: "white"
+                   implicitWidth: textboxSize
+                   onEditingFinished:  {
+                       sliderMinBrakeRegen.value = parseInt(text)
+                       bleHandler.regenBrakeMin = sliderMinBrakeRegen.value
+                   }
+               }
                Slider {
                    id: sliderMinBrakeRegen
                    from: 0
@@ -1034,7 +1232,10 @@ Item {
                    value: bleHandler.regenBrakeMin
                    stepSize: 1
                    implicitWidth: sliderWidth
-                   onValueChanged: bleHandler.regenBrakeMin = value
+                   onValueChanged: {
+                       textMinBrakeRegen.text = value.toFixed(0)
+                       bleHandler.regenBrakeMin = value
+                   }
                }
 
                Label {
@@ -1043,6 +1244,18 @@ Item {
                     text: qsTr("Max Signal Level")
                     font.pixelSize: smallTextSize
                 }
+               TextField
+               {
+                   id: textMaxSigBrake
+                   text: bleHandler.brakeMaxADC.toFixed(0)
+                   font.pixelSize: medTextSize
+                   color: "white"
+                   implicitWidth: textboxSize
+                   onEditingFinished:  {
+                       sliderMaxSigBrake.value = parseInt(text)
+                       bleHandler.brakeMaxADC = sliderMaxSigBrake.value
+                   }
+               }
                 Slider {
                     id: sliderMaxSigBrake
                     from: 0
@@ -1050,7 +1263,10 @@ Item {
                     value: bleHandler.brakeMaxADC
                     stepSize: 10
                     implicitWidth: sliderWidth
-                    onValueChanged: bleHandler.brakeMaxADC = value
+                    onValueChanged: {
+                        textMaxSigBrake.text = value.toFixed(0)
+                        bleHandler.brakeMaxADC = value
+                    }
                 }
                Label {
                     id: label104
@@ -1058,6 +1274,18 @@ Item {
                     text: qsTr("Max Brake Regen")
                     font.pixelSize: smallTextSize
                 }
+               TextField
+               {
+                   id: textMaxBrakeRegen
+                   text: bleHandler.regenBrakeMax.toFixed(0)
+                   font.pixelSize: medTextSize
+                   color: "white"
+                   implicitWidth: textboxSize
+                   onEditingFinished:  {
+                       sliderMaxBrakeRegen.value = parseInt(text)
+                       bleHandler.regenBrakeMax = sliderMaxBrakeRegen.value
+                   }
+               }
                Slider {
                    id: sliderMaxBrakeRegen
                    from: 0
@@ -1065,7 +1293,10 @@ Item {
                    value: bleHandler.regenBrakeMax
                    stepSize: 1
                    implicitWidth: sliderWidth
-                   onValueChanged: bleHandler.regenBrakeMax = value
+                   onValueChanged: {
+                       textMaxBrakeRegen.text = value.toFixed(0)
+                       bleHandler.regenBrakeMax = value
+                   }
                }
             }
         }
@@ -1100,11 +1331,11 @@ Item {
                 TextField
                 {
                     id: maxSpeedText
-                    text: bleHandler.maxRPM.toString()
+                    text: bleHandler.maxRPM.toFixed(0)
                     font.pixelSize: medTextSize
                     color: "white"
                     implicitWidth: textboxSize
-                    onTextChanged: bleHandler.maxRPM = parseInt(text)
+                    onEditingFinished: bleHandler.maxRPM = parseInt(text)
                 }
 
                 Label {
@@ -1116,11 +1347,11 @@ Item {
                 TextField
                 {
                     id: maxTorqueText
-                    text: bleHandler.maxTorque.toString()
+                    text: bleHandler.maxTorque.toFixed(1)
                     font.pixelSize: medTextSize
                     color: "white"
                     implicitWidth: textboxSize
-                    onTextChanged: bleHandler.maxTorque = parseInt(text)
+                    onEditingFinished: bleHandler.maxTorque = parseInt(text)
                 }
 
                 Label {
@@ -1185,11 +1416,11 @@ Item {
                 TextField
                 {
                     id: nomVoltsText
-                    text: bleHandler.nomBattVolts.toString()
+                    text: bleHandler.nomBattVolts.toFixed(1)
                     implicitWidth: textboxSize
                     font.pixelSize: medTextSize
                     color: "white"
-                    onTextChanged: bleHandler.nomBattVolts = parseInt(text)
+                    onEditingFinished: bleHandler.nomBattVolts = parseInt(text)
                 }
             }
         }
@@ -1238,11 +1469,11 @@ Item {
                 TextField
                 {
                     id:fanOnTempText
-                    text: bleHandler.coolingOnTemp.toString()
+                    text: bleHandler.coolingOnTemp.toFixed(1)
                     font.pixelSize: medTextSize
                     color: "white"
                     implicitWidth: textboxSize
-                    onTextChanged: bleHandler.coolingOnTemp = parseInt(text)
+                    onEditingFinished: bleHandler.coolingOnTemp = parseInt(text)
                 }
                 Label
                 {
@@ -1254,11 +1485,11 @@ Item {
                 TextField
                 {
                     id: fanOffTempText
-                    text: bleHandler.coolingOffTemp.toString()
+                    text: bleHandler.coolingOffTemp.toFixed(1)
                     font.pixelSize: medTextSize
                     color: "white"
                     implicitWidth: textboxSize
-                    onTextChanged: bleHandler.coolingOffTemp = parseInt(text)
+                    onEditingFinished: bleHandler.coolingOffTemp = parseInt(text)
                 }
 
                 Label
@@ -1286,11 +1517,11 @@ Item {
                 TextField
                 {
                     id:prechargeDelayText
-                    text: bleHandler.prechargeDuration.toString()
+                    text: bleHandler.prechargeDuration.toFixed(1)
                     font.pixelSize: medTextSize
                     color: "white"
                     implicitWidth: textboxSize
-                    onTextChanged: bleHandler.prechargeDuration = parseInt(text)
+                    onEditingFinished: bleHandler.prechargeDuration = parseInt(text)
                 }
 
                 Label
