@@ -13,6 +13,7 @@ Item {
 
     property real stretchFactor: (root.width / 1920)
     property real smallTextSize: 30 * stretchFactor
+    property real tabTextSize: 36 * stretchFactor
     property real medTextSize: 45 * stretchFactor
     property real largeTextSize: 60 * stretchFactor
     property real textboxSize: 175 * stretchFactor
@@ -92,8 +93,9 @@ Item {
     TabBar
     {
         id: barTopLevel
-        width: parent.width * 0.25
+        width: parent.width * 0.20
         onCurrentIndexChanged: calcScreenIndex()
+        font.pixelSize: tabTextSize
 
         TabButton
         {
@@ -111,7 +113,7 @@ Item {
 
         currentIndex: barTopLevel.currentIndex
         anchors.right: root.right
-        width: parent.width * 0.70
+        width: parent.width * 0.75
 
         Item
         {
@@ -120,6 +122,8 @@ Item {
             {
                 id: barTabsStatus
                 onCurrentIndexChanged: calcScreenIndex()
+                anchors.fill: parent
+                font.pixelSize: tabTextSize
 
                 TabButton {
                     text: qsTr("Status")
@@ -143,6 +147,8 @@ Item {
             {
                 id: barTabsConfig
                 onCurrentIndexChanged: calcScreenIndex()
+                anchors.fill: parent
+                font.pixelSize: tabTextSize
 
                 TabButton {
                     text: qsTr("Throttle")
@@ -1527,14 +1533,14 @@ Item {
                     Layout.row: 1
                     Layout.column: 0
                 }
-                ComboBox {
-                    id: cbDMOC645
-                    model: [ "Disabled", "Enabled" ]
-                    currentIndex: bleHandler.deviceDMOC
-                    implicitWidth: comboboxSize
+                Switch
+                {
+                    id:switchDMOC645
+                    checked: bleHandler.deviceDMOC
+                    onCheckedChanged: bleHandler.deviceDMOC = checked
                     font.pixelSize: smallTextSize
-                    onActivated: bleHandler.deviceDMOC = currentIndex;
                 }
+
                 Label
                 {
                     id:deviceLabel5
@@ -1542,13 +1548,12 @@ Item {
                     font.pixelSize: smallTextSize
                     text: "Pot/Hall Effect Throttle"                    
                 }
-                ComboBox {
-                    id: cbPotThrottle
-                    model: [ "Disabled", "Enabled" ]
-                    currentIndex: bleHandler.devicePotAccel
-                    implicitWidth: comboboxSize
+                Switch
+                {
+                    id:switchPotThrottle
+                    checked: bleHandler.devicePotAccel
+                    onCheckedChanged: bleHandler.devicePotAccel = checked
                     font.pixelSize: smallTextSize
-                    onActivated: bleHandler.devicePotAccel = currentIndex;
                 }
 
                 Label
@@ -1558,14 +1563,14 @@ Item {
                     font.pixelSize: smallTextSize
                     text: "UQM Powerphase 100"
                 }
-                ComboBox {
-                    id: cbUQMPowerPhase
-                    model: [ "Disabled", "Enabled" ]
-                    currentIndex: bleHandler.deviceCodaUQM
-                    implicitWidth: comboboxSize
+                Switch
+                {
+                    id:switchCodaUQM
+                    checked: bleHandler.deviceCodaUQM
+                    onCheckedChanged: bleHandler.deviceCodaUQM = checked
                     font.pixelSize: smallTextSize
-                    onActivated: bleHandler.deviceCodaUQM = currentIndex;
                 }
+
                 Label
                 {
                     id:deviceLabel7
@@ -1573,13 +1578,12 @@ Item {
                     font.pixelSize: smallTextSize
                     text: "Pot/Hall Effect Brake"
                 }
-                ComboBox {
-                    id: cbPotBrake
-                    model: [ "Disabled", "Enabled" ]
-                    currentIndex: bleHandler.devicePotBrake
-                    implicitWidth: comboboxSize
+                Switch
+                {
+                    id:switchPotBrake
+                    checked: bleHandler.devicePotBrake
+                    onCheckedChanged: bleHandler.devicePotBrake = checked
                     font.pixelSize: smallTextSize
-                    onActivated: bleHandler.devicePotBrake = currentIndex;
                 }
 
                 Label
@@ -1589,14 +1593,14 @@ Item {
                     font.pixelSize: smallTextSize
                     text: "Brusa DMC5"
                 }
-                ComboBox {
-                    id: cbBrusaDMC5
-                    model: [ "Disabled", "Enabled" ]
-                    currentIndex: bleHandler.deviceBrusaDMC5
-                    implicitWidth: comboboxSize
+                Switch
+                {
+                    id:switchBrusaDMC5
+                    checked: bleHandler.deviceBrusaDMC5
+                    onCheckedChanged: bleHandler.deviceBrusaDMC5 = checked
                     font.pixelSize: smallTextSize
-                    onActivated: bleHandler.deviceBrusaDMC5 = currentIndex;
                 }
+
                 Label
                 {
                     id:deviceLabel9
@@ -1604,13 +1608,12 @@ Item {
                     font.pixelSize: smallTextSize
                     text: "CANBus Throttle"
                 }
-                ComboBox {
-                    id: cbCANThrottle
-                    model: [ "Disabled", "Enabled" ]
-                    currentIndex: bleHandler.deviceCANAccel
-                    implicitWidth: comboboxSize
+                Switch
+                {
+                    id:switchCANAccel
+                    checked: bleHandler.deviceCANAccel
+                    onCheckedChanged: bleHandler.deviceCANAccel = checked
                     font.pixelSize: smallTextSize
-                    onActivated: bleHandler.deviceCANAccel = currentIndex;
                 }
 
                 Label
@@ -1620,13 +1623,12 @@ Item {
                     font.pixelSize: smallTextSize
                     text: "CK Inverter"
                 }
-                ComboBox {
-                    id: cbCKInverter
-                    model: [ "Disabled", "Enabled" ]
-                    currentIndex: bleHandler.deviceCKInverter
-                    implicitWidth: comboboxSize
+                Switch
+                {
+                    id:switchCKInverter
+                    checked: bleHandler.deviceCKInverter
+                    onCheckedChanged: bleHandler.deviceCKInverter = checked
                     font.pixelSize: smallTextSize
-                    onActivated: bleHandler.deviceCKInverter = currentIndex;
                 }
 
                 Label
@@ -1636,13 +1638,12 @@ Item {
                     font.pixelSize: smallTextSize
                     text: "CANBus Brake"
                 }
-                ComboBox {
-                    id: cbCANBrake
-                    model: [ "Disabled", "Enabled" ]
-                    currentIndex: bleHandler.deviceCANBrake
-                    implicitWidth: comboboxSize
+                Switch
+                {
+                    id:switchCANBrake
+                    checked: bleHandler.deviceCANBrake
+                    onCheckedChanged: bleHandler.deviceCANBrake = checked
                     font.pixelSize: smallTextSize
-                    onActivated: bleHandler.deviceCANBrake = currentIndex;
                 }
 
                 Label
@@ -1652,13 +1653,12 @@ Item {
                     font.pixelSize: smallTextSize
                     text: "Test Inverter"
                 }
-                ComboBox {
-                    id: cbTestInverter
-                    model: [ "Disabled", "Enabled" ]
-                    currentIndex: bleHandler.deviceTestInverter
-                    implicitWidth: comboboxSize
+                Switch
+                {
+                    id:switchTestInverter
+                    checked: bleHandler.deviceTestInverter
+                    onCheckedChanged: bleHandler.deviceTestInverter = checked
                     font.pixelSize: smallTextSize
-                    onActivated: bleHandler.deviceTestInverter = currentIndex;
                 }
 
                 Label
@@ -1668,13 +1668,12 @@ Item {
                     font.pixelSize: smallTextSize
                     text: "Test Throttle"
                 }
-                ComboBox {
-                    id: cbTestThrottle
-                    model: [ "Disabled", "Enabled" ]
-                    currentIndex: bleHandler.deviceTestAccel
-                    implicitWidth: comboboxSize
+                Switch
+                {
+                    id:switchTestThrottle
+                    checked: bleHandler.deviceTestAccel
+                    onCheckedChanged: bleHandler.deviceTestAccel = checked
                     font.pixelSize: smallTextSize
-                    onActivated: bleHandler.deviceTestAccel = currentIndex;
                 }
 
                 Label
@@ -1706,13 +1705,12 @@ Item {
                     Layout.row: 7
                     Layout.column: 0
                 }
-                ComboBox {
-                    id: cbBrusaNLG5
-                    model: [ "Disabled", "Enabled" ]
-                    currentIndex: bleHandler.deviceBrusaCharger
-                    implicitWidth: comboboxSize
+                Switch
+                {
+                    id:switchBrusaNLG5
+                    checked: bleHandler.deviceBrusaCharger
+                    onCheckedChanged: bleHandler.deviceBrusaCharger = checked
                     font.pixelSize: smallTextSize
-                    onActivated: bleHandler.deviceBrusaCharger = currentIndex;
                 }
 
                 Label
@@ -1722,14 +1720,14 @@ Item {
                     font.pixelSize: smallTextSize
                     text: "ELM327 OBDII Wireless"
                 }
-                ComboBox {
-                    id: cbELM327
-                    model: [ "Disabled", "Enabled" ]
-                    currentIndex: bleHandler.deviceELM327Emu
-                    implicitWidth: comboboxSize
+                Switch
+                {
+                    id:switchELM327
+                    checked: bleHandler.deviceELM327Emu
+                    onCheckedChanged: bleHandler.deviceELM327Emu = checked
                     font.pixelSize: smallTextSize
-                    onActivated: bleHandler.deviceELM327Emu = currentIndex;
                 }
+
                 Label
                 {
                     id:deviceLabel25
@@ -1737,13 +1735,12 @@ Item {
                     font.pixelSize: smallTextSize
                     text: "TCCH/Elcon Charger"
                 }
-                ComboBox {
-                    id: cbTCCH
-                    model: [ "Disabled", "Enabled" ]
-                    currentIndex: bleHandler.deviceTCCH
-                    implicitWidth: comboboxSize
+                Switch
+                {
+                    id:switchTCCH
+                    checked: bleHandler.deviceTCCH
+                    onCheckedChanged: bleHandler.deviceTCCH = checked
                     font.pixelSize: smallTextSize
-                    onActivated: bleHandler.deviceTCCH = currentIndex;
                 }
 
                 Label
@@ -1753,14 +1750,14 @@ Item {
                     font.pixelSize: smallTextSize
                     text: "OBDII PID Listener (CANBus)"
                 }
-                ComboBox {
-                    id: cbOBD2PID
-                    model: [ "Disabled", "Enabled" ]
-                    currentIndex: bleHandler.devicePIDListen
-                    implicitWidth: comboboxSize
+                Switch
+                {
+                    id:switchOBDII
+                    checked: bleHandler.devicePIDListen
+                    onCheckedChanged: bleHandler.devicePIDListen = checked
                     font.pixelSize: smallTextSize
-                    onActivated: bleHandler.devicePIDListen = currentIndex;
                 }
+
                 Label
                 {
                     id:deviceLabel27
@@ -1768,13 +1765,12 @@ Item {
                     font.pixelSize: smallTextSize
                     text: "Lear Charger"
                 }
-                ComboBox {
-                    id: cbLearCharger
-                    model: [ "Disabled", "Enabled" ]
-                    currentIndex: bleHandler.deviceLearCharger
-                    implicitWidth: comboboxSize
+                Switch
+                {
+                    id:switchLearCharger
+                    checked: bleHandler.deviceLearCharger
+                    onCheckedChanged: bleHandler.deviceLearCharger = checked
                     font.pixelSize: smallTextSize
-                    onActivated: bleHandler.deviceLearCharger = currentIndex;
                 }
 
                 Label
@@ -1784,13 +1780,12 @@ Item {
                     font.pixelSize: smallTextSize
                     text: "EVIC Display"
                 }
-                ComboBox {
-                    id: cbEvicDisplay
-                    model: [ "Disabled", "Enabled" ]
-                    currentIndex: bleHandler.deviceEVIC
-                    implicitWidth: comboboxSize
+                Switch
+                {
+                    id:switchEvicDisplay
+                    checked: bleHandler.deviceEVIC
+                    onCheckedChanged: bleHandler.deviceEVIC = checked
                     font.pixelSize: smallTextSize
-                    onActivated: bleHandler.deviceEVIC = currentIndex;
                 }
 
                 Label
@@ -1800,13 +1795,12 @@ Item {
                     font.pixelSize: smallTextSize
                     text: "Think BMS"
                 }
-                ComboBox {
-                    id: cbThinkBMS
-                    model: [ "Disabled", "Enabled" ]
-                    currentIndex: bleHandler.deviceThinkBMS
-                    implicitWidth: comboboxSize
+                Switch
+                {
+                    id:switchThinkBMS
+                    checked: bleHandler.deviceThinkBMS
+                    onCheckedChanged: bleHandler.deviceThinkBMS = checked
                     font.pixelSize: smallTextSize
-                    onActivated: bleHandler.deviceThinkBMS = currentIndex;
                 }
 
                 Label
@@ -1816,16 +1810,13 @@ Item {
                     font.pixelSize: smallTextSize
                     text: "Adafruit BLE"
                 }
-                ComboBox {
-                    id: cbAdaBLE
-                    model: [ "Disabled", "Enabled" ]
-                    currentIndex: bleHandler.deviceAdaBlue
-                    implicitWidth: comboboxSize
+                Switch
+                {
+                    id:switchAdaBLE
+                    checked: bleHandler.deviceAdaBlue
+                    onCheckedChanged: bleHandler.deviceAdaBlue = checked
                     font.pixelSize: smallTextSize
-                    onActivated: bleHandler.deviceAdaBlue = currentIndex;
                 }
-
-
             }
         }
         Item {
