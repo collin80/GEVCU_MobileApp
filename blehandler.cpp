@@ -105,6 +105,13 @@ void BLEHandler::addDevice(const QBluetoothDeviceInfo &device)
         BLEDeviceInfo *dev = new BLEDeviceInfo();
         dev->setDevice(device);
         bleDevices.append(dev);
+        if (dev->getName().contains("GEVCU"))
+        {
+            m_bleStatus = tr("Connecting");
+            discoveryAgent->stop();
+            emit bleStatusChanged();
+            connectToService(dev->getAddress());
+        }
     }
 }
 
@@ -118,7 +125,7 @@ void BLEHandler::scanFinished()
         emit bleStatusChanged();
     }
     //Q_EMIT nameChanged();
-    for (int i = 0; i < bleDevices.size(); i++)
+/*    for (int i = 0; i < bleDevices.size(); i++)
     {
         if ( ((BLEDeviceInfo*)bleDevices.at(i))->getName().contains("GEVCU"))
         {
@@ -131,7 +138,7 @@ void BLEHandler::scanFinished()
     qWarning() << "No GEVCU devices found to connect to!";
     m_bleStatus = "No GEVCU Found!";
     emit bleStatusChanged();
-
+    */
 }
 
 void BLEHandler::deviceScanError(QBluetoothDeviceDiscoveryAgent::Error error)
@@ -741,28 +748,28 @@ void BLEHandler::interpretCharacteristic310B(const quint8 *data)
 {
     quint16 val;
 
-    val = quint16(data[0] + (data[1] * 256ul)) / 10;
+    val = quint16(data[0] + (data[1] * 256ul));
     if (val != m_regenMaxPedalPos)
     {
         m_regenMaxPedalPos = val;
         emit regenMaxPedalPosChanged();
     }
 
-    val = quint16(data[2] + (data[3] * 256ul)) / 10;
+    val = quint16(data[2] + (data[3] * 256ul));
     if (val != m_regenMinPedalPos)
     {
         m_regenMinPedalPos = val;
         emit regenMinPedalPosChanged();
     }
 
-    val = quint16(data[4] + (data[5] * 256ul)) / 10;
+    val = quint16(data[4] + (data[5] * 256ul));
     if (val != m_fwdMotionPedalPos)
     {
         m_fwdMotionPedalPos = val;
         emit fwdMotionPedalPosChanged();
     }
 
-    val = quint16(data[6] + (data[7] * 256ul)) / 10;
+    val = quint16(data[6] + (data[7] * 256ul));
     if (val != m_mapPedalPos)
     {
         m_mapPedalPos = val;
@@ -1253,7 +1260,8 @@ void BLEHandler::setPrechargeDuration(const int newVal)
 
 int BLEHandler::getPrechargeOutput() const
 {
-    return m_prechargeOutput;
+    if (m_prechargeOutput == 255) return 0;
+    return m_prechargeOutput + 1;
 }
 
 void BLEHandler::setPrechargeOutput(const int newVal)
@@ -1263,7 +1271,8 @@ void BLEHandler::setPrechargeOutput(const int newVal)
 
     if (newVal > -1)
     {
-        m_prechargeOutput = newVal;
+        m_prechargeOutput = newVal - 1;
+        if (m_prechargeOutput == -1) m_prechargeOutput = 255;
         sendCharacteristic3109();
     }
     else
@@ -1275,7 +1284,8 @@ void BLEHandler::setPrechargeOutput(const int newVal)
 
 int BLEHandler::getMainContactorOutput() const
 {
-    return m_mainContactorOutput;
+    if (m_mainContactorOutput == 255) return 0;
+    return m_mainContactorOutput + 1;
 }
 
 void BLEHandler::setMainContactorOutput(const int newVal)
@@ -1285,7 +1295,8 @@ void BLEHandler::setMainContactorOutput(const int newVal)
 
     if (newVal > -1 && newVal < 8)
     {
-        m_mainContactorOutput = newVal;
+        m_mainContactorOutput = newVal - 1;
+        if (m_mainContactorOutput == -1) m_mainContactorOutput = 255;
         sendCharacteristic3109();
     }
     else
@@ -1297,7 +1308,8 @@ void BLEHandler::setMainContactorOutput(const int newVal)
 
 int BLEHandler::getCoolingOutput() const
 {
-    return m_coolingOutput;
+    if (m_coolingOutput == 255) return 0;
+    return m_coolingOutput + 1;
 }
 
 void BLEHandler::setCoolingOutput(const int newVal)
@@ -1307,7 +1319,8 @@ void BLEHandler::setCoolingOutput(const int newVal)
 
     if (newVal > -1 && newVal < 8)
     {
-        m_coolingOutput = newVal;
+        m_coolingOutput = newVal - 1;
+        if (m_coolingOutput == -1) m_coolingOutput = 255;
         sendCharacteristic3109();
     }
     else
@@ -1363,7 +1376,8 @@ void BLEHandler::setCoolingOffTemp(const int newVal)
 
 int BLEHandler::getBrakeLightOutput() const
 {
-    return m_brakeLightOutput;
+    if (m_brakeLightOutput == 255) return 0;
+    return m_brakeLightOutput + 1;
 }
 
 void BLEHandler::setBrakeLightOutput(const int newVal)
@@ -1373,7 +1387,8 @@ void BLEHandler::setBrakeLightOutput(const int newVal)
 
     if (newVal > -1 && newVal < 8)
     {
-        m_brakeLightOutput = newVal;
+        m_brakeLightOutput = newVal - 1;
+        if (m_brakeLightOutput == -1) m_brakeLightOutput = 255;
         sendCharacteristic3109();
     }
     else
@@ -1386,7 +1401,8 @@ void BLEHandler::setBrakeLightOutput(const int newVal)
 
 int BLEHandler::getReverseLightOutput() const
 {
-    return m_reverseLightOutput;
+    if (m_reverseLightOutput == 255) return 0;
+    return m_reverseLightOutput + 1;
 }
 
 void BLEHandler::setReverseLightOutput(const int newVal)
@@ -1396,7 +1412,8 @@ void BLEHandler::setReverseLightOutput(const int newVal)
 
     if (newVal > -1 && newVal < 8)
     {
-        m_reverseLightOutput = newVal;
+        m_reverseLightOutput = newVal - 1;
+        if (m_reverseLightOutput == -1) m_reverseLightOutput = 255;
         sendCharacteristic3109();
     }
     else
@@ -1408,7 +1425,8 @@ void BLEHandler::setReverseLightOutput(const int newVal)
 
 int BLEHandler::getEnableMotorControlInput() const
 {
-    return m_enableMotorControlInput;
+    if (m_enableMotorControlInput == 255) return 0;
+    return m_enableMotorControlInput + 1;
 }
 
 void BLEHandler::setEnableMotorControlInput(const int newVal)
@@ -1418,7 +1436,8 @@ void BLEHandler::setEnableMotorControlInput(const int newVal)
 
     if (newVal > -1 && newVal < 4)
     {
-        m_enableMotorControlInput = newVal;
+        m_enableMotorControlInput = newVal - 1;
+        if (m_enableMotorControlInput == -1) m_enableMotorControlInput = 255;
         sendCharacteristic3109();
     }
     else
@@ -1430,7 +1449,8 @@ void BLEHandler::setEnableMotorControlInput(const int newVal)
 
 int BLEHandler::getReverseInput() const
 {
-    return m_reverseInput;
+    if (m_reverseInput == 255) return 0;
+    return m_reverseInput + 1;
 }
 
 void BLEHandler::setReverseInput(const int newVal)
@@ -1440,7 +1460,8 @@ void BLEHandler::setReverseInput(const int newVal)
 
     if (newVal > -1 && newVal < 4)
     {
-        m_reverseInput = newVal;
+        m_reverseInput = newVal - 1;
+        if (m_reverseInput == -1) m_reverseInput = 255;
         sendCharacteristic3109();
     }
     else
@@ -1452,7 +1473,7 @@ void BLEHandler::setReverseInput(const int newVal)
 
 int BLEHandler::getNumThrottleADC() const
 {
-    return m_numThrottleADC;
+    return m_numThrottleADC - 1;
 }
 
 void BLEHandler::setNumThrottleADC(const int newVal)
@@ -1462,7 +1483,7 @@ void BLEHandler::setNumThrottleADC(const int newVal)
 
     if (newVal > -1 && newVal < 4)
     {
-        m_numThrottleADC = newVal;
+        m_numThrottleADC = newVal + 1;
         sendCharacteristic310A();
     }
     else
@@ -1474,7 +1495,7 @@ void BLEHandler::setNumThrottleADC(const int newVal)
 
 int BLEHandler::getThrottleType() const
 {
-    return m_throttleType;
+    return m_throttleType - 1;
 }
 
 void BLEHandler::setThrottleType(const int newVal)
@@ -1484,7 +1505,7 @@ void BLEHandler::setThrottleType(const int newVal)
 
     if (newVal > -1 && newVal < 2)
     {
-        m_throttleType = newVal;
+        m_throttleType = newVal + 1;
         sendCharacteristic310A();
     }
     else
@@ -1592,11 +1613,12 @@ int BLEHandler::getRegenMaxPedalPos() const
 void BLEHandler::setRegenMaxPedalPos(const int newVal)
 {
     if (!okToWrite) return;
-    if (newVal == m_regenMaxPedalPos) return;
+    int thisVal = newVal * 10;
+    if (thisVal == m_regenMaxPedalPos) return;
 
-    if (newVal > -1 && newVal < 1001)
+    if (thisVal > -1 && thisVal < 1001)
     {
-        m_regenMaxPedalPos = newVal;
+        m_regenMaxPedalPos = thisVal;
         sendCharacteristic310B();
     }
     else
@@ -1615,11 +1637,12 @@ int BLEHandler::getRegenMinPedalPos() const
 void BLEHandler::setRegenMinPedalPos(const int newVal)
 {
     if (!okToWrite) return;
-    if (newVal == m_regenMinPedalPos) return;
+    int thisVal = newVal * 10;
+    if (thisVal == m_regenMinPedalPos) return;
 
-    if (newVal > -1 && newVal < 1001)
+    if (thisVal > -1 && thisVal < 1001)
     {
-        m_regenMinPedalPos = newVal;
+        m_regenMinPedalPos = thisVal;
         sendCharacteristic310B();
     }
     else
@@ -1637,11 +1660,12 @@ int BLEHandler::getFWDMotionPedalPos() const
 void BLEHandler::setFWDMotionPedalPos(const int newVal)
 {
     if (!okToWrite) return;
-    if (newVal == m_fwdMotionPedalPos) return;
+    int thisVal = newVal * 10;
+    if (thisVal == m_fwdMotionPedalPos) return;
 
-    if (newVal > -1 && newVal < 1001)
+    if (thisVal > -1 && thisVal < 1001)
     {
-        m_fwdMotionPedalPos = newVal;
+        m_fwdMotionPedalPos = thisVal;
         sendCharacteristic310B();
     }
     else
@@ -1659,11 +1683,12 @@ int BLEHandler::getMapPedalPos() const
 void BLEHandler::setMapPedalPos(const int newVal)
 {
     if (!okToWrite) return;
-    if (newVal == m_mapPedalPos) return;
+    int thisVal = newVal * 10;
+    if (thisVal == m_mapPedalPos) return;
 
-    if (newVal > -1 && newVal < 1001)
+    if (thisVal > -1 && thisVal < 1001)
     {
-        m_mapPedalPos = newVal;
+        m_mapPedalPos = thisVal;
         sendCharacteristic310B();
     }
     else
@@ -1675,7 +1700,7 @@ void BLEHandler::setMapPedalPos(const int newVal)
 
 int BLEHandler::getRegenThrottleMin() const
 {
-    return m_regenThrottleMin / 10;
+    return m_regenThrottleMin;
 }
 
 void BLEHandler::setRegenThrottleMin(const int newVal)
@@ -1683,7 +1708,7 @@ void BLEHandler::setRegenThrottleMin(const int newVal)
     if (!okToWrite) return;
     if (newVal == m_regenThrottleMin) return;
 
-    if (newVal > -1 && newVal < 1001)
+    if (newVal > -1 && newVal < 101)
     {
         m_regenThrottleMin = newVal;
         sendCharacteristic310B();
@@ -1697,7 +1722,7 @@ void BLEHandler::setRegenThrottleMin(const int newVal)
 
 int BLEHandler::getRegenThrottleMax() const
 {
-    return m_regenThrottleMax / 10;
+    return m_regenThrottleMax;
 }
 
 void BLEHandler::setRegenThrottleMax(const int newVal)
@@ -1705,7 +1730,7 @@ void BLEHandler::setRegenThrottleMax(const int newVal)
     if (!okToWrite) return;
     if (newVal == m_regenThrottleMax) return;
 
-    if (newVal > -1 && newVal < 1001)
+    if (newVal > -1 && newVal < 101)
     {
         m_regenThrottleMax = newVal;
         sendCharacteristic310B();
@@ -1719,7 +1744,7 @@ void BLEHandler::setRegenThrottleMax(const int newVal)
 
 int BLEHandler::getCreepThrottle() const
 {
-    return m_creepThrottle / 10;
+    return m_creepThrottle;
 }
 
 void BLEHandler::setCreepThrottle(const int newVal)
@@ -1727,7 +1752,7 @@ void BLEHandler::setCreepThrottle(const int newVal)
     if (!okToWrite) return;
     if (newVal == m_creepThrottle) return;
 
-    if (newVal > -1 && newVal < 1001)
+    if (newVal > -1 && newVal < 101)
     {
         m_creepThrottle = newVal;
         sendCharacteristic310B();

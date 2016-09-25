@@ -94,8 +94,13 @@ Item {
     {
         id: barTopLevel
         width: parent.width * 0.20
+        height: tabTextSize * 1.2
         onCurrentIndexChanged: calcScreenIndex()
         font.pixelSize: tabTextSize
+
+        background: Rectangle {
+            color: "#00cc00"
+        }
 
         TabButton
         {
@@ -122,13 +127,21 @@ Item {
             {
                 id: barTabsStatus
                 onCurrentIndexChanged: calcScreenIndex()
-                anchors.fill: parent
+                width: parent.width
+                height: tabTextSize * 1.2
                 font.pixelSize: tabTextSize
 
+                background: Rectangle {
+                    color: "#00cc00"
+                    opacity: 1
+                }
+
                 TabButton {
+
                     text: qsTr("Status")
                 }
                 TabButton {
+
                     text: qsTr("Gauges1")
                 }
                 TabButton {
@@ -147,8 +160,12 @@ Item {
             {
                 id: barTabsConfig
                 onCurrentIndexChanged: calcScreenIndex()
-                anchors.fill: parent
+                width: parent.width
+                height: tabTextSize * 1.2
                 font.pixelSize: tabTextSize
+                background: Rectangle {
+                    color: "#00cc00"
+                }
 
                 TabButton {
                     text: qsTr("Throttle")
