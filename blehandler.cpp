@@ -89,6 +89,12 @@ BLEHandler::~BLEHandler()
 
 void BLEHandler::deviceSearch()
 {
+    if (bleController) {
+        bleController->disconnectFromDevice();
+        delete bleController;
+        bleController = 0;
+    }
+
     discoveryAgent->stop();
     qDeleteAll(bleDevices);
     bleDevices.clear();
@@ -802,14 +808,14 @@ void BLEHandler::sendCharacteristic310B()
     bleChar = bleService->characteristic(QBluetoothUuid((quint16)0x310B));
     if (bleChar.isValid())
     {
-        data.append((char)((m_regenMaxPedalPos * 10) & 0xFF));
-        data.append((char)((m_regenMaxPedalPos * 10) >> 8));
-        data.append((char)((m_regenMinPedalPos * 10) & 0xFF));
-        data.append((char)((m_regenMinPedalPos * 10) >> 8));
-        data.append((char)((m_fwdMotionPedalPos * 10) & 0xFF));
-        data.append((char)((m_fwdMotionPedalPos * 10) >> 8));
-        data.append((char)((m_mapPedalPos * 10) & 0xFF));
-        data.append((char)((m_mapPedalPos * 10) >> 8));
+        data.append((char)((m_regenMaxPedalPos) & 0xFF));
+        data.append((char)((m_regenMaxPedalPos) >> 8));
+        data.append((char)((m_regenMinPedalPos) & 0xFF));
+        data.append((char)((m_regenMinPedalPos) >> 8));
+        data.append((char)((m_fwdMotionPedalPos) & 0xFF));
+        data.append((char)((m_fwdMotionPedalPos) >> 8));
+        data.append((char)((m_mapPedalPos) & 0xFF));
+        data.append((char)((m_mapPedalPos) >> 8));
         data.append((char)m_regenThrottleMin);
         data.append((char)m_regenThrottleMax);
         data.append((char)m_creepThrottle);
@@ -1857,14 +1863,15 @@ float BLEHandler::getNominalVoltage() const
     return m_nomBattVolts / 10.0f;
 }
 
-void BLEHandler::setNominalVoltage(const int newVal)
+void BLEHandler::setNominalVoltage(const float newVal)
 {
     if (!okToWrite) return;
-    if (newVal == m_nomBattVolts) return;
+    int newInt = (int)(newVal * 10.0f);
+    if (newInt == m_nomBattVolts) return;
 
-    if (newVal > -1)
+    if (newInt > -1)
     {
-        m_nomBattVolts = newVal;
+        m_nomBattVolts = newInt;
         sendCharacteristic310D();
     }
     else
@@ -1896,19 +1903,20 @@ void BLEHandler::setMaxRPM(const int newVal)
     }
 }
 
-int BLEHandler::getMaxTorque() const
+float BLEHandler::getMaxTorque() const
 {
-    return m_maxTorque;
+    return m_maxTorque / 10.0f;
 }
 
-void BLEHandler::setMaxTorque(const int newVal)
+void BLEHandler::setMaxTorque(const float newVal)
 {
     if (!okToWrite) return;
-    if (newVal == m_maxTorque) return;
+    int newInt = (int)(newVal * 10.0f);
+    if (newInt == m_maxTorque) return;
 
-    if (newVal > -1)
+    if (newInt > -1)
     {
-        m_maxTorque = newVal;
+        m_maxTorque = newInt;
         sendCharacteristic310D();
     }
     else

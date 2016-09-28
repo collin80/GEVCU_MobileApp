@@ -183,11 +183,11 @@ public:
     int getRegenBrakeMax() const;
     void setRegenBrakeMax(const int newVal);
     float getNominalVoltage() const;
-    void setNominalVoltage(const int newVal);
+    void setNominalVoltage(const float newVal);
     int getMaxRPM() const;
     void setMaxRPM(const int newVal);
-    int getMaxTorque() const;
-    void setMaxTorque(const int newVal);
+    float getMaxTorque() const;
+    void setMaxTorque(const float newVal);
 
     int getDeviceDMOC() const;
     void setDeviceDMOC(const int newVal);
